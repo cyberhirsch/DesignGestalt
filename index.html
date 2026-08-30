@@ -59,11 +59,7 @@
     line-height: 1.5;
   }
 
-  .wrap {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 0 24px 80px;
-  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
 
   /* ---------- masthead ---------- */
   header {
@@ -113,10 +109,36 @@
     border-bottom: 1px solid var(--rule);
   }
 
-  /* ---------- tool cards ---------- */
+  /* ---------- feature card ---------- */
+  .feature {
+    display: block;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-radius: 2px;
+    padding: 26px;
+    text-decoration: none;
+  }
+  .feature:hover { filter: brightness(1.08); }
+
+  .feature-name {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -0.025em;
+    margin: 0 0 8px;
+  }
+  .feature p:last-child {
+    margin: 0;
+    font-size: 15px;
+    opacity: 0.88;
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+
+  /* ---------- cards ---------- */
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 14px;
   }
 
@@ -139,17 +161,13 @@
     color: var(--accent);
     margin: 0 0 8px;
   }
+  .card-name svg { vertical-align: baseline; margin-left: 3px; }
 
   .card p {
     margin: 0;
     font-size: 14px;
     color: var(--ink-2);
     text-wrap: pretty;
-  }
-
-  .card-name svg {
-    vertical-align: baseline;
-    margin-left: 2px;
   }
 
   .card .credit {
@@ -176,7 +194,11 @@
     flex-wrap: wrap;
     padding: 12px 16px;
     background: var(--surface);
+    text-decoration: none;
+    color: inherit;
   }
+  a.week:hover { background: var(--ground); }
+  a.week:hover .week-topic { color: var(--accent); }
 
   .week-no {
     font-family: var(--mono);
@@ -196,9 +218,7 @@
 
   .week-topic { font-size: 15px; flex: 1; min-width: 14ch; }
 
-  .week.pause {
-    background: var(--ground);
-  }
+  .week.pause { background: var(--ground); }
   .week.pause .week-topic {
     font-family: var(--mono);
     font-size: 12px;
@@ -216,6 +236,12 @@
     border: 1px solid var(--rule);
     border-radius: 2px;
     padding: 3px 7px;
+  }
+
+  .hint {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin: 12px 0 0;
   }
 
   footer {
@@ -245,15 +271,35 @@
   </header>
 
   <section>
+    <h2>Start here</h2>
+    <a class="feature" href="checklists.html">
+      <p class="feature-name">Submission checklists</p>
+      <p>Exactly what to hand in each week, as a tick list. Most marks lost in the first semester go on missing pieces rather than weak work — check here before you upload.</p>
+    </a>
+  </section>
+
+  <section>
     <h2>Classroom tools</h2>
     <div class="cards">
+      <a class="card" href="tools/gestalt.html">
+        <p class="card-name">Gestalt Playground</p>
+        <p>Push each principle until the grouping flips. Proximity, similarity, closure, continuity and figure-ground as live demonstrations.</p>
+        <p class="credit">Week 1</p>
+      </a>
+      <a class="card" href="tools/contrast.html">
+        <p class="card-name">Contrast Checker</p>
+        <p>Paste two colours for a WCAG AA/AAA verdict, with the pair shown through three kinds of colour blindness.</p>
+        <p class="credit">Week 7</p>
+      </a>
       <a class="card" href="tools/style-lottery.html">
         <p class="card-name">Style Lottery</p>
-        <p>Assigns each student one design style to present, drawn at random from 62 movements — Arts &amp; Crafts through the diffusion-model look. Two redraws each.</p>
+        <p>Assigns each student one design style to present, drawn from 62 movements — Arts &amp; Crafts through the diffusion-model look. Two redraws each.</p>
+        <p class="credit">Referat series</p>
       </a>
       <a class="card" href="tools/type-lottery.html">
         <p class="card-name">Type Lottery</p>
-        <p>The same draw for FontShop's 100 Best Fonts, with designer, year, classification and foundry. Used for the Week 10–11 typography assignment.</p>
+        <p>The same draw over FontShop's 100 Best Fonts, with designer, year, classification and foundry.</p>
+        <p class="credit">Weeks 10–11</p>
       </a>
     </div>
   </section>
@@ -261,10 +307,25 @@
   <section>
     <h2>Practice</h2>
     <div class="cards">
+      <a class="card" href="https://bezier.method.ac/" target="_blank" rel="noopener noreferrer">
+        <p class="card-name">The Bézier Game<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></p>
+        <p>Pen-tool drills: trace each shape using as few anchor points as possible. Worth an hour before you trace anything in Illustrator.</p>
+        <p class="credit">Week 6 &middot; External &middot; Method of Action</p>
+      </a>
+      <a class="card" href="https://color.method.ac/" target="_blank" rel="noopener noreferrer">
+        <p class="card-name">Color<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></p>
+        <p>Matching drills for hue and saturation, then complementary, analogous, triadic and tetradic relationships. Trains the eye the theory assumes you already have.</p>
+        <p class="credit">Week 7 &middot; External &middot; María Munuera &amp; Mark MacKay</p>
+      </a>
       <a class="card" href="https://type.method.ac/" target="_blank" rel="noopener noreferrer">
         <p class="card-name">KernType<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></p>
-        <p>A letter-spacing game — nudge each pair until the rhythm between the letters is even, then compare your answer against a typographer's. Scored out of 100. A good warm-up for Week 10.</p>
-        <p class="credit">External &middot; by Method of Action</p>
+        <p>A letter-spacing game — nudge each pair until the rhythm between the letters is even, then compare against a typographer's answer. Scored out of 100.</p>
+        <p class="credit">Week 10 &middot; External &middot; Method of Action</p>
+      </a>
+      <a class="card" href="https://shape.method.ac/" target="_blank" rel="noopener noreferrer">
+        <p class="card-name">Shape Type<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></p>
+        <p>Pull letterforms back into shape and score how close you got. The fastest way to start noticing what a curve on an <em>a</em> is actually doing.</p>
+        <p class="credit">Week 11 &middot; External &middot; Mark MacKay</p>
       </a>
     </div>
   </section>
@@ -272,23 +333,24 @@
   <section>
     <h2>Schedule</h2>
     <div class="weeks">
-      <div class="week"><span class="week-no">01</span><span class="week-date">6 Oct</span><span class="week-topic">Gestalt Principles</span></div>
-      <div class="week"><span class="week-no">02</span><span class="week-date">13 Oct</span><span class="week-topic">Visual Hierarchy &amp; Page Structure</span></div>
-      <div class="week"><span class="week-no">03</span><span class="week-date">20 Oct</span><span class="week-topic">Figure-Ground &amp; Whitespace</span></div>
-      <div class="week"><span class="week-no">04</span><span class="week-date">27 Oct</span><span class="week-topic">Grid Systems</span></div>
-      <div class="week"><span class="week-no">05</span><span class="week-date">3 Nov</span><span class="week-topic">Proportion &amp; Format Adaptation</span></div>
-      <div class="week"><span class="week-no">06</span><span class="week-date">10 Nov</span><span class="week-topic">Shape Semantics</span></div>
-      <div class="week"><span class="week-no">07</span><span class="week-date">17 Nov</span><span class="week-topic">Colour Psychology &amp; Cultural Coding</span></div>
-      <div class="week"><span class="week-no">08</span><span class="week-date">24 Nov</span><span class="week-topic">Contrast &amp; User Guidance</span></div>
-      <div class="week"><span class="week-no">09</span><span class="week-date">1 Dec</span><span class="week-topic">Semiotics &amp; Abstraction</span></div>
-      <div class="week"><span class="week-no">10</span><span class="week-date">8 Dec</span><span class="week-topic">Micro-Typography &amp; Cognitive Load</span></div>
-      <div class="week"><span class="week-no">11</span><span class="week-date">15 Dec</span><span class="week-topic">Macro-Typography &amp; Emotion</span></div>
-      <div class="week"><span class="week-no">12</span><span class="week-date">22 Dec</span><span class="week-topic">Imagery &amp; Framing</span></div>
+      <a class="week" href="checklists.html#week-1"><span class="week-no">01</span><span class="week-date">6 Oct</span><span class="week-topic">Gestalt Principles</span></a>
+      <a class="week" href="checklists.html#week-2"><span class="week-no">02</span><span class="week-date">13 Oct</span><span class="week-topic">Visual Hierarchy &amp; Page Structure</span></a>
+      <a class="week" href="checklists.html#week-3"><span class="week-no">03</span><span class="week-date">20 Oct</span><span class="week-topic">Figure-Ground &amp; Whitespace</span></a>
+      <a class="week" href="checklists.html#week-4"><span class="week-no">04</span><span class="week-date">27 Oct</span><span class="week-topic">Grid Systems</span></a>
+      <a class="week" href="checklists.html#week-5"><span class="week-no">05</span><span class="week-date">3 Nov</span><span class="week-topic">Proportion &amp; Format Adaptation</span></a>
+      <a class="week" href="checklists.html#week-6"><span class="week-no">06</span><span class="week-date">10 Nov</span><span class="week-topic">Shape Semantics</span></a>
+      <a class="week" href="checklists.html#week-7"><span class="week-no">07</span><span class="week-date">17 Nov</span><span class="week-topic">Colour Psychology &amp; Cultural Coding</span></a>
+      <a class="week" href="checklists.html#week-8"><span class="week-no">08</span><span class="week-date">24 Nov</span><span class="week-topic">Contrast &amp; User Guidance</span></a>
+      <a class="week" href="checklists.html#week-9"><span class="week-no">09</span><span class="week-date">1 Dec</span><span class="week-topic">Semiotics &amp; Abstraction</span></a>
+      <a class="week" href="checklists.html#week-10"><span class="week-no">10</span><span class="week-date">8 Dec</span><span class="week-topic">Micro-Typography &amp; Cognitive Load</span></a>
+      <a class="week" href="checklists.html#week-11"><span class="week-no">11</span><span class="week-date">15 Dec</span><span class="week-topic">Macro-Typography &amp; Emotion</span></a>
+      <a class="week" href="checklists.html#week-12"><span class="week-no">12</span><span class="week-date">22 Dec</span><span class="week-topic">Imagery &amp; Framing</span></a>
       <div class="week pause"><span class="week-no"></span><span class="week-date">29 Dec</span><span class="week-topic">Christmas break</span></div>
-      <div class="week"><span class="week-no">13</span><span class="week-date">5 Jan</span><span class="week-topic">Guerilla Rebrand — Kickoff</span></div>
-      <div class="week"><span class="week-no">14</span><span class="week-date">12 Jan</span><span class="week-topic">Guerilla Rebrand — Execution</span></div>
-      <div class="week"><span class="week-no">15</span><span class="week-date">19 Jan</span><span class="week-topic">The Pitch</span><span class="tag">Final</span></div>
+      <a class="week" href="checklists.html#week-13"><span class="week-no">13</span><span class="week-date">5 Jan</span><span class="week-topic">Guerilla Rebrand — Kickoff</span></a>
+      <a class="week" href="checklists.html#week-14"><span class="week-no">14</span><span class="week-date">12 Jan</span><span class="week-topic">Guerilla Rebrand — Execution</span></a>
+      <a class="week" href="checklists.html#week-15"><span class="week-no">15</span><span class="week-date">19 Jan</span><span class="week-topic">The Pitch</span><span class="tag">Final</span></a>
     </div>
+    <p class="hint">Each week links to what you have to hand in.</p>
   </section>
 
   <footer>

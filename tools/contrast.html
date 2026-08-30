@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrast Checker</title>
+<meta name="description" content="Check a colour pair against WCAG AA and AAA, and see it through three kinds of colour blindness.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #EDEEF1;
+    --surface: #FFFFFF;
+    --ink: #14161B;
+    --ink-2: #565D6C;
+    --ink-3: #878E9E;
+    --rule: #D3D7E0;
+    --accent: #2439D4;
+    --pass: #1B7A4B;
+    --fail: #B3261E;
+
+    --display: "Syne", "Archivo", system-ui, sans-serif;
+    --body: "Archivo", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D0F14;
+      --surface: #161A23;
+      --ink: #EDEFF4;
+      --ink-2: #A4ACBB;
+      --ink-3: #6C7488;
+      --rule: #2A303C;
+      --accent: #6B7FFF;
+      --pass: #4ECB8A;
+      --fail: #FF6B6B;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D0F14;
+    --surface: #161A23;
+    --ink: #EDEFF4;
+    --ink-2: #A4ACBB;
+    --ink-3: #6C7488;
+    --rule: #2A303C;
+    --accent: #6B7FFF;
+    --pass: #4ECB8A;
+    --fail: #FF6B6B;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.5;
+  }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 24px 90px; }
+
+  header { padding: 52px 0 34px; }
+
+  .back {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 22px;
+  }
+  .back:hover { color: var(--accent); }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 56px);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    margin: 0 0 16px;
+  }
+
+  .standfirst {
+    font-size: 16px;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* ---------- inputs ---------- */
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .field {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 16px;
+  }
+
+  .field label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+
+  .field-row { display: flex; gap: 10px; align-items: center; }
+
+  input[type="color"] {
+    flex: none;
+    width: 46px; height: 40px;
+    padding: 0;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: none;
+    cursor: pointer;
+  }
+
+  input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--mono);
+    font-size: 15px;
+    text-transform: uppercase;
+    padding: 11px 12px;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+  input[type="text"].bad { border-color: var(--fail); }
+
+  .swapline { display: flex; justify-content: center; margin-bottom: 18px; }
+
+  button {
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- verdict ---------- */
+  .verdict {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 26px 22px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .ratio {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(46px, 10vw, 82px);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin: 0 0 4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ratio-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 22px;
+  }
+
+  .grades {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    text-align: left;
+  }
+
+  .grade { background: var(--surface); padding: 13px 14px; }
+  .grade-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 4px;
+  }
+  .grade-val { font-size: 15px; font-weight: 600; margin: 0; }
+  .grade-val.pass { color: var(--pass); }
+  .grade-val.fail { color: var(--fail); }
+  .grade-note { font-size: 12px; color: var(--ink-3); margin: 2px 0 0; }
+
+  /* ---------- samples ---------- */
+  .samples {
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .sample { padding: 24px 22px; }
+  .sample .big { font-size: 26px; font-weight: 600; margin: 0 0 8px; }
+  .sample .small { font-size: 15px; margin: 0 0 6px; }
+  .sample .tiny { font-size: 12px; margin: 0; opacity: 0.9; }
+
+  /* ---------- colour vision ---------- */
+  h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 400;
+    margin: 34px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .vision {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+  }
+
+  .sim {
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .sim-swatch { height: 74px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; }
+  .sim-foot { padding: 9px 12px; }
+  .sim-name { font-size: 13px; font-weight: 600; margin: 0; }
+  .sim-note { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 34px;
+    padding-top: 22px;
+    font-size: 13px;
+    color: var(--ink-3);
+    text-wrap: pretty;
+  }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a class="back" href="../index.html">&larr; Design &amp; Gestalt</a>
+    <h1>Contrast checker</h1>
+    <p class="standfirst">
+      Paste two colours and see whether text actually holds up on that background. The ratio is
+      the WCAG 2 contrast formula — the same one Stark uses inside Figma — so you can check a
+      palette before you have committed to it, or outside Figma entirely.
+    </p>
+  </header>
+
+  <div class="pair">
+    <div class="field">
+      <label for="fgHex">Foreground &middot; text</label>
+      <div class="field-row">
+        <input type="color" id="fgPick" value="#14161B" aria-label="Pick foreground colour">
+        <input type="text" id="fgHex" value="#14161B" spellcheck="false" autocomplete="off" aria-label="Foreground hex">
+      </div>
+    </div>
+    <div class="field">
+      <label for="bgHex">Background</label>
+      <div class="field-row">
+        <input type="color" id="bgPick" value="#EDEEF1" aria-label="Pick background colour">
+        <input type="text" id="bgHex" value="#EDEEF1" spellcheck="false" autocomplete="off" aria-label="Background hex">
+      </div>
+    </div>
+  </div>
+
+  <div class="swapline"><button id="swap">Swap colours</button></div>
+
+  <div class="verdict">
+    <p class="ratio" id="ratio">—</p>
+    <p class="ratio-label">contrast ratio</p>
+    <div class="grades">
+      <div class="grade">
+        <p class="grade-name">AA · body text</p>
+        <p class="grade-val" id="aaSmall">—</p>
+        <p class="grade-note">needs 4.5</p>
+      </div>
+      <div class="grade">
+        <p class="grade-name">AA · large text</p>
+        <p class="grade-val" id="aaLarge">—</p>
+        <p class="grade-note">24 px, or 18.7 px bold — needs 3.0</p>
+      </div>
+      <div class="grade">
+        <p class="grade-name">AAA · body text</p>
+        <p class="grade-val" id="aaaSmall">—</p>
+        <p class="grade-note">needs 7.0</p>
+      </div>
+      <div class="grade">
+        <p class="grade-name">UI &amp; graphics</p>
+        <p class="grade-val" id="uiG">—</p>
+        <p class="grade-note">borders, icons, chart marks — needs 3.0</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="samples" id="samples">
+    <div class="sample" id="sample">
+      <p class="big">Large heading at 26 px</p>
+      <p class="small">Body copy at 15 px — the size most of your text will actually be.</p>
+      <p class="tiny">Caption at 12 px, the first thing to fail.</p>
+    </div>
+  </div>
+
+  <h2>Seen with colour blindness</h2>
+  <div class="vision" id="vision"></div>
+
+  <footer>
+    Week 7 &middot; Colour Psychology. The simulations approximate how the pair shifts for the three
+    common types of inherited colour blindness — useful for spotting a palette that relies on a
+    red/green distinction, but not a substitute for testing with real people.
+  </footer>
+
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  /* ---------- colour maths ---------- */
+
+  function parseHex(str) {
+    let s = String(str).trim().replace(/^#/, "");
+    if (/^[0-9a-f]{3}$/i.test(s)) s = s.split("").map((c) => c + c).join("");
+    if (!/^[0-9a-f]{6}$/i.test(s)) return null;
+    return [
+      parseInt(s.slice(0, 2), 16),
+      parseInt(s.slice(2, 4), 16),
+      parseInt(s.slice(4, 6), 16)
+    ];
+  }
+
+  const toHex = (rgb) =>
+    "#" + rgb.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0")).join("").toUpperCase();
+
+  // WCAG 2 relative luminance
+  function luminance(rgb) {
+    const [r, g, b] = rgb.map((v) => {
+      const c = v / 255;
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  function contrast(a, b) {
+    const la = luminance(a), lb = luminance(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+
+  /* Colour-blindness approximation (Brettel/Viénot-style matrices in linear RGB). */
+  const MATRICES = {
+    protanopia:   [[0.1705, 0.8294, 0.0], [0.1705, 0.8294, 0.0], [-0.0045, 0.0045, 1.0]],
+    deuteranopia: [[0.6104, 0.3896, 0.0], [0.6104, 0.3896, 0.0], [-0.0405, 0.0405, 1.0]],
+    tritanopia:   [[1.0, 0.1499, -0.1499], [0.0, 0.8646, 0.1354], [0.0, 0.8646, 0.1354]]
+  };
+
+  const toLinear = (v) => { const c = v / 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+  const toSrgb = (v) => {
+    const c = Math.max(0, Math.min(1, v));
+    return 255 * (c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055);
+  };
+
+  function simulate(rgb, kind) {
+    const m = MATRICES[kind];
+    const lin = rgb.map(toLinear);
+    return [0, 1, 2].map((i) => toSrgb(m[i][0] * lin[0] + m[i][1] * lin[1] + m[i][2] * lin[2]));
+  }
+
+  /* ---------- state ---------- */
+
+  const fgHex = $("fgHex"), bgHex = $("bgHex"), fgPick = $("fgPick"), bgPick = $("bgPick");
+  let fg = parseHex(fgHex.value), bg = parseHex(bgHex.value);
+
+  function grade(node, ok) {
+    node.textContent = ok ? "Pass" : "Fail";
+    node.classList.toggle("pass", ok);
+    node.classList.toggle("fail", !ok);
+  }
+
+  function render() {
+    if (!fg || !bg) return;
+
+    const ratio = contrast(fg, bg);
+    $("ratio").textContent = ratio.toFixed(2) + " : 1";
+
+    grade($("aaSmall"), ratio >= 4.5);
+    grade($("aaLarge"), ratio >= 3);
+    grade($("aaaSmall"), ratio >= 7);
+    grade($("uiG"), ratio >= 3);
+
+    const sample = $("sample");
+    sample.style.background = toHex(bg);
+    sample.style.color = toHex(fg);
+
+    const vision = $("vision");
+    vision.innerHTML = "";
+    const kinds = [
+      ["Normal vision", null],
+      ["Protanopia", "protanopia"],
+      ["Deuteranopia", "deuteranopia"],
+      ["Tritanopia", "tritanopia"]
+    ];
+    kinds.forEach(([name, kind]) => {
+      const f = kind ? simulate(fg, kind) : fg;
+      const b = kind ? simulate(bg, kind) : bg;
+      const r = contrast(f, b);
+
+      const card = document.createElement("div");
+      card.className = "sim";
+
+      const sw = document.createElement("div");
+      sw.className = "sim-swatch";
+      sw.style.background = toHex(b);
+      sw.style.color = toHex(f);
+      sw.textContent = "Aa";
+
+      const foot = document.createElement("div");
+      foot.className = "sim-foot";
+      const nm = document.createElement("p");
+      nm.className = "sim-name";
+      nm.textContent = name;
+      const nt = document.createElement("p");
+      nt.className = "sim-note";
+      nt.textContent = r.toFixed(2) + " : 1";
+      foot.append(nm, nt);
+
+      card.append(sw, foot);
+      vision.appendChild(card);
+    });
+  }
+
+  function bindHex(hexInput, picker, isFg) {
+    hexInput.addEventListener("input", () => {
+      const parsed = parseHex(hexInput.value);
+      hexInput.classList.toggle("bad", !parsed);
+      if (!parsed) return;
+      if (isFg) fg = parsed; else bg = parsed;
+      picker.value = toHex(parsed);
+      render();
+    });
+    picker.addEventListener("input", () => {
+      const parsed = parseHex(picker.value);
+      if (!parsed) return;
+      if (isFg) fg = parsed; else bg = parsed;
+      hexInput.value = toHex(parsed);
+      hexInput.classList.remove("bad");
+      render();
+    });
+  }
+
+  bindHex(fgHex, fgPick, true);
+  bindHex(bgHex, bgPick, false);
+
+  $("swap").addEventListener("click", () => {
+    const t = fg; fg = bg; bg = t;
+    fgHex.value = toHex(fg); bgHex.value = toHex(bg);
+    fgPick.value = toHex(fg); bgPick.value = toHex(bg);
+    fgHex.classList.remove("bad"); bgHex.classList.remove("bad");
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>

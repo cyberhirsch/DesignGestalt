@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Submission Checklists</title>
+<meta name="description" content="What to hand in each week — Design &amp; Gestalt, Smart Interactive Media.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #EDEEF1;
+    --surface: #FFFFFF;
+    --ink: #14161B;
+    --ink-2: #565D6C;
+    --ink-3: #878E9E;
+    --rule: #D3D7E0;
+    --accent: #2439D4;
+    --accent-ink: #FFFFFF;
+    --done: #1B7A4B;
+
+    --display: "Syne", "Archivo", system-ui, sans-serif;
+    --body: "Archivo", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D0F14;
+      --surface: #161A23;
+      --ink: #EDEFF4;
+      --ink-2: #A4ACBB;
+      --ink-3: #6C7488;
+      --rule: #2A303C;
+      --accent: #6B7FFF;
+      --accent-ink: #0D0F14;
+      --done: #4ECB8A;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D0F14;
+    --surface: #161A23;
+    --ink: #EDEFF4;
+    --ink-2: #A4ACBB;
+    --ink-3: #6C7488;
+    --rule: #2A303C;
+    --accent: #6B7FFF;
+    --accent-ink: #0D0F14;
+    --done: #4ECB8A;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.5;
+  }
+
+  .wrap { max-width: 780px; margin: 0 auto; padding: 0 24px 90px; }
+
+  /* ---------- masthead ---------- */
+  header { padding: 52px 0 26px; }
+
+  .back {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 22px;
+  }
+  .back:hover { color: var(--accent); }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 56px);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    margin: 0 0 16px;
+  }
+
+  .standfirst {
+    font-size: 16px;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* ---------- sticky nav ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--ground);
+    border-bottom: 1px solid var(--rule);
+    padding: 12px 0;
+    margin-bottom: 34px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .jump { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
+
+  .jump a {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+    text-decoration: none;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 4px 7px;
+    min-width: 28px;
+    text-align: center;
+  }
+  .jump a:hover { border-color: var(--accent); color: var(--accent); }
+  .jump a.complete { color: var(--done); border-color: var(--done); }
+
+  .overall {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .overall b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- week blocks ---------- */
+  .week {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 22px;
+    margin-bottom: 14px;
+    scroll-margin-top: 74px;
+  }
+
+  .week-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+
+  .week-no {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .week-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    margin-left: auto;
+  }
+  .count.complete { color: var(--done); }
+
+  .week h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    margin: 0 0 3px;
+  }
+
+  .brief {
+    font-size: 14px;
+    color: var(--ink-2);
+    margin: 0 0 16px;
+    text-wrap: pretty;
+  }
+
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 3px 7px;
+  }
+  .tag.party { color: var(--accent); border-color: var(--accent); }
+
+  /* ---------- checklist items ---------- */
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+
+  li label {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 8px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 15px;
+    text-wrap: pretty;
+  }
+  li label:hover { background: var(--ground); }
+
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: none;
+    width: 17px;
+    height: 17px;
+    margin: 3px 0 0;
+    border: 1.5px solid var(--ink-3);
+    border-radius: 2px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+  }
+  input[type="checkbox"]:checked {
+    background: var(--done);
+    border-color: var(--done);
+  }
+  input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 4.5px;
+    top: 1px;
+    width: 4px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  input[type="checkbox"]:checked + span { color: var(--ink-3); text-decoration: line-through; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 34px;
+    padding-top: 22px;
+    font-size: 13px;
+    color: var(--ink-3);
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a class="back" href="index.html">&larr; Design &amp; Gestalt</a>
+    <h1>Submission checklists</h1>
+    <p class="standfirst">
+      Exactly what to hand in each week. Tick items off as you finish them — your ticks are
+      saved in this browser, on this device only, so nothing is submitted from this page and
+      nobody else sees it. Use it as a last check before you upload.
+    </p>
+  </header>
+
+  <div class="nav">
+    <div class="jump" id="jump"></div>
+    <div class="overall"><b id="doneCount">0</b> / <span id="totalCount">0</span> done</div>
+  </div>
+
+  <div id="weeks"></div>
+
+  <footer>
+    <button id="reset">Clear all ticks</button>
+    <span>Saved on this device only.</span>
+  </footer>
+
+</div>
+
+<script>
+  const WEEKS = [
+    {
+      n: 1, date: "6 Oct", topic: "The Intuitive Icon Set",
+      theory: "Gestalt Principles",
+      brief: "Find Gestalt in the wild, then sketch your way to one clean icon.",
+      items: [
+        "Three real-world designs that use Gestalt principles, screenshotted",
+        "One sentence per example on how it affects perception",
+        "Twelve rough icon variations on one theme, on paper or with a stylus",
+        "The strongest concept digitised as a clean vector icon",
+        "All of it in one Figma file, link shared"
+      ]
+    },
+    {
+      n: 2, date: "13 Oct", topic: "Hierarchy Variants", party: true,
+      theory: "Visual Hierarchy & Page Structure",
+      brief: "One message, three readings — “Campus Christmas Party, 18 Dec, Main Hall”.",
+      items: [
+        "Three compositions of the same message",
+        "Each version leads with a different fact — date, place, or entry",
+        "Scale, weight, contrast, spacing and alignment doing the work (no decoration)",
+        "A note on the reading order each version produces"
+      ]
+    },
+    {
+      n: 3, date: "20 Oct", topic: "Figure-Ground Composition", party: true,
+      theory: "Figure-Ground & Whitespace",
+      brief: "Cut paper, and make the white space as deliberate as the black.",
+      items: [
+        "Five abstract shapes cut from black paper",
+        "Three trial arrangements, each photographed before anything is glued",
+        "The final composition glued down",
+        "A clean, evenly lit photograph of the final piece"
+      ]
+    },
+    {
+      n: 4, date: "27 Oct", topic: "Magazine Grid Analysis",
+      theory: "Grid Systems & Cognitive Security",
+      brief: "Take a professional page apart and find the structure underneath it.",
+      items: [
+        "A professional magazine page, scanned or as PDF",
+        "Margins, column count, gutter width and baseline grid traced over it",
+        "Three sentences on how the grid helps the reader scan the page",
+        "Exported as a single PDF with your overlay visible"
+      ]
+    },
+    {
+      n: 5, date: "3 Nov", topic: "Cross-Format Event Poster", party: true,
+      theory: "Proportion & Format Adaptation",
+      brief: "One poster, three shapes — and the hierarchy survives all three.",
+      items: [
+        "The party poster designed at 16:9",
+        "Adapted to 1:1 (square)",
+        "Adapted to 9:16 (story)",
+        "Rebuilt for each format, not just scaled — check the hierarchy still reads"
+      ]
+    },
+    {
+      n: 6, date: "10 Nov", topic: "Spike vs. Bloom",
+      theory: "Shape Semantics & the Bouba-Kiki Effect",
+      brief: "Two words, two forms — make the shape carry the meaning.",
+      items: [
+        "A mind map of associations for each word",
+        "Ten thumbnail shapes per word — twenty in total",
+        "The strongest shape per word traced as a vector and refined",
+        "One PDF with both finished shapes side by side, plus the sketches"
+      ]
+    },
+    {
+      n: 7, date: "17 Nov", topic: "Itten Contrast Studies", party: true,
+      theory: "Colour Psychology & Cultural Coding",
+      brief: "Make the colour contrasts yourself rather than reading about them.",
+      items: [
+        "Two or three of Itten's seven contrasts, each as an original piece",
+        "Each piece labelled with the contrast it demonstrates",
+        "Made, not sourced — drawing, collage, or your own photography",
+        "One study nominated as the party's colour direction, with a sentence on why"
+      ]
+    },
+    {
+      n: 8, date: "24 Nov", topic: "RSVP Button States", party: true,
+      theory: "Contrast & User Guidance",
+      brief: "Three states that tell the user what will happen before they click.",
+      items: [
+        "The button sketched in three states before you build anything",
+        "Built in Figma as a component with variants: Default, Hover, Pressed",
+        "Primary, secondary and tertiary versions",
+        "Shown to one person: ask which they'd click to confirm, note how fast they found it",
+        "Three sentences summarising that test"
+      ]
+    },
+    {
+      n: 9, date: "1 Dec", topic: "Event Signage Pictograms", party: true, last: true,
+      theory: "Semiotics & Abstraction",
+      brief: "Five signs that work without a single word. Last party deliverable.",
+      items: [
+        "Five icons: coat check, food, drinks, photo booth, exit",
+        "One consistent visual grammar — same stroke weight, corner radius and grid",
+        "Legible at 30 × 30 mm",
+        "Works in pure black and white as well as in colour",
+        "Uses the colour direction chosen in Week 7"
+      ]
+    },
+    {
+      n: 10, date: "8 Dec", topic: "Famous Font: Research",
+      theory: "Micro-Typography & Cognitive Load",
+      brief: "Pick a classic, find the free stand-in, and prove you can see the difference.",
+      items: [
+        "A type classic chosen: designer, year, notable users, character",
+        "Its closest free or open-source substitute identified",
+        "The same word set in both at matching size, side by side",
+        "At least three concrete differences annotated — x-height, width, weight steps, character",
+        "A note on what the substitute's licence actually permits"
+      ]
+    },
+    {
+      n: 11, date: "15 Dec", topic: "Famous Font: Wallpaper",
+      theory: "Macro-Typography & Emotion",
+      brief: "Facts about a typeface you are not allowed to use — with the reveal at the end.",
+      items: [
+        "Desktop wallpaper at 1920 × 1080",
+        "Phone lock screen at 1170 × 2532",
+        "Your researched facts about the original typeface as the content",
+        "The reveal line, isolated and high contrast (“This is not Futura.”)",
+        "Set only in the free substitute — no licensed font in the final file",
+        "Legible as ambient background, not as a poster you read head-on"
+      ]
+    },
+    {
+      n: 12, date: "22 Dec", topic: "Narrative Photo Crops",
+      theory: "Imagery & Framing",
+      brief: "One photograph, two stories, decided entirely by where you cut.",
+      items: [
+        "One complex photo with several subjects or actions",
+        "Two crops isolating two genuinely different narratives",
+        "Colour and value adjusted to amplify each narrative",
+        "The original alongside both crops",
+        "Two sentences on the narrative shift"
+      ]
+    },
+    {
+      n: 13, date: "5 Jan", topic: "Guerilla Rebrand: Kickoff",
+      theory: "Brand audit and strategic vision",
+      brief: "Audit an identity nobody asked you to fix, then sketch wide.",
+      items: [
+        "A local organisation chosen with a weak or inconsistent identity",
+        "Its current logo, typography, colours and formats documented",
+        "Three concrete design flaws named — Gestalt, legibility, or hierarchy",
+        "Three new brand attributes to steer the redesign",
+        "A user persona, and how the current identity fails them",
+        "Twenty rough thumbnail logo sketches — no self-censoring"
+      ]
+    },
+    {
+      n: 14, date: "12 Jan", topic: "Guerilla Rebrand: Execution",
+      theory: "Execution & Context of Use",
+      brief: "Turn the sketches into a system, then put it somewhere real.",
+      items: [
+        "Logo digitised, with variants for light and dark backgrounds",
+        "A type scale: display, body, caption",
+        "Colour swatches that pass WCAG AA — checked, not assumed",
+        "The assets placed in a realistic mockup — signage, storefront, or screen",
+        "Feedback gathered from an actual customer or stakeholder",
+        "Two sentences on what they said"
+      ]
+    },
+    {
+      n: 15, date: "19 Jan", topic: "The Pitch", final: true,
+      theory: "Final presentation",
+      brief: "Sell the rebrand as though you are giving it to them for free — because you are.",
+      items: [
+        "A presentation deck",
+        "The audit, the strategy, the system and the mockups as one narrative",
+        "The three flaws you found, and how the redesign answers each",
+        "Rehearsed to time",
+        "Everything exported and working offline before you present"
+      ]
+    }
+  ];
+
+  const KEY = "dg-checklists-v1";
+  const $ = (id) => document.getElementById(id);
+  let state = {};
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      const parsed = raw ? JSON.parse(raw) : null;
+      state = (parsed && typeof parsed === "object") ? parsed : {};
+    } catch (e) { state = {}; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* private mode */ }
+  }
+
+  const idFor = (w, i) => "w" + w.n + "i" + i;
+
+  function build() {
+    const weeksBox = $("weeks");
+    const jump = $("jump");
+
+    WEEKS.forEach((w) => {
+      const sec = document.createElement("section");
+      sec.className = "week";
+      sec.id = "week-" + w.n;
+
+      const head = document.createElement("div");
+      head.className = "week-head";
+
+      const no = document.createElement("span");
+      no.className = "week-no";
+      no.textContent = "Week " + String(w.n).padStart(2, "0");
+
+      const date = document.createElement("span");
+      date.className = "week-date";
+      date.textContent = w.date;
+
+      const count = document.createElement("span");
+      count.className = "count";
+      count.id = "count-" + w.n;
+
+      head.append(no, date, count);
+
+      const h2 = document.createElement("h2");
+      h2.textContent = w.topic;
+
+      const brief = document.createElement("p");
+      brief.className = "brief";
+      brief.textContent = w.brief;
+
+      const tags = document.createElement("div");
+      tags.className = "tags";
+      const t1 = document.createElement("span");
+      t1.className = "tag";
+      t1.textContent = w.theory;
+      tags.appendChild(t1);
+      if (w.party) {
+        const t2 = document.createElement("span");
+        t2.className = "tag party";
+        t2.textContent = w.last ? "Christmas party · final piece" : "Christmas party";
+        tags.appendChild(t2);
+      }
+      if (w.final) {
+        const t3 = document.createElement("span");
+        t3.className = "tag party";
+        t3.textContent = "Graded final";
+        tags.appendChild(t3);
+      }
+
+      const ul = document.createElement("ul");
+      w.items.forEach((text, i) => {
+        const li = document.createElement("li");
+        const label = document.createElement("label");
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.dataset.week = w.n;
+        box.id = idFor(w, i);
+        box.checked = !!state[box.id];
+        box.addEventListener("change", () => {
+          if (box.checked) state[box.id] = 1; else delete state[box.id];
+          save();
+          refresh();
+        });
+        const span = document.createElement("span");
+        span.textContent = text;
+        label.append(box, span);
+        li.appendChild(label);
+        ul.appendChild(li);
+      });
+
+      sec.append(head, h2, brief, tags, ul);
+      weeksBox.appendChild(sec);
+
+      const link = document.createElement("a");
+      link.href = "#week-" + w.n;
+      link.id = "jump-" + w.n;
+      link.textContent = String(w.n).padStart(2, "0");
+      link.title = "Week " + w.n + " — " + w.topic;
+      jump.appendChild(link);
+    });
+  }
+
+  function refresh() {
+    let done = 0, total = 0;
+    WEEKS.forEach((w) => {
+      const d = w.items.filter((_, i) => state[idFor(w, i)]).length;
+      done += d;
+      total += w.items.length;
+      const c = $("count-" + w.n);
+      c.textContent = d + " / " + w.items.length;
+      c.classList.toggle("complete", d === w.items.length);
+      $("jump-" + w.n).classList.toggle("complete", d === w.items.length);
+    });
+    $("doneCount").textContent = done;
+    $("totalCount").textContent = total;
+  }
+
+  $("reset").addEventListener("click", () => {
+    state = {};
+    save();
+    document.querySelectorAll('input[type="checkbox"]').forEach((b) => { b.checked = false; });
+    refresh();
+  });
+
+  load();
+  build();
+  refresh();
+</script>
+</body>
+</html>
