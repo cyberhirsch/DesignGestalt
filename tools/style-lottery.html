@@ -1,0 +1,1017 @@
+<title>Style Lottery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #EDEEF1;
+    --surface: #FFFFFF;
+    --surface-2: #E4E6EC;
+    --ink: #14161B;
+    --ink-2: #565D6C;
+    --ink-3: #878E9E;
+    --rule: #D3D7E0;
+    --accent: #2439D4;
+    --accent-ink: #FFFFFF;
+    --chip-edge: #00000022;
+    --swap: #A8471C;
+    --scrim: rgba(20, 22, 27, 0.45);
+
+    --display: "Syne", "Archivo", system-ui, sans-serif;
+    --body: "Archivo", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D0F14;
+      --surface: #161A23;
+      --surface-2: #1F2430;
+      --ink: #EDEFF4;
+      --ink-2: #A4ACBB;
+      --ink-3: #6C7488;
+      --rule: #2A303C;
+      --accent: #6B7FFF;
+      --accent-ink: #0D0F14;
+      --chip-edge: #FFFFFF2E;
+      --swap: #E8894F;
+      --scrim: rgba(0, 0, 0, 0.62);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D0F14;
+    --surface: #161A23;
+    --surface-2: #1F2430;
+    --ink: #EDEFF4;
+    --ink-2: #A4ACBB;
+    --ink-3: #6C7488;
+    --rule: #2A303C;
+    --accent: #6B7FFF;
+    --accent-ink: #0D0F14;
+    --chip-edge: #FFFFFF2E;
+    --swap: #E8894F;
+    --scrim: rgba(0, 0, 0, 0.62);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- header ---------- */
+  .bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px 24px;
+    flex-wrap: wrap;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .wordmark {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+
+  .course {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .tally {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .tally b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- stage ---------- */
+  .stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 44px 28px;
+    text-align: center;
+    min-height: 44vh;
+  }
+
+  .era {
+    font-family: var(--mono);
+    font-size: clamp(12px, 1.4vw, 15px);
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    min-height: 1.2em;
+  }
+  .era.swapping { color: var(--swap); }
+
+  .name {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(40px, 8.6vw, 132px);
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+    margin: 0;
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+  .name.idle { color: var(--ink-3); }
+
+  .blurb {
+    font-size: clamp(15px, 1.7vw, 20px);
+    color: var(--ink-2);
+    max-width: 48ch;
+    line-height: 1.45;
+    margin: 0;
+    text-wrap: pretty;
+    min-height: 1.4em;
+  }
+
+  .swatches { display: flex; gap: 10px; }
+  .swatches div {
+    width: clamp(32px, 4.2vw, 56px);
+    height: clamp(32px, 4.2vw, 56px);
+    border: 1px solid var(--chip-edge);
+  }
+
+  .spinning .name { opacity: 0.5; }
+
+  /* ---------- controls ---------- */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 28px 24px;
+  }
+
+  input[type="text"] {
+    font-family: var(--body);
+    font-size: 16px;
+    padding: 13px 16px;
+    width: min(280px, 62vw);
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+  input[type="text"]::placeholder { color: var(--ink-3); }
+
+  button {
+    font-family: var(--body);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px 26px;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  button.ghost {
+    background: transparent;
+    color: var(--ink-2);
+    border-color: var(--rule);
+    font-weight: 500;
+  }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-3);
+    padding: 0 28px 18px;
+    min-height: 1.2em;
+  }
+  .note.warn { color: var(--swap); }
+
+  /* ---------- panels ---------- */
+  .panel {
+    border-top: 1px solid var(--rule);
+    background: var(--surface);
+    padding: 18px 28px 26px;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 13px;
+  }
+
+  .panel h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .linkish {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 400;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--surface);
+  }
+
+  .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    min-width: 2ch;
+  }
+
+  .row-text { min-width: 0; flex: 1; }
+  .row-who {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row-what {
+    font-size: 13px;
+    color: var(--ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mini { display: flex; gap: 3px; flex: none; }
+  .mini span { width: 10px; height: 20px; border: 1px solid var(--chip-edge); }
+
+  .undo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 7px;
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    color: var(--swap);
+    cursor: pointer;
+    flex: none;
+    font-weight: 500;
+  }
+  .undo svg { display: block; }
+  .undo-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pool { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pool span {
+    font-size: 12px;
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    padding: 4px 9px;
+    border-radius: 2px;
+  }
+
+  .empty { font-size: 14px; color: var(--ink-3); margin: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- results overlay ---------- */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    background: var(--ground);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sheet-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .sheet-title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(20px, 2.6vw, 30px);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .sheet-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .sheet-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .sheet-body { flex: 1; overflow: auto; padding: 22px 28px 40px; }
+
+  .results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .res {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--surface);
+  }
+  .res .num { font-size: 12px; }
+  .res-text { min-width: 0; flex: 1; }
+  .res-who {
+    font-size: clamp(15px, 1.5vw, 18px);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .res-what {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(15px, 1.5vw, 19px);
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .res-era {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .res .mini span { height: 30px; width: 12px; }
+  .res-swapped {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--swap);
+  }
+
+  /* ---------- confirm dialog ---------- */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: var(--scrim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .dialog {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 24px;
+    width: 100%;
+    max-width: 44ch;
+  }
+
+  .dialog-text {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+
+  .dialog-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="bar">
+  <div>
+    <h1 class="wordmark">Style Lottery</h1>
+    <div class="course">Design &amp; Gestalt &middot; Referat assignment</div>
+  </div>
+  <div class="tally">
+    <b id="drawnCount">0</b> drawn &middot; <b id="left">62</b> of <span id="total">62</span> styles left
+  </div>
+</div>
+
+<main class="stage" id="stage">
+  <div class="era" id="era"></div>
+  <h2 class="name idle" id="name">Ready to draw</h2>
+  <p class="blurb" id="blurb">Type your name, then draw your style.</p>
+  <div class="swatches" id="swatches"></div>
+</main>
+
+<div class="controls">
+  <input type="text" id="who" placeholder="Your name" autocomplete="off" maxlength="40">
+  <button id="draw" disabled>Draw a style</button>
+  <button class="ghost" id="results" disabled>Show results</button>
+  <button class="ghost" id="reset">Reset</button>
+</div>
+<p class="note" id="note">Everyone draws once. After that, each student may give a style back and redraw — up to twice.</p>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Assigned</h2>
+    <button class="linkish" id="poolToggle">Show remaining styles</button>
+  </div>
+  <div id="assigned"><p class="empty">Nothing drawn yet.</p></div>
+  <div id="poolWrap" hidden style="margin-top:18px;">
+    <div class="panel-head"><h2>Still in the pool</h2></div>
+    <div class="pool" id="pool"></div>
+  </div>
+</section>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-bar">
+    <div>
+      <h2 class="sheet-title">Referat assignments</h2>
+      <div class="sheet-sub" id="sheetSub">Design &amp; Gestalt</div>
+    </div>
+    <div class="sheet-actions">
+      <button id="download" hidden>Download CSV</button>
+      <button class="ghost" id="closeSheet">Close</button>
+    </div>
+  </div>
+  <div class="sheet-body">
+    <div class="results" id="resultsList"></div>
+    <p class="note" id="dlNote" style="padding-top:20px;"></p>
+  </div>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalText">
+    <p class="dialog-text" id="modalText"></p>
+    <div class="dialog-actions">
+      <button class="ghost" id="modalCancel">Cancel</button>
+      <button id="modalOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STYLES = [
+    { n: "Arts & Crafts", e: "1880–1920", d: "Honest materials, hand-set type, medieval borders.", c: ["#4A5D3A", "#8C3A2B", "#E8DCC0"] },
+    { n: "Art Nouveau", e: "1890–1910", d: "Whiplash curves and botanical line — everything grows.", c: ["#3B5A3F", "#B08D57", "#E3D9C6"] },
+    { n: "Vienna Secession", e: "1897–1905", d: "Squared geometry and gold; ornament under discipline.", c: ["#1A1A1A", "#C9A227", "#F0EDE4"] },
+    { n: "Wiener Werkstätte", e: "1903–1932", d: "Black-and-white grids and hand-made luxury objects.", c: ["#101010", "#F5F2EA", "#A62B2B"] },
+    { n: "Futurism", e: "1909–1918", d: "Speed, noise and type flung off the baseline.", c: ["#C1121F", "#1B1B1B", "#E8E2D5"] },
+    { n: "Dada", e: "1916–1924", d: "Cut-up nonsense, mixed type, deliberate chaos.", c: ["#1A1A1A", "#D93A2B", "#EAE6DC"] },
+    { n: "De Stijl", e: "1917–1931", d: "Right angles, primaries, black rules, nothing else.", c: ["#F7F7F7", "#D40000", "#0A3CFF"] },
+    { n: "Constructivism", e: "1919–1934", d: "Diagonal force, red and black, type as machinery.", c: ["#C1121F", "#14110F", "#EDE7DC"] },
+    { n: "Bauhaus", e: "1919–1933", d: "Form follows function — red, yellow, blue and the grid.", c: ["#D62828", "#F6BE00", "#1D4ED8"] },
+    { n: "Isotype", e: "1925–1940", d: "Neurath's picture language: repeat the symbol, not the bar.", c: ["#1F1F1F", "#C1272D", "#E6E2D8"] },
+    { n: "Neue Typographie", e: "1925–1935", d: "Tschichold's asymmetry and sans-serif, function over tradition.", c: ["#111111", "#E10600", "#F7F7F7"] },
+    { n: "Art Deco", e: "1920–1939", d: "Machine-age luxury: symmetry, chevrons, gold on jet.", c: ["#101015", "#D4AF37", "#1F6F78"] },
+    { n: "Streamline Moderne", e: "1930–1945", d: "Aerodynamic curves, speed whiskers, chrome and cream.", c: ["#B8C4CC", "#E4DDD0", "#7A2E2E"] },
+    { n: "Surrealism", e: "1924–1950", d: "Impossible objects rendered with total conviction.", c: ["#2C4A6E", "#D6A756", "#C4533F"] },
+    { n: "Soviet Poster", e: "1920–1955", d: "Heroic angles, one red, one worker, one message.", c: ["#B01717", "#1C1C1C", "#E5DCC8"] },
+    { n: "Swiss Style", e: "1950–1975", d: "Helvetica, the grid, objective clarity.", c: ["#E10600", "#111111", "#F7F7F7"] },
+    { n: "Ulm School", e: "1953–1968", d: "Systematic design as applied science; no decoration.", c: ["#2B2B2B", "#F0F0EE", "#D96D2B"] },
+    { n: "Braun Functionalism", e: "1955–1990", d: "Dieter Rams: as little design as possible.", c: ["#E8E6E1", "#2A2A2A", "#F5A623"] },
+    { n: "Blue Note Covers", e: "1955–1965", d: "Reid Miles: duotone photography, type crammed to the edge.", c: ["#1B3A6B", "#E8A33D", "#F2EDE4"] },
+    { n: "Saul Bass", e: "1955–1995", d: "Torn paper shapes and one violent idea.", c: ["#E03A24", "#14110F", "#F0E9DC"] },
+    { n: "Mid-Century Modern", e: "1945–1969", d: "Warm woods, tapered legs, unhurried geometry.", c: ["#B5651D", "#4A7C59", "#E8DCC8"] },
+    { n: "Googie", e: "1945–1969", d: "Space-age optimism: boomerangs, starbursts, cantilevers.", c: ["#00A6A6", "#FF6B4A", "#F2E9DC"] },
+    { n: "Tiki / Exotica", e: "1945–1969", d: "Polynesian pop: bamboo, tapa cloth, carved idols.", c: ["#6B3F23", "#D9822B", "#2F5D50"] },
+    { n: "Atomic / Space Age", e: "1957–1969", d: "Atoms, orbits and moulded plastic futures.", c: ["#F25C05", "#0B3C5D", "#D9D9D9"] },
+    { n: "Pop Art", e: "1955–1970", d: "Ben-Day dots, supermarket colour, mass culture as subject.", c: ["#F5D000", "#E5194B", "#1B9AE0"] },
+    { n: "Op Art", e: "1960–1972", d: "Black and white patterns that will not hold still.", c: ["#0A0A0A", "#FAFAFA", "#D81E5B"] },
+    { n: "Brutalism", e: "1950–1975", d: "Béton brut: raw concrete and honest mass.", c: ["#8C8681", "#B5AFA6", "#3A3733"] },
+    { n: "Polish Poster School", e: "1950–1975", d: "Painterly, metaphorical, never literal.", c: ["#1F2A44", "#C6462E", "#E3D9C2"] },
+    { n: "Push Pin Studios", e: "1954–1980", d: "Glaser and Chwast: illustration against the Swiss grid.", c: ["#E5445E", "#2BB3A3", "#F7E7B4"] },
+    { n: "Herb Lubalin", e: "1960–1980", d: "Type as image; letters that touch, kiss and collide.", c: ["#111111", "#E8402A", "#F2EFE6"] },
+    { n: "Psychedelic", e: "1965–1972", d: "Melting type and vibrating complements, all hand-drawn.", c: ["#FF3EA5", "#FFD400", "#6A0DAD"] },
+    { n: "Anti-Design", e: "1966–1980", d: "Italian radicals reject good taste on purpose.", c: ["#E44C2C", "#2E9B57", "#F0E3C8"] },
+    { n: "Hipgnosis", e: "1968–1983", d: "Album sleeves as deadpan photographic riddles.", c: ["#C9BBA0", "#4C6B8A", "#1E1B18"] },
+    { n: "Cosmic Disco", e: "1975–1982", d: "Airbrush chrome, lens flare, endless gradient horizon.", c: ["#7B2D8B", "#FF6F3C", "#12123A"] },
+    { n: "Punk / DIY", e: "1976–1984", d: "Ransom-note type, photocopier grain, cut and paste.", c: ["#0A0A0A", "#F5F1E6", "#E01B24"] },
+    { n: "New Wave / Swiss Punk", e: "1975–1990", d: "Weingart takes the grid apart on purpose.", c: ["#111111", "#FF2D55", "#00E0B8"] },
+    { n: "Memphis", e: "1981–1988", d: "Squiggles, terrazzo, deliberately wrong colour.", c: ["#F73E7C", "#16C4E8", "#FFD23F"] },
+    { n: "Postmodernism", e: "1975–1995", d: "Quotation, irony, and columns that hold nothing up.", c: ["#E85D9C", "#3AAFA9", "#F2E6C9"] },
+    { n: "Pixel Art", e: "1980–1995", d: "Every pixel placed by hand inside a tiny palette.", c: ["#1B1B2F", "#4ADE80", "#F2C14E"] },
+    { n: "Miami Pastel", e: "1984–1989", d: "Flamingo, teal and neon strip-lighting.", c: ["#F5A7C5", "#3FD0C9", "#F7E7A0"] },
+    { n: "Cyberpunk", e: "1982–", d: "High tech, low life: rain, neon and corporate dread.", c: ["#0B0E1A", "#00F0FF", "#FF2E88"] },
+    { n: "Rave / Acid House", e: "1988–1995", d: "Smiley yellow, warped type, photocopied flyers.", c: ["#FFE500", "#12121A", "#FF5AC8"] },
+    { n: "Deconstructivism", e: "1988–2000", d: "Structure pulled apart and left visibly unresolved.", c: ["#2E2E2E", "#C9C4BC", "#A3402C"] },
+    { n: "Grunge", e: "1990–1999", d: "Carson-era distress and collage; legibility optional.", c: ["#3A3226", "#8C7B62", "#C4462F"] },
+    { n: "Emigre", e: "1984–2005", d: "The Mac lets designers draw their own alphabets.", c: ["#1A1A2E", "#E94F37", "#E9DCC9"] },
+    { n: "Web 1.0", e: "1995–2001", d: "Tiled backgrounds, visitor counters, under construction.", c: ["#000080", "#C0C0C0", "#00C000"] },
+    { n: "Y2K Techno", e: "1997–2003", d: "Liquid chrome, lens flares and translucent plastic.", c: ["#B8C6DB", "#7B61FF", "#E8F6FF"] },
+    { n: "Flash-era Web", e: "2000–2008", d: "Splash screens, preloaders, everything animates.", c: ["#1D1D1D", "#FF6600", "#EFEFEF"] },
+    { n: "Frutiger Aero", e: "2004–2013", d: "Glossy glass, bubbles, grass and clear blue sky.", c: ["#4FB3E8", "#7ED957", "#EAF7FF"] },
+    { n: "Skeuomorphism", e: "2007–2013", d: "Stitched leather, green felt and glossy buttons.", c: ["#4A3B2A", "#C8A165", "#2B6CB0"] },
+    { n: "Flat Design", e: "2013–2018", d: "Bold flat planes, no shadows — long shadows only.", c: ["#2C3E50", "#E74C3C", "#ECF0F1"] },
+    { n: "Material Design", e: "2014–", d: "Honest surfaces, real elevation, physical motion.", c: ["#2196F3", "#F44336", "#FAFAFA"] },
+    { n: "Brutalist Web", e: "2014–", d: "Default fonts, blue links, raw HTML as attitude.", c: ["#F7F7F7", "#0000EE", "#111111"] },
+    { n: "Corporate Memphis", e: "2017–2022", d: "Boneless figures in flat brand colour.", c: ["#6C63FF", "#FF6584", "#F5F5FB"] },
+    { n: "Vaporwave", e: "2010–", d: "Roman busts, chrome grids, dial-up nostalgia.", c: ["#FF71CE", "#01CDFE", "#05FFA1"] },
+    { n: "Neumorphism", e: "2019–2021", d: "Soft extrusions from a single surface.", c: ["#E0E5EC", "#A3B1C6", "#FFFFFF"] },
+    { n: "Glassmorphism", e: "2020–", d: "Frosted panes — depth by blur, light through layers.", c: ["#7DA3F5", "#B9C8FF", "#EEF2FF"] },
+    { n: "Swiss Revival", e: "2015–", d: "The grid returns, now with variable fonts.", c: ["#111111", "#F5F5F0", "#FF4A1C"] },
+    { n: "Maximalism", e: "2020–", d: "Every surface earns a pattern; restraint is the enemy.", c: ["#7B2D8B", "#F5A623", "#14A88C"] },
+    { n: "Solarpunk", e: "2014–", d: "Optimistic ecology: plants, brass and stained glass.", c: ["#4A9D5B", "#E8C86A", "#E6F0DC"] },
+    { n: "Superflat", e: "1996–", d: "Murakami: anime surface, no perspective, no depth.", c: ["#FF5C8A", "#FFD93D", "#3BC9DB"] },
+    { n: "AI Aesthetic", e: "2022–", d: "Uncanny gloss, impossible detail, diffusion sheen.", c: ["#6E56CF", "#E8D5B7", "#1F2233"] }
+  ];
+
+  const KEY = "style-lottery-v2";
+  const MAX_REDRAWS = 2;
+  const $ = (id) => document.getElementById(id);
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let drawn = [];
+  let spinning = false;
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      const parsed = raw ? JSON.parse(raw) : null;
+      drawn = Array.isArray(parsed) ? parsed : [];
+    } catch (e) { drawn = []; }
+    // entries saved before redraws were counted carried a boolean
+    drawn.forEach((d) => {
+      if (typeof d.redraws !== "number") d.redraws = d.swapped ? 1 : 0;
+      delete d.swapped;
+    });
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(drawn)); } catch (e) { /* private mode */ }
+  }
+
+  const byName = (n) => STYLES.find((s) => s.n === n);
+
+  function remaining(alsoExclude) {
+    const taken = new Set(drawn.map((d) => d.style));
+    if (alsoExclude) taken.add(alsoExclude);
+    return STYLES.filter((s) => !taken.has(s.n));
+  }
+
+  function paint(el, colors, tag) {
+    el.innerHTML = "";
+    colors.forEach((c) => {
+      const b = document.createElement(tag);
+      b.style.background = c;
+      el.appendChild(b);
+    });
+  }
+
+  function show(style) {
+    $("era").textContent = style.e;
+    $("name").textContent = style.n;
+    $("name").classList.remove("idle");
+    $("blurb").textContent = style.d;
+    paint($("swatches"), style.c, "div");
+  }
+
+  function setNote(text, warn) {
+    $("note").textContent = text;
+    $("note").classList.toggle("warn", !!warn);
+  }
+
+  /* ---------- rendering ---------- */
+
+  function renderRoster() {
+    const box = $("assigned");
+    box.innerHTML = "";
+    if (!drawn.length) {
+      const p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = "Nothing drawn yet.";
+      box.appendChild(p);
+      return;
+    }
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    drawn.forEach((d, i) => {
+      const style = byName(d.style);
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const num = document.createElement("span");
+      num.className = "num";
+      num.textContent = String(i + 1).padStart(2, "0");
+
+      const text = document.createElement("div");
+      text.className = "row-text";
+      const who = document.createElement("div");
+      who.className = "row-who";
+      who.textContent = d.who;
+      const what = document.createElement("div");
+      what.className = "row-what";
+      what.textContent = d.style;
+      text.append(who, what);
+
+      const mini = document.createElement("div");
+      mini.className = "mini";
+      paint(mini, style ? style.c : ["#888", "#888", "#888"], "span");
+
+      row.append(num, text, mini);
+
+      const left = MAX_REDRAWS - (d.redraws || 0);
+      if (left > 0) {
+        const btn = document.createElement("button");
+        btn.className = "undo";
+        btn.title = "Give " + d.style + " back and redraw — " +
+          left + " redraw" + (left === 1 ? "" : "s") + " left";
+        btn.setAttribute("aria-label", "Redraw for " + d.who + ", " + left + " left");
+        btn.innerHTML =
+          '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" ' +
+          'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<path d="M3 8v6h6"/><path d="M3.8 14a9 9 0 1 0 2.1-9.4L3 8"/></svg>' +
+          '<span class="undo-count">' + left + '</span>';
+        btn.addEventListener("click", () => redraw(i));
+        row.appendChild(btn);
+      }
+
+      grid.appendChild(row);
+    });
+
+    box.appendChild(grid);
+  }
+
+  function renderPool() {
+    const pool = remaining();
+    const box = $("pool");
+    box.innerHTML = "";
+    pool.forEach((s) => {
+      const chip = document.createElement("span");
+      chip.textContent = s.n;
+      box.appendChild(chip);
+    });
+    if (!pool.length) {
+      const p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = "The pool is empty.";
+      box.appendChild(p);
+    }
+  }
+
+  function renderTally() {
+    const left = remaining().length;
+    $("left").textContent = left;
+    $("total").textContent = STYLES.length;
+    $("drawnCount").textContent = drawn.length;
+    $("results").disabled = drawn.length === 0;
+    if (!$("poolWrap").hidden) renderPool();
+    syncDrawButton();
+  }
+
+  /* ---------- results & export ---------- */
+
+  function renderResults() {
+    const box = $("resultsList");
+    box.innerHTML = "";
+
+    const redrawn = drawn.filter((d) => (d.redraws || 0) > 0).length;
+    $("sheetSub").textContent =
+      "Design & Gestalt · " + drawn.length + " assigned" + (redrawn ? " · " + redrawn + " redrawn" : "");
+
+    drawn.forEach((d, i) => {
+      const style = byName(d.style);
+      const res = document.createElement("div");
+      res.className = "res";
+
+      const num = document.createElement("span");
+      num.className = "num";
+      num.textContent = String(i + 1).padStart(2, "0");
+
+      const text = document.createElement("div");
+      text.className = "res-text";
+      const who = document.createElement("div");
+      who.className = "res-who";
+      who.textContent = d.who;
+      const what = document.createElement("div");
+      what.className = "res-what";
+      what.textContent = d.style;
+      const era = document.createElement("div");
+      era.className = "res-era";
+      era.textContent = style ? style.e : "";
+      text.append(who, what, era);
+
+      const mini = document.createElement("div");
+      mini.className = "mini";
+      paint(mini, style ? style.c : ["#888", "#888", "#888"], "span");
+
+      res.append(num, text, mini);
+
+      if (d.redraws) {
+        const tag = document.createElement("span");
+        tag.className = "res-swapped";
+        tag.textContent = d.redraws === 1 ? "1 redraw" : d.redraws + " redraws";
+        res.appendChild(tag);
+      }
+
+      box.appendChild(res);
+    });
+  }
+
+  function csvCell(v) {
+    const s = String(v == null ? "" : v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+
+  function buildCsv() {
+    const rows = [["#", "Student", "Style", "Era", "Redraws used"]];
+    drawn.forEach((d, i) => {
+      const style = byName(d.style);
+      rows.push([i + 1, d.who, d.style, style ? style.e : "", d.redraws || 0]);
+    });
+    return rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
+  }
+
+  let downloads = null;
+
+  async function initDownloads() {
+    try {
+      if (typeof claude === "undefined" || !claude || typeof claude.use !== "function") return;
+      downloads = await claude.use("downloads");
+    } catch (e) {
+      downloads = null;
+    }
+    if (downloads) $("download").hidden = false;
+    else $("dlNote").textContent = "Saving a file isn't available in this view — the list above can be selected and copied.";
+  }
+
+  async function doDownload() {
+    if (!downloads) return;
+    $("download").disabled = true;
+    $("dlNote").classList.remove("warn");
+    $("dlNote").textContent = "";
+    try {
+      await downloads.save({ filename: "style-assignments.csv", data: buildCsv() });
+      $("dlNote").textContent = "Saved.";
+    } catch (err) {
+      const code = err && err.code;
+      if (code === "declined") $("dlNote").textContent = "Save cancelled.";
+      else if (code === "rate_limited") {
+        $("dlNote").textContent = "A save prompt is already open — try again in a moment.";
+        $("dlNote").classList.add("warn");
+      } else {
+        $("dlNote").textContent = "Couldn't save the file. The list above can be selected and copied instead.";
+        $("dlNote").classList.add("warn");
+      }
+    }
+    $("download").disabled = false;
+  }
+
+  function openSheet() {
+    if (!drawn.length) return;
+    renderResults();
+    $("dlNote").textContent = downloads ? "" : $("dlNote").textContent;
+    $("sheet").hidden = false;
+  }
+
+  function syncDrawButton() {
+    const name = $("who").value.trim();
+    $("draw").disabled = spinning || !name || remaining().length === 0;
+  }
+
+  /* ---------- the draw ---------- */
+
+  function reveal(pick, label, swapping, done) {
+    const finish = () => {
+      spinning = false;
+      $("stage").classList.remove("spinning");
+      $("era").classList.remove("swapping");
+      show(pick);
+      done();
+    };
+
+    if (reduced) { spinning = true; finish(); return; }
+
+    spinning = true;
+    $("stage").classList.add("spinning");
+    $("era").classList.toggle("swapping", !!swapping);
+    $("blurb").textContent = label;
+    $("swatches").innerHTML = "";
+    syncDrawButton();
+
+    let delay = 55;
+    const step = () => {
+      const flick = STYLES[Math.floor(Math.random() * STYLES.length)];
+      $("era").textContent = flick.e;
+      $("name").textContent = flick.n;
+      $("name").classList.remove("idle");
+      delay *= 1.19;
+      if (delay < 340) setTimeout(step, delay);
+      else setTimeout(finish, 240);
+    };
+    step();
+  }
+
+  function draw() {
+    if (spinning) return;
+    const who = $("who").value.trim();
+    if (!who) { setNote("Enter a name first.", true); return; }
+
+    const clash = drawn.find((d) => d.who.toLowerCase() === who.toLowerCase());
+    if (clash) {
+      setNote(clash.who + " already drew " + clash.style + ". Use the undo button in the list below to redraw.", true);
+      return;
+    }
+
+    const pool = remaining();
+    if (!pool.length) { setNote("Every style has been assigned.", true); return; }
+
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+
+    reveal(pick, "Drawing for " + who + "…", false, () => {
+      drawn.push({ who: who, style: pick.n, swapped: false });
+      save();
+      $("who").value = "";
+      setNote(who + " drew " + pick.n + ". Pass the device on.");
+      renderRoster();
+      renderTally();
+    });
+  }
+
+  async function redraw(index) {
+    if (spinning) return;
+    const entry = drawn[index];
+    if (!entry) return;
+
+    const used = entry.redraws || 0;
+    if (used >= MAX_REDRAWS) return;
+
+    const pool = remaining(entry.style);
+    if (!pool.length) {
+      setNote("No other style is free — nothing to redraw into.", true);
+      return;
+    }
+
+    const willRemain = MAX_REDRAWS - used - 1;
+    const ok = await ask(
+      entry.who + " gives back " + entry.style + " and redraws.\n\n" +
+      (willRemain
+        ? willRemain + " redraw left afterwards."
+        : "This is the last redraw — the style drawn now is final.") +
+      "\n" + entry.style + " goes back into the pool.",
+      "Redraw"
+    );
+    if (!ok) return;
+
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    const old = entry.style;
+
+    reveal(pick, entry.who + " redraws…", true, () => {
+      entry.style = pick.n;
+      entry.redraws = used + 1;
+      save();
+      setNote(
+        entry.who + " gave back " + old + " and drew " + pick.n + ". " +
+        (willRemain ? willRemain + " redraw left." : "No redraws left — that one is final.")
+      );
+      renderRoster();
+      renderTally();
+    });
+  }
+
+  async function resetAll() {
+    if (drawn.length && !(await ask(
+      "Clear all " + drawn.length + " assignments and return every style to the pool?",
+      "Clear all"
+    ))) return;
+    drawn = [];
+    save();
+    $("era").textContent = "";
+    $("era").classList.remove("swapping");
+    $("name").textContent = "Ready to draw";
+    $("name").classList.add("idle");
+    $("blurb").textContent = "Type your name, then draw your style.";
+    $("swatches").innerHTML = "";
+    setNote("Everyone draws once. After that, each student may give a style back and redraw — up to twice.");
+    renderRoster();
+    renderTally();
+  }
+
+  /* ---------- confirm dialog ----------
+     Sandboxed artifact frames block the native modal dialogs; the call
+     returns false with nothing shown, so confirmations are handled
+     in-page instead. */
+
+  let modalResolve = null;
+
+  function ask(message, okLabel) {
+    return new Promise((resolve) => {
+      if (modalResolve) { resolve(false); return; }
+      modalResolve = resolve;
+      $("modalText").textContent = message;
+      $("modalOk").textContent = okLabel || "Confirm";
+      $("modal").hidden = false;
+      $("modalOk").focus();
+    });
+  }
+
+  function closeModal(value) {
+    if (!modalResolve) return;
+    const resolve = modalResolve;
+    modalResolve = null;
+    $("modal").hidden = true;
+    resolve(value);
+  }
+
+  /* ---------- wiring ---------- */
+
+  $("draw").addEventListener("click", draw);
+  $("reset").addEventListener("click", resetAll);
+  $("who").addEventListener("input", syncDrawButton);
+  $("who").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); draw(); }
+  });
+
+  $("poolToggle").addEventListener("click", () => {
+    const wrap = $("poolWrap");
+    wrap.hidden = !wrap.hidden;
+    $("poolToggle").textContent = wrap.hidden ? "Show remaining styles" : "Hide remaining styles";
+    if (!wrap.hidden) renderPool();
+  });
+
+  $("results").addEventListener("click", openSheet);
+  $("closeSheet").addEventListener("click", () => { $("sheet").hidden = true; });
+  $("download").addEventListener("click", doDownload);
+
+  $("modalOk").addEventListener("click", () => closeModal(true));
+  $("modalCancel").addEventListener("click", () => closeModal(false));
+  $("modal").addEventListener("click", (e) => {
+    if (e.target === $("modal")) closeModal(false);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!$("modal").hidden) { closeModal(false); return; }
+    if (!$("sheet").hidden) $("sheet").hidden = true;
+  });
+
+  load();
+  renderRoster();
+  renderTally();
+  initDownloads();
+</script>

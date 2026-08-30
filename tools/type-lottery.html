@@ -1,0 +1,1031 @@
+<title>Type Lottery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #EDEEF1;
+    --surface: #FFFFFF;
+    --ink: #14161B;
+    --ink-2: #565D6C;
+    --ink-3: #878E9E;
+    --rule: #D3D7E0;
+    --accent: #2439D4;
+    --accent-ink: #FFFFFF;
+    --swap: #A8471C;
+    --scrim: rgba(20, 22, 27, 0.45);
+
+    --display: "Syne", "Archivo", system-ui, sans-serif;
+    --body: "Archivo", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D0F14;
+      --surface: #161A23;
+      --ink: #EDEFF4;
+      --ink-2: #A4ACBB;
+      --ink-3: #6C7488;
+      --rule: #2A303C;
+      --accent: #6B7FFF;
+      --accent-ink: #0D0F14;
+      --swap: #E8894F;
+      --scrim: rgba(0, 0, 0, 0.62);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D0F14;
+    --surface: #161A23;
+    --ink: #EDEFF4;
+    --ink-2: #A4ACBB;
+    --ink-3: #6C7488;
+    --rule: #2A303C;
+    --accent: #6B7FFF;
+    --accent-ink: #0D0F14;
+    --swap: #E8894F;
+    --scrim: rgba(0, 0, 0, 0.62);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px 24px;
+    flex-wrap: wrap;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .wordmark {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+
+  .course {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .tally {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .tally b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- stage ---------- */
+  .stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px 28px;
+    text-align: center;
+    min-height: 46vh;
+  }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: clamp(11px, 1.3vw, 14px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    min-height: 1.2em;
+  }
+  .kicker.swapping { color: var(--swap); }
+
+  .name {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(38px, 8vw, 124px);
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+    margin: 0;
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+  .name.idle { color: var(--ink-3); }
+
+  .meta {
+    font-size: clamp(15px, 1.7vw, 20px);
+    color: var(--ink-2);
+    margin: 0;
+    min-height: 1.4em;
+  }
+
+  .spinning .name { opacity: 0.5; }
+
+  /* ---------- controls ---------- */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 28px 24px;
+  }
+
+  input[type="text"] {
+    font-family: var(--body);
+    font-size: 16px;
+    padding: 13px 16px;
+    width: min(280px, 62vw);
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+  input[type="text"]::placeholder { color: var(--ink-3); }
+
+  button {
+    font-family: var(--body);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px 26px;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  button.ghost {
+    background: transparent;
+    color: var(--ink-2);
+    border-color: var(--rule);
+    font-weight: 500;
+  }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-3);
+    padding: 0 28px 18px;
+    min-height: 1.2em;
+  }
+  .note.warn { color: var(--swap); }
+
+  /* ---------- panels ---------- */
+  .panel {
+    border-top: 1px solid var(--rule);
+    background: var(--surface);
+    padding: 18px 28px 26px;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 13px;
+  }
+
+  .panel h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .linkish {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 400;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--surface);
+  }
+
+  .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    min-width: 2ch;
+  }
+
+  .row-text { min-width: 0; flex: 1; }
+  .row-who {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row-what {
+    font-size: 13px;
+    color: var(--ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .yr {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    flex: none;
+  }
+
+  .undo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 7px;
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    color: var(--swap);
+    cursor: pointer;
+    flex: none;
+    font-weight: 500;
+  }
+  .undo svg { display: block; }
+  .undo-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pool { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pool span {
+    font-size: 12px;
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    padding: 4px 9px;
+    border-radius: 2px;
+  }
+
+  .empty { font-size: 14px; color: var(--ink-3); margin: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- results overlay ---------- */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    background: var(--ground);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sheet-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .sheet-title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(20px, 2.6vw, 30px);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .sheet-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .sheet-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .sheet-body { flex: 1; overflow: auto; padding: 22px 28px 40px; }
+
+  .results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .res {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--surface);
+  }
+  .res .num { font-size: 12px; }
+  .res-text { min-width: 0; flex: 1; }
+  .res-who {
+    font-size: clamp(15px, 1.5vw, 18px);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .res-what {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(15px, 1.5vw, 19px);
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .res-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .res-swapped {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--swap);
+    flex: none;
+  }
+
+  /* ---------- confirm dialog ---------- */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: var(--scrim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .dialog {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 24px;
+    width: 100%;
+    max-width: 44ch;
+  }
+
+  .dialog-text {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+
+  .dialog-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="bar">
+  <div>
+    <h1 class="wordmark">Type Lottery</h1>
+    <div class="course">Design &amp; Gestalt &middot; Week 10 &ndash; 11 &middot; Famous font, free substitute</div>
+  </div>
+  <div class="tally">
+    <b id="drawnCount">0</b> drawn &middot; <b id="left">100</b> of <span id="total">100</span> typefaces left
+  </div>
+</div>
+
+<main class="stage" id="stage">
+  <div class="kicker" id="kicker"></div>
+  <h2 class="name idle" id="name">Ready to draw</h2>
+  <p class="meta" id="meta">Type your name, then draw your typeface.</p>
+</main>
+
+<div class="controls">
+  <input type="text" id="who" placeholder="Your name" autocomplete="off" maxlength="40">
+  <button id="draw" disabled>Draw a typeface</button>
+  <button class="ghost" id="results" disabled>Show results</button>
+  <button class="ghost" id="reset">Reset</button>
+</div>
+<p class="note" id="note">Everyone draws once. After that, each student may give a typeface back and redraw — up to twice.</p>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Assigned</h2>
+    <button class="linkish" id="poolToggle">Show remaining typefaces</button>
+  </div>
+  <div id="assigned"><p class="empty">Nothing drawn yet.</p></div>
+  <div id="poolWrap" hidden style="margin-top:18px;">
+    <div class="panel-head"><h2>Still in the pool</h2></div>
+    <div class="pool" id="pool"></div>
+  </div>
+</section>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-bar">
+    <div>
+      <h2 class="sheet-title">Typeface assignments</h2>
+      <div class="sheet-sub" id="sheetSub">Design &amp; Gestalt</div>
+    </div>
+    <div class="sheet-actions">
+      <button id="download" hidden>Download CSV</button>
+      <button class="ghost" id="closeSheet">Close</button>
+    </div>
+  </div>
+  <div class="sheet-body">
+    <div class="results" id="resultsList"></div>
+    <p class="note" id="dlNote" style="padding-top:20px;"></p>
+  </div>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalText">
+    <p class="dialog-text" id="modalText"></p>
+    <div class="dialog-actions">
+      <button class="ghost" id="modalCancel">Cancel</button>
+      <button id="modalOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* n = name, d = designer, y = year, c = classification key */
+  const FONTS = [
+    { r: 1, n: "Helvetica", y: 1957, d: "Max Miedinger", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "Haas Typefoundry", c: "grotesque" },
+    { r: 2, n: "Garamond", y: 1530, d: "Claude Garamond", cat: "Serif", cl: "Old Style", fo: "", c: "oldstyle" },
+    { r: 3, n: "Frutiger", y: 1977, d: "Adrian Frutiger", cat: "Sans-serif", cl: "Humanist", fo: "Linotype", c: "humanist" },
+    { r: 4, n: "Bodoni", y: 1790, d: "Giambattista Bodoni", cat: "Serif", cl: "Didone / Modern, Romantic", fo: "", c: "didone" },
+    { r: 5, n: "Futura", y: 1927, d: "Paul Renner", cat: "Sans-serif", cl: "Geometric Sans-serif", fo: "Bauer Type Foundry, Neufville Digital", c: "geometric" },
+    { r: 6, n: "Times New Roman", y: 1931, d: "Stanley Morison", cat: "Serif", cl: "Transitional", fo: "", c: "transitional" },
+    { r: 7, n: "Akzidenz Grotesk", y: 1966, d: "Günter Gerhard Lange", cat: "Sans-serif", cl: "Grotesque", fo: "H. Berthold AG", c: "grotesque" },
+    { r: 8, n: "Officina", y: 1990, d: "Erik Spiekermann", cat: "Sans-serif, Serif", cl: "Slab serif, Western", fo: "ITC", c: "slab" },
+    { r: 9, n: "Gill Sans", y: 1930, d: "Eric Gill", cat: "Sans-serif", cl: "Humanist", fo: "Monotype", c: "humanist" },
+    { r: 10, n: "Univers", y: 1954, d: "Adrian Frutiger", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "Deberny & Peignot", c: "grotesque" },
+    { r: 11, n: "Optima", y: 1954, d: "Hermann Zapf", cat: "Sans-serif", cl: "Humanist", fo: "Stempel", c: "humanist" },
+    { r: 12, n: "Franklin Gothic", y: 1903, d: "Morris F. Benton", cat: "Sans-serif", cl: "Grotesque", fo: "ITC", c: "grotesque" },
+    { r: 13, n: "Bembo", y: 1496, d: "Francesco Griffo", cat: "Serif", cl: "Old Style", fo: "Monotype", c: "oldstyle" },
+    { r: 14, n: "Interstate", y: 1993, d: "Tobias Frere-Jones", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "Font Bureau", c: "grotesque" },
+    { r: 15, n: "Thesis", y: 1994, d: "Lucas de Groot", cat: "Sans-serif", cl: "Humanist", fo: "LucasFonts", c: "humanist" },
+    { r: 16, n: "Rockwell", y: 1934, d: "Frank H. Pierpont", cat: "Serif", cl: "Slab Serif", fo: "Monotype", c: "slab" },
+    { r: 17, n: "Walbaum", y: 1800, d: "Justus Walbaum", cat: "Serif", cl: "Didone / Modern", fo: "Monotype", c: "didone" },
+    { r: 18, n: "Meta", y: 1991, d: "Erik Spiekermann", cat: "Sans-serif", cl: "Humanist", fo: "FSI FontShop International", c: "humanist" },
+    { r: 19, n: "Trinité", y: 1982, d: "Bram De Does", cat: "Serif", cl: "Humanist", fo: "The Enschedé Font Foundry", c: "oldstyle" },
+    { r: 20, n: "DIN", y: 1926, d: "Ludwig Goller", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "FSI FontShop International", c: "grotesque" },
+    { r: 21, n: "Matrix", y: 1986, d: "Zuzana Licko", cat: "Serif", cl: "Didone / Modern, Constructed", fo: "Emigre", c: "didone" },
+    { r: 22, n: "OCR", y: 1965, d: "American Type Founders", cat: "Sans-serif", cl: "Computer Related", fo: "", c: "mono" },
+    { r: 23, n: "Avant Garde", y: 1968, d: "Herb Lubalin", cat: "Sans-serif", cl: "Geometric Sans-serif", fo: "ITC, Lubalin, Burns & Co.", c: "geometric" },
+    { r: 24, n: "Lucida", y: 1985, d: "Kris Holmes & Charles Bigelow", cat: "Sans-serif", cl: "Humanist", fo: "Bigelow & Holmes", c: "humanist" },
+    { r: 25, n: "Sabon", y: 1964, d: "Jan Tschichold", cat: "Serif", cl: "Old Style", fo: "D. Stempel AG, Linotype, Monotype", c: "oldstyle" },
+    { r: 26, n: "Zapfino", y: 1998, d: "Hermann Zapf", cat: "Script", cl: "Calligraphic", fo: "Linotype", c: "script" },
+    { r: 27, n: "Letter Gothic", y: 1956, d: "Roger Roberson", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "Monotype, Bitstream, Adobe, URW", c: "mono" },
+    { r: 28, n: "Stone", y: 1987, d: "Sumner Stone", cat: "Sans-serif, Serif, Informal", cl: "Humanist", fo: "ITC", c: "humanist" },
+    { r: 29, n: "Arnhem", y: 1998, d: "Fred Smeijers", cat: "Serif", cl: "Transitional", fo: "OurType", c: "transitional" },
+    { r: 30, n: "Minion", y: 1990, d: "Robert Slimbach", cat: "Serif", cl: "Old Style", fo: "Adobe Systems", c: "oldstyle" },
+    { r: 31, n: "Myriad", y: 1992, d: "Carol Twombly & Robert Slimbach", cat: "Sans-serif", cl: "Humanist", fo: "Adobe Systems", c: "humanist" },
+    { r: 32, n: "Rotis", y: 1988, d: "Otl Aicher", cat: "Sans, Semi-Sans, Serif, Semi-Serif", cl: "Antiqua, Semi-Grotesque, Lineale Humanist", fo: "Monotype", c: "humanist" },
+    { r: 33, n: "Eurostile", y: 1962, d: "Aldo Novarese", cat: "Sans-serif", cl: "Geometric Sans-serif", fo: "Nebiolo", c: "geometric" },
+    { r: 34, n: "Scala", y: 1991, d: "Martin Majoor", cat: "Serif", cl: "Old Style, Neohumanist", fo: "FSI FontShop International", c: "oldstyle" },
+    { r: 35, n: "Syntax", y: 1968, d: "Hans Eduard Meier", cat: "Sans-serif", cl: "Humanist", fo: "Linotype", c: "humanist" },
+    { r: 36, n: "Joanna", y: 1930, d: "Eric Gill", cat: "Serif", cl: "Transitional", fo: "Monotype", c: "transitional" },
+    { r: 37, n: "Fleischmann", y: 1997, d: "Erhard Kaiser", cat: "Serif", cl: "Antiqua", fo: "DTL", c: "oldstyle" },
+    { r: 38, n: "Palatino", y: 1950, d: "Hermann Zapf", cat: "Serif", cl: "Old Style", fo: "Linotype", c: "oldstyle" },
+    { r: 39, n: "Baskerville", y: 1754, d: "John Baskerville", cat: "Serif", cl: "Transitional", fo: "Deberny & Peignot, Linotype", c: "transitional" },
+    { r: 40, n: "Fedra", y: 2002, d: "Peter Bil'ak", cat: "Sans-serif, Serif", cl: "Humanist", fo: "Typotheque", c: "humanist" },
+    { r: 41, n: "Gotham", y: 2000, d: "Tobias Frere-Jones", cat: "Sans-serif", cl: "Geometric Sans-serif", fo: "Hoefler & Frere-Jones", c: "geometric" },
+    { r: 42, n: "Lexicon", y: 1992, d: "Bram De Does", cat: "Serif", cl: "Old Style", fo: "The Enschedé Font Foundry", c: "oldstyle" },
+    { r: 43, n: "Hands", y: 1991, d: "LettError", cat: "Script", cl: "Casual", fo: "LettError", c: "script" },
+    { r: 44, n: "Metro", y: 1929, d: "W. A. Dwiggins", cat: "Sans-serif", cl: "Humanist", fo: "Linotype", c: "humanist" },
+    { r: 45, n: "Didot", y: 1799, d: "Firmin Didot", cat: "Serif", cl: "Didone / Modern", fo: "Linotype", c: "didone" },
+    { r: 46, n: "Formata", y: 1984, d: "Bernd Möllenstädt", cat: "Sans-serif", cl: "Humanist", fo: "Berthold", c: "humanist" },
+    { r: 47, n: "Caslon", y: 1725, d: "William Caslon", cat: "Serif", cl: "Transitional", fo: "Caslon Type Foundry", c: "transitional" },
+    { r: 48, n: "Cooper Black", y: 1920, d: "Oswald B. Cooper", cat: "Serif", cl: "Old Style", fo: "Barnhart Brothers & Spindler", c: "display" },
+    { r: 49, n: "Peignot", y: 1937, d: "A. M. Cassandre", cat: "Sans-serif", cl: "Decorative", fo: "Deberny & Peignot", c: "display" },
+    { r: 50, n: "Bell Gothic", y: 1938, d: "Chauncey H. Griffith", cat: "Sans-serif", cl: "Grotesque", fo: "Mergenthaler Linotype", c: "grotesque" },
+    { r: 51, n: "Antique Olive", y: 1962, d: "Roger Excoffon", cat: "Sans-serif", cl: "Humanist", fo: "Adobe Systems", c: "humanist" },
+    { r: 52, n: "Wilhelm Klingspor Gotisch", y: 1926, d: "Rudolf Koch", cat: "Blackletter", cl: "Medieval / Gothic", fo: "Linotype", c: "blackletter" },
+    { r: 53, n: "Info", y: 1996, d: "Erik Spiekermann", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "FontFont", c: "grotesque" },
+    { r: 54, n: "Dax", y: 1995, d: "Hans Reichel", cat: "Sans-serif", cl: "Humanist", fo: "FSI FontShop International", c: "humanist" },
+    { r: 55, n: "Proforma", y: 1988, d: "Petr van Blokland", cat: "Serif", cl: "Old Style", fo: "Font Bureau", c: "oldstyle" },
+    { r: 56, n: "Today Sans", y: 1988, d: "Volker Küster", cat: "Sans-serif", cl: "Humanist", fo: "Scangraphic", c: "humanist" },
+    { r: 57, n: "Prokyon", y: 2002, d: "Erhard Kaiser", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "DTL", c: "grotesque" },
+    { r: 58, n: "Trade Gothic", y: 1948, d: "Jackson Burke", cat: "Sans-serif", cl: "Grotesque", fo: "Linotype", c: "grotesque" },
+    { r: 59, n: "Swift", y: 1987, d: "Gerard Unger", cat: "Serif", cl: "Didone / Modern", fo: "Linotype", c: "didone" },
+    { r: 60, n: "Copperplate Gothic", y: 1901, d: "Frederic W. Goudy", cat: "Serif", cl: "Gothic", fo: "American Type Founders", c: "inscribed" },
+    { r: 61, n: "Blur", y: 1992, d: "Neville Brody", cat: "Sans-serif", cl: "Neo-Grotesque / Display", fo: "FontFont", c: "display" },
+    { r: 62, n: "Base", y: 1995, d: "Zuzana Licko", cat: "Serif", cl: "Didone / Modern", fo: "Emigre", c: "didone" },
+    { r: 63, n: "Bell Centennial", y: 1978, d: "Matthew Carter", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "Mergenthaler Linotype", c: "grotesque" },
+    { r: 64, n: "News Gothic", y: 1908, d: "Morris F. Benton", cat: "Sans-serif", cl: "Grotesque", fo: "American Type Founders", c: "grotesque" },
+    { r: 65, n: "Avenir", y: 1988, d: "Adrian Frutiger", cat: "Sans-serif", cl: "Geometric", fo: "Linotype", c: "geometric" },
+    { r: 66, n: "Bernhard Modern", y: 1937, d: "Lucian Bernhard", cat: "Serif", cl: "English Roundhand", fo: "American Type Founders", c: "oldstyle" },
+    { r: 67, n: "Amplitude", y: 2003, d: "Christian Schwartz", cat: "Serif", cl: "Grotesque", fo: "Font Bureau", c: "grotesque" },
+    { r: 68, n: "Trixie", y: 1991, d: "Erik van Blokland", cat: "Serif", cl: "Monospaced", fo: "FSI FontShop International", c: "mono" },
+    { r: 69, n: "Quadraat", y: 1992, d: "Fred Smeijers", cat: "Serif", cl: "Old Style", fo: "FSI FontShop International", c: "oldstyle" },
+    { r: 70, n: "Neutraface", y: 2002, d: "Christian Schwartz", cat: "Sans-serif", cl: "Geometric", fo: "House Industries", c: "geometric" },
+    { r: 71, n: "Nobel", y: 1929, d: "Sjoerd de Roos", cat: "Sans-serif", cl: "Geometric", fo: "Lettergieterij Amsterdam", c: "geometric" },
+    { r: 72, n: "Industria", y: 1990, d: "Neville Brody", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "Linotype", c: "grotesque" },
+    { r: 73, n: "Bickham Script", y: 1997, d: "Richard Lipton", cat: "Script", cl: "Formal", fo: "Adobe Systems", c: "script" },
+    { r: 74, n: "Bank Gothic", y: 1930, d: "Morris F. Benton", cat: "Sans-serif", cl: "Geometric", fo: "American Type Founders", c: "geometric" },
+    { r: 75, n: "Corporate ASE", y: 1989, d: "Kurt Weidemann", cat: "Sans-serif, Serif", cl: "Neo-Grotesque, Old Style, Slab Serif", fo: "URW++", c: "grotesque" },
+    { r: 76, n: "Fago", y: 2000, d: "Ole Schäfer", cat: "Sans-serif", cl: "Humanist", fo: "FontFont", c: "humanist" },
+    { r: 77, n: "Trajan", y: 1989, d: "Carol Twombly", cat: "Serif", cl: "Inscriptional", fo: "Adobe Systems", c: "inscribed" },
+    { r: 78, n: "Kabel", y: 1927, d: "Rudolf Koch", cat: "Sans-serif", cl: "Geometric", fo: "Gebr. Klingspor", c: "geometric" },
+    { r: 79, n: "House Gothic 23", y: 1995, d: "Tal Leming", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "House Industries", c: "grotesque" },
+    { r: 80, n: "Kosmik", y: 1993, d: "Erik van Blokland", cat: "Sans-serif", cl: "Neo-Grotesque / Display", fo: "FontFont", c: "display" },
+    { r: 81, n: "Caecilia", y: 1990, d: "Peter Matthias Noordzij", cat: "Serif", cl: "Slab Serif", fo: "Linotype", c: "slab" },
+    { r: 82, n: "Mrs Eaves", y: 1996, d: "Zuzana Licko", cat: "Serif", cl: "Transitional", fo: "Emigre", c: "transitional" },
+    { r: 83, n: "Corpid", y: 1997, d: "Lucas de Groot", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "LucasFonts", c: "grotesque" },
+    { r: 84, n: "Miller", y: 1997, d: "Matthew Carter", cat: "Serif", cl: "Transitional, Scotch Roman", fo: "Carter & Cone", c: "transitional" },
+    { r: 85, n: "Souvenir", y: 1914, d: "Morris F. Benton", cat: "Serif", cl: "Old Style", fo: "ITC", c: "oldstyle" },
+    { r: 86, n: "Instant Types", y: 1992, d: "Just van Rossum", cat: "Sans-serif", cl: "Grotesque / Display", fo: "FontFont", c: "display" },
+    { r: 87, n: "Clarendon", y: 1845, d: "Benjamin Fox", cat: "Serif", cl: "Slab Serif", fo: "Fann Street", c: "slab" },
+    { r: 88, n: "Triplex", y: 1989, d: "Zuzana Licko", cat: "Sans-serif, Serif", cl: "Neo-Grotesque, Modern", fo: "Emigre", c: "grotesque" },
+    { r: 89, n: "Benguiat", y: 1989, d: "Ed Benguiat", cat: "Serif", cl: "Display", fo: "ITC", c: "display" },
+    { r: 90, n: "Zapf Renaissance", y: 1984, d: "Hermann Zapf", cat: "Serif", cl: "Old Style", fo: "Elsner+Flake", c: "oldstyle" },
+    { r: 91, n: "Filosofia", y: 1996, d: "Zuzana Licko", cat: "Serif", cl: "Didone / Modern", fo: "Emigre", c: "didone" },
+    { r: 92, n: "Chalet", y: 1996, d: "House Industries", cat: "Sans-serif", cl: "Geometric", fo: "House Industries", c: "geometric" },
+    { r: 93, n: "Quay Sans", y: 1990, d: "David Quay", cat: "Sans-serif", cl: "Neo-Grotesque", fo: "ITC", c: "grotesque" },
+    { r: 94, n: "Cezanne", y: 1995, d: "Michael Want & James Grieshaber", cat: "Script", cl: "Casual", fo: "P22", c: "script" },
+    { r: 95, n: "Reporter", y: 1938, d: "Carlos Winkow", cat: "Script", cl: "Casual", fo: "Linotype", c: "script" },
+    { r: 96, n: "Legacy", y: 1992, d: "Ronald Arnholm", cat: "Sans-serif, Serif", cl: "Old Style", fo: "ITC", c: "oldstyle" },
+    { r: 97, n: "Agenda", y: 1993, d: "Greg Thompson", cat: "Sans-serif", cl: "Humanist", fo: "Font Bureau", c: "humanist" },
+    { r: 98, n: "Bello", y: 2004, d: "Underware", cat: "Script", cl: "Casual", fo: "Underware", c: "script" },
+    { r: 99, n: "Dalliance", y: 2000, d: "Frank Heine", cat: "Serif, Script", cl: "Old Style", fo: "Emigre", c: "oldstyle" },
+    { r: 100, n: "Mistral", y: 1953, d: "Roger Excoffon", cat: "Script", cl: "Casual", fo: "ITC", c: "script" }
+  ];
+
+
+
+  const KEY = "type-lottery-v1";
+  const MAX_REDRAWS = 2;
+  const $ = (id) => document.getElementById(id);
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let drawn = [];
+  let spinning = false;
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      const parsed = raw ? JSON.parse(raw) : null;
+      drawn = Array.isArray(parsed) ? parsed : [];
+    } catch (e) { drawn = []; }
+    drawn.forEach((d) => { if (typeof d.redraws !== "number") d.redraws = 0; });
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(drawn)); } catch (e) { /* private mode */ }
+  }
+
+  const byName = (n) => FONTS.find((f) => f.n === n);
+
+  function remaining(alsoExclude) {
+    const taken = new Set(drawn.map((d) => d.font));
+    if (alsoExclude) taken.add(alsoExclude);
+    return FONTS.filter((f) => !taken.has(f.n));
+  }
+
+  function show(font) {
+    $("kicker").textContent = "No. " + font.r + " · " + font.cl;
+    $("name").textContent = font.n;
+    $("name").classList.remove("idle");
+    $("meta").textContent = font.d + ", " + font.y + (font.fo ? " · " + font.fo : "");
+  }
+
+  function clearStage(msg) {
+    $("kicker").textContent = "";
+    $("kicker").classList.remove("swapping");
+    $("name").textContent = "Ready to draw";
+    $("name").classList.add("idle");
+    $("meta").textContent = msg;
+  }
+
+  function setNote(text, warn) {
+    $("note").textContent = text;
+    $("note").classList.toggle("warn", !!warn);
+  }
+
+  /* ---------- rendering ---------- */
+
+  function renderRoster() {
+    const box = $("assigned");
+    box.innerHTML = "";
+    if (!drawn.length) {
+      const p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = "Nothing drawn yet.";
+      box.appendChild(p);
+      return;
+    }
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    drawn.forEach((d, i) => {
+      const font = byName(d.font);
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const num = document.createElement("span");
+      num.className = "num";
+      num.textContent = String(i + 1).padStart(2, "0");
+
+      const text = document.createElement("div");
+      text.className = "row-text";
+      const who = document.createElement("div");
+      who.className = "row-who";
+      who.textContent = d.who;
+      const what = document.createElement("div");
+      what.className = "row-what";
+      what.textContent = d.font + (font ? " · " + font.d : "");
+      what.title = font ? font.cl + (font.fo ? " · " + font.fo : "") : "";
+      text.append(who, what);
+
+      const yr = document.createElement("span");
+      yr.className = "yr";
+      yr.textContent = font ? font.y : "";
+
+      row.append(num, text, yr);
+
+      const left = MAX_REDRAWS - (d.redraws || 0);
+      if (left > 0) {
+        const btn = document.createElement("button");
+        btn.className = "undo";
+        btn.title = "Give " + d.font + " back and redraw — " +
+          left + " redraw" + (left === 1 ? "" : "s") + " left";
+        btn.setAttribute("aria-label", "Redraw for " + d.who + ", " + left + " left");
+        btn.innerHTML =
+          '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" ' +
+          'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<path d="M3 8v6h6"/><path d="M3.8 14a9 9 0 1 0 2.1-9.4L3 8"/></svg>' +
+          '<span class="undo-count">' + left + '</span>';
+        btn.addEventListener("click", () => redraw(i));
+        row.appendChild(btn);
+      }
+
+      grid.appendChild(row);
+    });
+
+    box.appendChild(grid);
+  }
+
+  function renderPool() {
+    const pool = remaining();
+    const box = $("pool");
+    box.innerHTML = "";
+    pool.forEach((f) => {
+      const chip = document.createElement("span");
+      chip.textContent = f.n;
+      box.appendChild(chip);
+    });
+    if (!pool.length) {
+      const p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = "The pool is empty.";
+      box.appendChild(p);
+    }
+  }
+
+  function renderTally() {
+    $("left").textContent = remaining().length;
+    $("total").textContent = FONTS.length;
+    $("drawnCount").textContent = drawn.length;
+    $("results").disabled = drawn.length === 0;
+    if (!$("poolWrap").hidden) renderPool();
+    syncDrawButton();
+  }
+
+  function syncDrawButton() {
+    const name = $("who").value.trim();
+    $("draw").disabled = spinning || !name || remaining().length === 0;
+  }
+
+  /* ---------- the draw ---------- */
+
+  function reveal(pick, label, swapping, done) {
+    const finish = () => {
+      spinning = false;
+      $("stage").classList.remove("spinning");
+      $("kicker").classList.remove("swapping");
+      show(pick);
+      done();
+    };
+
+    if (reduced) { spinning = true; finish(); return; }
+
+    spinning = true;
+    $("stage").classList.add("spinning");
+    $("kicker").classList.toggle("swapping", !!swapping);
+    $("meta").textContent = label;
+    syncDrawButton();
+
+    let delay = 55;
+    const step = () => {
+      const flick = FONTS[Math.floor(Math.random() * FONTS.length)];
+      $("kicker").textContent = "No. " + flick.r + " · " + flick.cl;
+      $("name").textContent = flick.n;
+      $("name").classList.remove("idle");
+      delay *= 1.19;
+      if (delay < 340) setTimeout(step, delay);
+      else setTimeout(finish, 240);
+    };
+    step();
+  }
+
+  function draw() {
+    if (spinning) return;
+    const who = $("who").value.trim();
+    if (!who) { setNote("Enter a name first.", true); return; }
+
+    const clash = drawn.find((d) => d.who.toLowerCase() === who.toLowerCase());
+    if (clash) {
+      setNote(clash.who + " already drew " + clash.font + ". Use the undo button in the list below to redraw.", true);
+      return;
+    }
+
+    const pool = remaining();
+    if (!pool.length) { setNote("Every typeface has been assigned.", true); return; }
+
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+
+    reveal(pick, "Drawing for " + who + "…", false, () => {
+      drawn.push({ who: who, font: pick.n, redraws: 0 });
+      save();
+      $("who").value = "";
+      setNote(who + " drew " + pick.n + ". Pass the device on.");
+      renderRoster();
+      renderTally();
+    });
+  }
+
+  async function redraw(index) {
+    if (spinning) return;
+    const entry = drawn[index];
+    if (!entry) return;
+
+    const used = entry.redraws || 0;
+    if (used >= MAX_REDRAWS) return;
+
+    const pool = remaining(entry.font);
+    if (!pool.length) {
+      setNote("No other typeface is free — nothing to redraw into.", true);
+      return;
+    }
+
+    const willRemain = MAX_REDRAWS - used - 1;
+    const ok = await ask(
+      entry.who + " gives back " + entry.font + " and redraws.\n\n" +
+      (willRemain
+        ? willRemain + " redraw left afterwards."
+        : "This is the last redraw — the typeface drawn now is final.") +
+      "\n" + entry.font + " goes back into the pool.",
+      "Redraw"
+    );
+    if (!ok) return;
+
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    const old = entry.font;
+
+    reveal(pick, entry.who + " redraws…", true, () => {
+      entry.font = pick.n;
+      entry.redraws = used + 1;
+      save();
+      setNote(
+        entry.who + " gave back " + old + " and drew " + pick.n + ". " +
+        (willRemain ? willRemain + " redraw left." : "No redraws left — that one is final.")
+      );
+      renderRoster();
+      renderTally();
+    });
+  }
+
+  /* ---------- results & export ---------- */
+
+  function renderResults() {
+    const box = $("resultsList");
+    box.innerHTML = "";
+
+    const redrawn = drawn.filter((d) => (d.redraws || 0) > 0).length;
+    $("sheetSub").textContent =
+      "Design & Gestalt · " + drawn.length + " assigned" + (redrawn ? " · " + redrawn + " redrawn" : "");
+
+    drawn.forEach((d, i) => {
+      const font = byName(d.font);
+      const res = document.createElement("div");
+      res.className = "res";
+
+      const num = document.createElement("span");
+      num.className = "num";
+      num.textContent = String(i + 1).padStart(2, "0");
+
+      const text = document.createElement("div");
+      text.className = "res-text";
+      const who = document.createElement("div");
+      who.className = "res-who";
+      who.textContent = d.who;
+      const what = document.createElement("div");
+      what.className = "res-what";
+      what.textContent = d.font;
+      const meta = document.createElement("div");
+      meta.className = "res-meta";
+      meta.textContent = font
+        ? "No. " + font.r + " · " + font.d + " · " + font.y + " · " + font.cl + (font.fo ? " · " + font.fo : "")
+        : "";
+      text.append(who, what, meta);
+
+      res.append(num, text);
+
+      if (d.redraws) {
+        const tag = document.createElement("span");
+        tag.className = "res-swapped";
+        tag.textContent = d.redraws === 1 ? "1 redraw" : d.redraws + " redraws";
+        res.appendChild(tag);
+      }
+
+      box.appendChild(res);
+    });
+  }
+
+  function csvCell(v) {
+    const s = String(v == null ? "" : v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+
+  function buildCsv() {
+    const rows = [["#", "Student", "Rank", "Typeface", "Year", "Designer", "Category", "Classification", "Foundry", "Redraws used"]];
+    drawn.forEach((d, i) => {
+      const f = byName(d.font);
+      rows.push([
+        i + 1, d.who,
+        f ? f.r : "", d.font, f ? f.y : "", f ? f.d : "",
+        f ? f.cat : "", f ? f.cl : "", f ? f.fo : "",
+        d.redraws || 0
+      ]);
+    });
+    return rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
+  }
+
+  let downloads = null;
+
+  async function initDownloads() {
+    try {
+      if (typeof claude === "undefined" || !claude || typeof claude.use !== "function") return;
+      downloads = await claude.use("downloads");
+    } catch (e) {
+      downloads = null;
+    }
+    if (downloads) $("download").hidden = false;
+    else $("dlNote").textContent = "Saving a file isn't available in this view — the list above can be selected and copied.";
+  }
+
+  async function doDownload() {
+    if (!downloads) return;
+    $("download").disabled = true;
+    $("dlNote").classList.remove("warn");
+    $("dlNote").textContent = "";
+    try {
+      await downloads.save({ filename: "typeface-assignments.csv", data: buildCsv() });
+      $("dlNote").textContent = "Saved.";
+    } catch (err) {
+      const code = err && err.code;
+      if (code === "declined") $("dlNote").textContent = "Save cancelled.";
+      else if (code === "rate_limited") {
+        $("dlNote").textContent = "A save prompt is already open — try again in a moment.";
+        $("dlNote").classList.add("warn");
+      } else {
+        $("dlNote").textContent = "Couldn't save the file. The list above can be selected and copied instead.";
+        $("dlNote").classList.add("warn");
+      }
+    }
+    $("download").disabled = false;
+  }
+
+  async function resetAll() {
+    if (drawn.length && !(await ask(
+      "Clear all " + drawn.length + " assignments and return every typeface to the pool?",
+      "Clear all"
+    ))) return;
+    drawn = [];
+    save();
+    clearStage("Type your name, then draw your typeface.");
+    setNote("Everyone draws once. After that, each student may give a typeface back and redraw — up to twice.");
+    renderRoster();
+    renderTally();
+  }
+
+  /* ---------- confirm dialog ----------
+     Sandboxed artifact frames block the native modal dialogs; the call
+     returns false with nothing shown, so confirmations are handled
+     in-page instead. */
+
+  let modalResolve = null;
+
+  function ask(message, okLabel) {
+    return new Promise((resolve) => {
+      if (modalResolve) { resolve(false); return; }
+      modalResolve = resolve;
+      $("modalText").textContent = message;
+      $("modalOk").textContent = okLabel || "Confirm";
+      $("modal").hidden = false;
+      $("modalOk").focus();
+    });
+  }
+
+  function closeModal(value) {
+    if (!modalResolve) return;
+    const resolve = modalResolve;
+    modalResolve = null;
+    $("modal").hidden = true;
+    resolve(value);
+  }
+
+  /* ---------- wiring ---------- */
+
+  $("draw").addEventListener("click", draw);
+  $("reset").addEventListener("click", resetAll);
+  $("who").addEventListener("input", syncDrawButton);
+  $("who").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); draw(); }
+  });
+
+  $("poolToggle").addEventListener("click", () => {
+    const wrap = $("poolWrap");
+    wrap.hidden = !wrap.hidden;
+    $("poolToggle").textContent = wrap.hidden ? "Show remaining typefaces" : "Hide remaining typefaces";
+    if (!wrap.hidden) renderPool();
+  });
+
+  $("results").addEventListener("click", () => {
+    if (!drawn.length) return;
+    renderResults();
+    $("sheet").hidden = false;
+  });
+  $("closeSheet").addEventListener("click", () => { $("sheet").hidden = true; });
+  $("download").addEventListener("click", doDownload);
+
+  $("modalOk").addEventListener("click", () => closeModal(true));
+  $("modalCancel").addEventListener("click", () => closeModal(false));
+  $("modal").addEventListener("click", (e) => {
+    if (e.target === $("modal")) closeModal(false);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!$("modal").hidden) { closeModal(false); return; }
+    if (!$("sheet").hidden) $("sheet").hidden = true;
+  });
+
+  load();
+  renderRoster();
+  renderTally();
+  initDownloads();
+</script>
