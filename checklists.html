@@ -440,45 +440,48 @@
       ]
     },
     {
-      n: 12, date: "22 Dec", topic: "Narrative Photo Crops",
-      theory: "Imagery & Framing",
-      brief: "One photograph, two stories, decided entirely by where you cut.",
-      items: [
-        "One complex photo with several subjects or actions",
-        "Two crops isolating two genuinely different narratives",
-        "Colour and value adjusted to amplify each narrative",
-        "The original alongside both crops",
-        "Two sentences on the narrative shift"
-      ]
-    },
-    {
-      n: 13, date: "5 Jan", topic: "Guerilla Rebrand: Kickoff",
+      n: 12, date: "22 Dec", kickoff: true,
       theory: "Brand audit and strategic vision",
-      brief: "Audit an identity nobody asked you to fix, then sketch wide.",
+      brief: "The brief lands before the break — the audit and the sketches are holiday work.",
       items: [
         "A local organisation chosen with a weak or inconsistent identity",
         "Its current logo, typography, colours and formats documented",
         "Three concrete design flaws named — Gestalt, legibility, or hierarchy",
         "Three new brand attributes to steer the redesign",
         "A user persona, and how the current identity fails them",
-        "Twenty rough thumbnail logo sketches — no self-censoring"
-      ]
+        "Twenty rough thumbnail logo sketches — no self-censoring",
+        "Ready to show on 12 January, not started on 11 January"
+      ],
+      topic: "Guerilla Rebrand: Kickoff"
     },
     {
-      n: 14, date: "12 Jan", topic: "Guerilla Rebrand: Execution",
-      theory: "Execution & Context of Use",
-      brief: "Turn the sketches into a system, then put it somewhere real.",
+      n: 13, date: "12 Jan",
+      theory: "From sketch to system",
+      brief: "Pick the surviving concept and build the system around it.",
       items: [
-        "Logo digitised, with variants for light and dark backgrounds",
+        "The strongest thumbnail chosen and digitised as a vector",
+        "Logo variants for light and dark backgrounds",
         "A type scale: display, body, caption",
         "Colour swatches that pass WCAG AA — checked, not assumed",
-        "The assets placed in a realistic mockup — signage, storefront, or screen",
-        "Feedback gathered from an actual customer or stakeholder",
-        "Two sentences on what they said"
-      ]
+        "The whole set assembled as one style sheet"
+      ],
+      topic: "Guerilla Rebrand: Style System"
     },
     {
-      n: 15, date: "19 Jan", topic: "The Pitch", final: true,
+      n: 14, date: "19 Jan",
+      theory: "Context of use",
+      brief: "Put the system somewhere real and find out what a stranger makes of it.",
+      items: [
+        "The assets placed in a realistic mockup — signage, storefront, packaging or screen",
+        "Checked at actual viewing distance, not just at 100 % on your screen",
+        "Feedback gathered from an actual customer or stakeholder",
+        "Two sentences on what they said",
+        "One thing changed in response to that feedback"
+      ],
+      topic: "Guerilla Rebrand: In Context"
+    },
+    {
+      n: 15, date: "26 Jan", final: true, topic: "The Pitch",
       theory: "Final presentation",
       brief: "Sell the rebrand as though you are giving it to them for free — because you are.",
       items: [
@@ -552,6 +555,12 @@
         t2.className = "tag party";
         t2.textContent = w.last ? "Christmas party · final piece" : "Christmas party";
         tags.appendChild(t2);
+      }
+      if (w.kickoff) {
+        const t4 = document.createElement("span");
+        t4.className = "tag party";
+        t4.textContent = "Briefed before the break";
+        tags.appendChild(t4);
       }
       if (w.final) {
         const t3 = document.createElement("span");
