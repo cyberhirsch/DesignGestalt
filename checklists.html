@@ -208,6 +208,21 @@
   }
   .tag.party { color: var(--accent); border-color: var(--accent); }
 
+  .tool-link {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    padding: 6px 10px;
+    margin-bottom: 16px;
+  }
+  .tool-link:hover { background: var(--accent); color: var(--accent-ink); }
+
   /* ---------- checklist items ---------- */
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 
@@ -315,6 +330,7 @@
     {
       n: 1, date: "6 Oct", topic: "The Intuitive Icon Set",
       theory: "Gestalt Principles",
+      tool: { href: "tools/gestalt.html", label: "Gestalt Playground" },
       brief: "Find Gestalt in the wild, then sketch your way to one clean icon.",
       items: [
         "Three real-world designs that use Gestalt principles, screenshotted",
@@ -381,22 +397,28 @@
     },
     {
       n: 7, date: "17 Nov", topic: "Itten Contrast Studies", party: true,
-      theory: "Colour Psychology & Cultural Coding",
-      brief: "Make the colour contrasts yourself rather than reading about them.",
+      theory: "Colour Psychology & Accessibility (WCAG AA)",
+      brief: "Make the colour contrasts yourself — then find out whether the one you picked can actually carry text.",
+      tool: { href: "tools/contrast.html", label: "Contrast Checker" },
       items: [
         "Two or three of Itten's seven contrasts, each as an original piece",
         "Each piece labelled with the contrast it demonstrates",
         "Made, not sourced — drawing, collage, or your own photography",
-        "One study nominated as the party's colour direction, with a sentence on why"
+        "One study nominated as the party's colour direction, with a sentence on why",
+        "That palette written out as named hex values",
+        "Every text-on-background pair run through the contrast checker, ratios noted",
+        "Anything under 4.5:1 for body text adjusted until it passes — fix the colour, keep the idea",
+        "The palette seen through the colour-blindness simulation, with a note on what survives"
       ]
     },
     {
-      n: 8, date: "24 Nov", topic: "The Sign-Up Button", party: true,
+      n: 8, date: "24 Nov", topic: "The RSVP Button", party: true,
       theory: "Contrast & User Guidance",
-      brief: "The brief says “RSVP”. Find out whether that word survives contact with your audience — then design the states.",
+      brief: "The label is “RSVP”. Test it before you touch it — it only changes if the answers say so.",
       items: [
         "Ask three people what “RSVP” means, without letting them look it up — write down what they said",
-        "A label chosen for the people actually coming to this party, with one sentence defending it",
+        "“RSVP” kept unless those answers say otherwise — changing it needs evidence, not a hunch",
+        "A one-line verdict: kept or changed, and what the three answers showed",
         "The button sketched in three states before you build anything",
         "Built as a component with variants: Default, Hover, Pressed",
         "Primary, secondary and tertiary versions",
@@ -420,6 +442,7 @@
     {
       n: 10, date: "8 Dec", topic: "Famous Font: Research",
       theory: "Micro-Typography & Cognitive Load",
+      tool: { href: "tools/type-lottery.html", label: "Type Lottery" },
       brief: "Pick a classic, find the free stand-in, and prove you can see the difference.",
       items: [
         "A type classic chosen: designer, year, notable users, character",
@@ -593,7 +616,17 @@
         ul.appendChild(li);
       });
 
-      sec.append(head, h2, brief, tags, ul);
+      sec.append(head, h2, brief, tags);
+
+      if (w.tool) {
+        const toolLink = document.createElement("a");
+        toolLink.className = "tool-link";
+        toolLink.href = w.tool.href;
+        toolLink.textContent = "Open the " + w.tool.label;
+        sec.appendChild(toolLink);
+      }
+
+      sec.appendChild(ul);
       weeksBox.appendChild(sec);
 
       const link = document.createElement("a");
