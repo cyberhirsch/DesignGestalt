@@ -11,6 +11,9 @@ Published site: https://cyberhirsch.github.io/DesignGestalt/
   - `style-lottery.html` — assigns each student a design style to present (62 movements)
   - `type-lottery.html` — the same for FontShop's 100 Best Fonts
 
+The hub also links out to KernType (type.method.ac) by Method of Action as kerning
+practice for Week 10.
+
 Slide decks are added per week as they are finished.
 
 ## Notes
