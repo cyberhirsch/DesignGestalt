@@ -483,36 +483,28 @@
       topic: "Guerilla Rebrand: Kickoff"
     },
     {
-      n: 13, date: "12 Jan",
-      theory: "From sketch to system",
-      brief: "Pick the surviving concept and build the system around it.",
+      n: 13, date: "12 Jan", heavy: true,
+      theory: "From sketch to system, and out into the world",
+      brief: "The system and its first contact with reality share one session. Start before the week does.",
       items: [
         "The strongest thumbnail chosen and digitised as a vector",
         "Logo variants for light and dark backgrounds",
         "A type scale: display, body, caption",
         "Colour swatches that pass WCAG AA — checked, not assumed",
-        "The whole set assembled as one style sheet"
-      ],
-      topic: "Guerilla Rebrand: Style System"
-    },
-    {
-      n: 14, date: "19 Jan",
-      theory: "Context of use",
-      brief: "Put the system somewhere real and find out what a stranger makes of it.",
-      items: [
+        "The whole set assembled as one style sheet",
         "The assets placed in a realistic mockup — signage, storefront, packaging or screen",
         "Checked at actual viewing distance, not just at 100 % on your screen",
         "Feedback gathered from an actual customer or stakeholder",
-        "Two sentences on what they said",
-        "One thing changed in response to that feedback"
+        "Two sentences on what they said"
       ],
-      topic: "Guerilla Rebrand: In Context"
+      topic: "Guerilla Rebrand: System & Context"
     },
     {
-      n: 15, date: "26 Jan", final: true, topic: "The Pitch",
+      n: 14, date: "19 Jan", final: true, topic: "The Pitch",
       theory: "Final presentation",
       brief: "Sell the rebrand as though you are giving it to them for free — because you are.",
       items: [
+        "One thing changed in response to last week's feedback, and a note on why",
         "A presentation deck",
         "The audit, the strategy, the system and the mockups as one narrative",
         "The three flaws you found, and how the redesign answers each",
@@ -583,6 +575,12 @@
         t2.className = "tag party";
         t2.textContent = w.last ? "Christmas party · final piece" : "Christmas party";
         tags.appendChild(t2);
+      }
+      if (w.heavy) {
+        const t5 = document.createElement("span");
+        t5.className = "tag party";
+        t5.textContent = "Heaviest week — start early";
+        tags.appendChild(t5);
       }
       if (w.kickoff) {
         const t4 = document.createElement("span");
