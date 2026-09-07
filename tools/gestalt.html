@@ -398,6 +398,18 @@
     const r = 76, cx = 350, cy = 110;
     clear(closeSvg);
 
+    // An SVG arc whose endpoints coincide is omitted by the spec — at gap 0 the
+    // path renders nothing at all, which is exactly the wrong moment for a
+    // closure demo to vanish. Draw the real circle for that case.
+    if (gapDeg < 0.5) {
+      closeSvg.appendChild(el("circle", {
+        cx: cx, cy: cy, r: r,
+        fill: "none", stroke: "var(--mark)", "stroke-width": 10
+      }));
+      closeOut.textContent = "closed";
+      return;
+    }
+
     const start = (-90 + gapDeg / 2) * Math.PI / 180;
     const end = (270 - gapDeg / 2) * Math.PI / 180;
     const large = (360 - gapDeg) > 180 ? 1 : 0;
