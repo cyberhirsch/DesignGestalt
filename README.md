@@ -9,7 +9,7 @@ Published site: https://cyberhirsch.github.io/DesignGestalt/
 - `index.html` — course hub, schedule, and links to everything below
 - `checklists.html` — what to hand in each week, as tick lists (14 weeks, 91 deliverables)
 - `tools/`
-  - `gestalt.html` — interactive demos of the five Gestalt principles (Week 1)
+  - `gestalt.html` — interactive demos of the seven Gestalt principles (Week 1)
   - `contrast.html` — WCAG AA/AAA checker with colour-blindness simulation (Week 7)
   - `style-lottery.html` — assigns each student a design style to present (62 movements)
   - `type-lottery.html` — the same for FontShop's 100 Best Fonts
