@@ -7,7 +7,7 @@ Published site: https://cyberhirsch.github.io/DesignGestalt/
 ## Contents
 
 - `index.html` — course hub, schedule, and links to everything below
-- `checklists.html` — the homework checklist: what to hand in each week and what to check first, as tick lists (14 weeks, 72 hand-ins and 54 checks)
+- `checklists.html` — the homework checklist: what to hand in each week and what to check first, as tick lists (14 weeks, 73 hand-ins and 54 checks)
 - `briefs.html` — the full homework brief for every week. Generated: edit the homework
   document, then run `python scripts/build_briefs.py` (needs the `markdown` package)
 - `tools/`
