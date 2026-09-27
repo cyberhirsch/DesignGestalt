@@ -1,0 +1,704 @@
+<!doctype html>
+<!-- Generated from the homework document by scripts/build_briefs.py. Edit the document, not this file. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homework Briefs</title>
+<meta name="description" content="The full homework brief for every week — Design &amp; Gestalt, Smart Interactive Media.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #EDEEF1;
+    --surface: #FFFFFF;
+    --ink: #14161B;
+    --ink-2: #565D6C;
+    --ink-3: #878E9E;
+    --rule: #D3D7E0;
+    --accent: #2439D4;
+    --accent-ink: #FFFFFF;
+
+    --display: "Syne", "Archivo", system-ui, sans-serif;
+    --body: "Archivo", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D0F14;
+      --surface: #161A23;
+      --ink: #EDEFF4;
+      --ink-2: #A4ACBB;
+      --ink-3: #6C7488;
+      --rule: #2A303C;
+      --accent: #6B7FFF;
+      --accent-ink: #0D0F14;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D0F14;
+    --surface: #161A23;
+    --ink: #EDEFF4;
+    --ink-2: #A4ACBB;
+    --ink-3: #6C7488;
+    --rule: #2A303C;
+    --accent: #6B7FFF;
+    --accent-ink: #0D0F14;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.55;
+  }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 24px 90px; }
+
+  /* ---------- masthead ---------- */
+  header { padding: 52px 0 26px; }
+
+  .back {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 22px;
+  }
+  .back:hover { color: var(--accent); }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 56px);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    margin: 0 0 16px;
+  }
+
+  .standfirst { font-size: 16px; color: var(--ink-2); max-width: 62ch; margin: 0; text-wrap: pretty; }
+
+  /* ---------- sticky nav ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--ground);
+    border-bottom: 1px solid var(--rule);
+    padding: 12px 0;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .nav a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-2);
+    text-decoration: none;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 4px 7px;
+    min-width: 28px;
+    text-align: center;
+  }
+  .nav a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- the document ---------- */
+  .doc { font-size: 15.5px; }
+  .doc h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 12px 0 6px;
+    scroll-margin-top: 100px;
+  }
+  .doc h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    margin: 30px 0 8px;
+    scroll-margin-top: 100px;
+  }
+  .doc h2 + h3 {
+    font-family: var(--body);
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 0;
+    color: var(--ink-2);
+    margin: 0 0 12px;
+  }
+  .doc p { margin: 0 0 12px; text-wrap: pretty; }
+  .doc ul, .doc ol { padding-left: 24px; margin: 6px 0 12px; }
+  .doc li { margin: 5px 0; }
+  .doc li > ul, .doc li > ol { margin: 4px 0; }
+  .doc blockquote {
+    margin: 16px 0;
+    padding: 12px 16px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 2px;
+  }
+  .doc blockquote p:last-child { margin-bottom: 0; }
+  .doc code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0 4px;
+  }
+  .doc hr { border: 0; border-top: 1px solid var(--rule); margin: 44px 0 34px; }
+  .doc a { color: var(--accent); overflow-wrap: anywhere; }
+
+  .to-list {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    padding: 6px 10px;
+    margin: 2px 0 14px;
+  }
+  .doc a.to-list { overflow-wrap: normal; }
+  .to-list:hover { background: var(--accent); color: var(--accent-ink); }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a class="back" href="index.html">&larr; Design &amp; Gestalt</a>
+    <h1>Homework briefs</h1>
+    <p class="standfirst">
+      The full brief for every week: what to study first, the task step by step, and what to
+      hand in. The <a href="checklists.html">homework checklist</a> is the short version for ticking off.
+    </p>
+  </header>
+
+  <nav class="nav">
+    <a href="#week-1">01</a>
+    <a href="#week-2">02</a>
+    <a href="#week-3">03</a>
+    <a href="#week-4">04</a>
+    <a href="#week-5">05</a>
+    <a href="#week-6">06</a>
+    <a href="#week-7">07</a>
+    <a href="#week-8">08</a>
+    <a href="#week-9">09</a>
+    <a href="#week-10">10</a>
+    <a href="#week-11">11</a>
+    <a href="#week-12">12</a>
+    <a href="#week-13">13</a>
+    <a href="#week-14">14</a>
+    <a href="#party-fact-sheet">Party fact sheet</a>
+  </nav>
+
+  <article class="doc">
+    <p>This document contains the weekly homework assignments for the <strong>Design &amp; Gestalt</strong> module.</p>
+    <p>In our <strong>flipped classroom model</strong>, you are expected to complete the <strong>Pre-Class Study</strong> and the <strong>Homework Task</strong> at home <em>before</em> coming to class. During the class session, we will review your submissions, discuss challenges, run live critiques, and build upon your work.</p>
+    <h3>Show your process</h3>
+    <p>Every homework assignment requires you to show your <em>process</em>—including initial brainstorming, failed drafts, and user feedback—rather than just a single polished output. Every hand-in therefore includes your sketches and discarded drafts.</p>
+    <h3>Generative AI</h3>
+    <p>You may use generative AI in any week, as long as you declare it: your prompts and what the tool gave you go in with your sketches and discarded drafts. The pieces you hand in stay your own work. Week 5 introduces image generators properly.</p>
+    <h3>Deadlines, uploads and grading</h3>
+    <ul>
+    <li>Each week's homework is due <strong>before class at the next session</strong>. The exceptions: the Week 12 brief is due on 12 January, and Weeks 13 and 14 are both due on 19 January, the day of the pitch.</li>
+    <li>Upload it to the course Miro board: <a href="https://miro.com/app/board/uXjVHhgHJV8=/?share_link_id=566460259605">https://miro.com/app/board/uXjVHhgHJV8=/?share_link_id=566460259605</a></li>
+    <li>Name every file <code>WNN_Lastname</code>, for example <code>W02_Hirsch.pdf</code>, so the work sorts by week.</li>
+    <li>Your weekly work forms a <strong>portfolio</strong>, graded together with the final pitch in Week 14.</li>
+    </ul>
+    <h3>The Campus Christmas Party</h3>
+    <p>Weeks 2, 3 and 5 to 10 all build assets for one fictional-but-plausible brief: a <strong>Campus Christmas Party organised by students</strong> on Friday 18 December. The work follows a real event's calendar: the promotion goes out four weeks before the party, the RSVP page opens two and a half weeks before, and the event pieces are ready three days before.</p>
+    <ul>
+    <li><strong>Everyone</strong> designs the full promotion set (Week 6), the RSVP page (Week 8) and the pictograms (Week 9).</li>
+    <li><strong>In Week 9 the class commits to one design</strong>, chosen by vote from the promotion sets, and each of you draws one event piece by lot: the directional signs, the welcome backdrop, the programme board or the table cards. You make it in Week 10, in the class design.</li>
+    <li>On 15 December, three days before the party, we lay the whole party out together.</li>
+    </ul>
+    <h3 id="party-fact-sheet">Party fact sheet</h3>
+    <ul>
+    <li><strong>Campus Christmas Party</strong>: Friday 18 December, 18:00 to 01:00, Main Hall. Free entry. RSVP by Friday 11 December.</li>
+    <li><strong>Programme</strong>:<ul>
+    <li>18:00 Doors open: mulled wine and alcohol-free punch</li>
+    <li>18:30 Welcome from the student council</li>
+    <li>19:00 Carols with the university choir</li>
+    <li>19:45 The buffet opens</li>
+    <li>20:30 Secret Santa gift swap: bring one wrapped gift worth under €10</li>
+    <li>21:15 Ugly Christmas sweater contest</li>
+    <li>22:00 DJ and dancing</li>
+    <li>All evening: photo booth and coat check</li>
+    </ul>
+    </li>
+    <li><strong>Menu</strong>, with the allergens EU rules require on it:<ul>
+    <li>Mulled wine: sulphites</li>
+    <li>Alcohol-free punch: none</li>
+    <li>Bratwurst in a bread roll: gluten, mustard</li>
+    <li>Cheese spätzle (vegetarian): gluten, eggs, milk</li>
+    <li>Lentil stew (vegan): celery</li>
+    <li>Christmas biscuits: gluten, eggs, milk, nuts</li>
+    <li>Stollen: gluten, milk, nuts</li>
+    <li>Roasted almonds: nuts</li>
+    </ul>
+    </li>
+    </ul>
+    <h3>Homework checklist</h3>
+    <p>Every assignment below has a homework checklist at
+    <a href="https://cyberhirsch.github.io/DesignGestalt/checklists.html">https://cyberhirsch.github.io/DesignGestalt/checklists.html</a>
+    It lists every step, not only what you hand in: tick it off as you work, and check it once more before you upload. Marks are lost far more often on missing pieces than on weak work.</p>
+    <hr />
+    <h2 id="week-1">Week 1 — 6 October: Gestalt Principles</h2>
+    <h3>How Our Brain Organizes Information (Discover, Ideate &amp; Prototype)</h3>
+    <a class="to-list" href="checklists.html#week-1">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 2–3 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Understand the psychological foundations of perception through the seven Gestalt laws: Proximity, Similarity, Continuity, Closure, Common Fate, Prägnanz (Simplicity) and Figure-Ground.</li>
+    <li>Learn why the human brain naturally seeks pattern optimization to save cognitive energy.</li>
+    <li>Apply those laws deliberately in a piece of your own, and say where you did.</li>
+    <li>Initialize basic workspace environments in your chosen design application.</li>
+    </ul>
+    </li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: Core concepts of Gestalt psychology in visual design—the seven laws above.</li>
+    <li><strong>Play</strong>: The Gestalt Playground (<a href="https://cyberhirsch.github.io/DesignGestalt/tools/gestalt.html">https://cyberhirsch.github.io/DesignGestalt/tools/gestalt.html</a>). Push each slider until the grouping flips, and note where the tipping point sits.</li>
+    <li><strong>Watch</strong>: An introduction to your chosen application—frames, vectors, shapes, alignment, grouping.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Discover</strong>: Find and screenshot three real-world designs (logos, UI, posters) that use Gestalt principles. Write a 1-sentence note for each explaining how it affects perception.</li>
+    <li><strong>Choose</strong>: Pick <strong>one</strong> artifact you actually want to make—a poster, flyer, menu, invitation, ticket, business card or certificate; a book, album or magazine cover; a label, packaging or sticker; an app icon, phone wallpaper, Instagram post or YouTube thumbnail; a sign, a T-shirt print, or your own CV.</li>
+    <li><strong>Ideate (Rapid Brainstorming)</strong>: Sketch <strong>12 rough variations</strong> of it on paper with black markers, or digitally with a stylus. They must be genuinely different—not one idea drawn twelve times.</li>
+    <li><strong>Prototype</strong>: Pick the strongest and build it properly in your chosen application, using <strong>at least two of the seven laws deliberately</strong>.</li>
+    <li><strong>Name them</strong>: Say which two laws you used and where they appear in the piece. One sentence each.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: The three real-world examples with their notes, your 12 sketches, the finished piece and your two named laws as one viewable PDF, plus the editable source file or a project link.</li>
+    <li><strong>Keep this file.</strong> In Week 9 you will build a five-icon signage set. Putting that set beside this first piece is how you will see what eight weeks changed.</li>
+    <li><strong>This week sits outside the Christmas Party brief.</strong> Make what you actually want to make—the party starts in Week 2.</li>
+    <li><strong>In-Class Discussion (Week 2)</strong>: A critique of the finished pieces. The class names the Gestalt principles it sees before you say anything; then you name the two you chose. Where the two lists agree, the piece communicates. Where they differ, the form is doing something you did not ask it to.</li>
+    </ul>
+    <hr />
+    <h2 id="week-2">Week 2 — 13 October: Visual Hierarchy &amp; Page Structure</h2>
+    <h3>Establishing a Clear Reading Order (Define &amp; Prototype)</h3>
+    <a class="to-list" href="checklists.html#week-2">Checklist for this week</a>
+    <blockquote>
+    <p><strong>The Design Thinking &amp; Creative Process Framework.</strong> From this week on, you will apply the <strong>Double Diamond</strong> process (Discover, Define, Develop, Deliver) and the core phases of <strong>Design Thinking</strong> (Empathize, Define, Ideate, Prototype, Test). Every brief names its phase under <strong>Design Thinking Focus</strong>.</p>
+    </blockquote>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 2–3 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Control the viewer's reading order using scale, weight, contrast, spacing and alignment.</li>
+    <li>Recognise that hierarchy is a decision about <em>what matters most</em>, not a decoration applied afterwards.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Define</strong>. One message, deliberately re-prioritised three ways.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: How weight, scale, contrast, spacing and alignment establish reading order.</li>
+    <li><strong>Setup</strong>: Review text styles and layout grids in your chosen application.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Define</strong>: Take this message exactly as given — <em>"Campus Christmas Party — 18 December, Main Hall, free entry"</em>.</li>
+    <li><strong>Prototype</strong>: Build <strong>three compositions</strong> of it. Each version must lead with a different fact: one where the date arrives first, one where the place does, one where "free entry" does.</li>
+    <li><strong>Constraint</strong>: Type only. No photographs, no illustration, no decorative elements. Scale, weight, contrast, spacing and alignment must do all of the work.</li>
+    <li><strong>Reflect</strong>: For each version, write one line naming the reading order it produces.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: The three compositions plus your three reading-order notes as one viewable PDF, plus the editable source file or a project link.</li>
+    <li><strong>In-Class Discussion (Week 3)</strong>: We will read your compositions cold—without your notes—and check whether the class arrives at the order you intended.</li>
+    </ul>
+    <hr />
+    <h2 id="week-3">Week 3 — 20 October: Figure-Ground &amp; The Power of Whitespace</h2>
+    <h3>Negative Space as an Active Component (Ideate &amp; Prototype)</h3>
+    <a class="to-list" href="checklists.html#week-3">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 2–3 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Treat negative space as an active, designed element rather than as leftover background.</li>
+    <li>Judge balance by eye through physical iteration.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Ideate (Physical Iteration)</strong>. Arrange before you commit.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: Figure-ground relationships and ambiguous figures.</li>
+    <li><strong>Gather Materials</strong>: Black paper, a craft knife or scalpel, a cutting mat, glue, and a sheet of A4 white card.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Ideate</strong>: Cut <strong>five abstract geometric shapes</strong> from black paper, abstracted from a Christmas motif of your choice—a tree, a star, an ornament, a candle. Abstract it far enough that it reads as form first and motif second.</li>
+    <li><strong>Iterate</strong>: Before gluing anything, build <strong>three different arrangements</strong> on the white card. Photograph each one.</li>
+    <li><strong>Select &amp; Finalise</strong>: Choose the arrangement where the white card reads as deliberate shape rather than as empty background. Glue it down and photograph it cleanly, evenly lit and square to the camera.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: Photographs of your three trial arrangements and of the final composition. Bring the glued piece itself to the Week 4 session for the pin-up.</li>
+    <li><strong>In-Class Discussion (Week 4)</strong>: A pinned-up gallery critique. We will discuss what the trials taught you about balance, and then rebuild selected compositions digitally using boolean and pathfinder operations.</li>
+    </ul>
+    <hr />
+    <h2 id="week-4">Week 4 — 27 October: Grid Systems &amp; Cognitive Security</h2>
+    <h3>Structural Order and the Swiss Aesthetic (Discover &amp; Define)</h3>
+    <a class="to-list" href="checklists.html#week-4">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 2–3 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Read the underlying structure of a professional layout.</li>
+    <li>Understand margins, columns, gutters and the baseline grid as a system rather than as separate settings.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Discover (Structural Analysis)</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: Selected construction principles from Müller-Brockmann's <em>Grid Systems in Graphic Design</em>.</li>
+    <li><strong>Watch</strong>: Setting up document grids, margins, columns and master pages in your chosen layout application. Figma has no baseline grid: there you keep every line height on one step instead.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Deconstruct</strong>: Find a page layout from a professional magazine—scanned, photographed or as PDF.</li>
+    <li><strong>Define</strong>: Trace the grid the designer used. Mark the margins, the column count, the gutter width and the baseline alignment. Draw the lines over the page yourself; tracing needs no grid feature in any tool.</li>
+    <li><strong>Analyse</strong>: Write three sentences on how that structure helps a reader scan the page and group information.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: A PDF of the page with your grid overlay visible, plus your written analysis.</li>
+    <li><strong>In-Class Discussion (Week 5)</strong>: We will compare the structures found across the class.</li>
+    </ul>
+    <hr />
+    <h2 id="week-5">Week 5 — 3 November: Shape Semantics &amp; The Key Visual</h2>
+    <h3>Form Carries Meaning Before Text Does (Ideate &amp; Decide)</h3>
+    <a class="to-list" href="checklists.html#week-5">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 3–4 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Understand how abstract form carries meaning before any text is read.</li>
+    <li>Use an image generator to widen the search, and judge what it makes by its form.</li>
+    <li>Refine vector paths deliberately for emotional effect.</li>
+    <li>Commit to one visual direction and be able to defend it in one sentence.</li>
+    </ul>
+    </li>
+    <li><strong>Generative AI</strong>: This week you work with an image generator as part of the brief. It is a sparring partner for ideas, not the author of your piece: the key visual you hand in is your own drawing.</li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Ideate, then Decide</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: The Bouba-Kiki effect and cross-modal association of shape and sound.</li>
+    <li><strong>Practise</strong>: The Bézier Game (<a href="https://bezier.method.ac/">https://bezier.method.ac/</a>). Work through it until you can hit a curve with few anchor points—it will save you hours later.</li>
+    <li><strong>Watch</strong>: Vector editing basics—pen tool, direct selection, anchor points.</li>
+    <li><strong>Get a generator</strong>: Adobe Firefly and Google Gemini both make images on a free account. If you would rather not sign up anywhere, work with the images we generate together in class; they go on the Miro board.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Warm up on the effect</strong>: Take two contrasting words—<strong>"Spike"</strong> (sharp, high-energy) and <strong>"Bloom"</strong> (soft, organic). Map what each triggers: textures, sounds, speeds, temperatures. Sketch <strong>five thumbnails per word</strong>.</li>
+    <li><strong>Decide the party's character</strong>: Which does this Christmas party want to be—warm and quiet, or bright and loud? Pick one. You cannot have both.</li>
+    <li><strong>Ideate</strong>: Sketch <strong>12 thumbnails</strong> for a key visual carrying that character. Abstract form only, no lettering, no clip art.</li>
+    <li><strong>Ask the machine</strong>: Only after your thumbnails, describe the same character to the image generator in words about form, not about Christmas—<em>"abstract shapes, soft, rounded, slow, heavy"</em> rather than <em>"Christmas tree"</em>. Generate at least eight images and put them next to your thumbnails.</li>
+    <li><strong>Judge it</strong>: Name one formal property the generator got right and one cliché it fell into—baubles, snowflakes, a tree. Take at most one idea across into your own thumbnails, and say which.</li>
+    <li><strong>Prototype</strong>: Trace the strongest of your own thumbnails as a vector and refine the paths until the character sharpens. Never a generated image, and never a traced one.</li>
+    <li><strong>Defend it</strong>: One sentence naming the formal property that carries the mood—roundness, angle, symmetry, density, weight. "It feels festive" is not an answer.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: The Spike/Bloom warm-up, your 12 key-visual thumbnails, the generated images with your prompts, your two-line judgement, the finished vector and your one-sentence defence as one viewable PDF, plus the editable source file or a project link.</li>
+    <li><strong>This is the party's visual direction.</strong> Weeks 6 to 8 build on whatever you decide here; in Week 9 the class picks one direction for everyone.</li>
+    <li><strong>In-Class Discussion (Week 6)</strong>: A blind critique—the class reads the mood off your key visual before you say a word. Where the reading and the intent disagree, the form is doing something you did not ask it to.</li>
+    </ul>
+    <hr />
+    <h2 id="week-6">Week 6 — 10 November: Proportion &amp; Format Adaptation</h2>
+    <h3>Dynamic Layouts and Responsive Constraints (Prototype)</h3>
+    <a class="to-list" href="checklists.html#week-6">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 4 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Maintain hierarchy across radically different aspect ratios.</li>
+    <li>Understand that adaptation means rebuilding relationships, not scaling a layout down.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Prototype (Systematic Variation)</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: Proportion systems—the golden ratio and the rule of thirds—and how context of use changes layout decisions.</li>
+    <li><strong>Watch</strong>: Auto Layout, constraints, or linked artboards in your chosen application.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>: The party's promotion set. Everyone makes all five pieces.<ol>
+    <li><strong>Prototype</strong>: Design the party poster at <strong>A3 portrait</strong>, for noticeboards, dorms, the library and the cafeterias. Build it around <strong>your key visual from Week 5</strong>. It must carry the event name, the date, the location and one call to action: <em>RSVP by 11 December</em>.</li>
+    <li><strong>Adapt</strong>: Rebuild it for the lobby screens in the Main Hall (<strong>16:9, 1920 × 1080 px</strong>), an Instagram post (<strong>1:1</strong>), a story (<strong>9:16</strong>) and the banner at the top of the student mailing list (<strong>600 × 200 px</strong>).</li>
+    <li><strong>Flyer check</strong>: Print the poster at 35 % on an A4 sheet: that is A6, flyer size. If it no longer reads in the hand, fix the poster.</li>
+    <li><strong>Constraint</strong>: Each format is rebuilt, not scaled. Check that the hierarchy from Week 2 still survives in all five, and that the key visual still reads at the smallest size.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: All five formats as one viewable PDF, plus the editable source file or a project link.</li>
+    <li><strong>In-Class Discussion (Week 7)</strong>: We compare the five formats side by side and look for the one that was scaled rather than rebuilt—it is always visible.</li>
+    </ul>
+    <hr />
+    <h2 id="week-7">Week 7 — 17 November: Colour Psychology &amp; Accessibility</h2>
+    <h3>Colour as an Active Signal and as an Accessibility Metric (Ideate &amp; Test)</h3>
+    <a class="to-list" href="checklists.html#week-7">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 3–4 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Work through Itten's colour contrasts by making them rather than reading about them.</li>
+    <li>Measure a palette against WCAG AA and repair it without abandoning the idea.</li>
+    <li>Understand why a palette that depends on a red/green distinction fails a substantial group of users.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Test</strong>. Your own work is the thing under test.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: Johannes Itten's seven colour contrasts (<code>F3_Grafik_Farbkontraste.pdf</code>).</li>
+    <li><strong>Read</strong>: WCAG contrast requirements—what the 4.5:1 and 3:1 thresholds actually mean.</li>
+    <li><strong>Practise</strong>: The Color game (<a href="https://color.method.ac/">https://color.method.ac/</a>). It trains the discrimination the theory assumes you already have.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Ideate</strong>: Choose <strong>two or three</strong> of Itten's seven contrasts and produce an original small piece for each—drawing, collage, or your own photography. No sourced imagery. Label each piece with the contrast it demonstrates.</li>
+    <li><strong>Define</strong>: Nominate one study as the colour direction for the Campus Christmas Party, with one sentence on why it suits the event. Write the palette out: each colour with a name and its hex value.</li>
+    <li><strong>Test</strong>: Apply the palette to your Week 6 promotion set. Run every text-on-background pair in it through the contrast checker (<a href="https://cyberhirsch.github.io/DesignGestalt/tools/contrast.html">https://cyberhirsch.github.io/DesignGestalt/tools/contrast.html</a>) and record the ratios.</li>
+    <li><strong>Repair</strong>: Anything below 4.5:1 for body text gets adjusted until it passes. Fix the colour; keep the idea.</li>
+    <li><strong>Review</strong>: Look at the palette through the colour-blindness simulations and note what still works and what collapses.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: Your contrast studies, the named palette, your promotion set in the new palette, the recorded ratios before and after any repair, and your colour-blindness note.</li>
+    <li><strong>In-Class Discussion (Week 8)</strong>: We will look at which palettes needed repair and which survived intact, and discuss the difference between a colour that is <em>wrong</em> and a colour that is merely <em>untested</em>.</li>
+    </ul>
+    <hr />
+    <h2 id="week-8">Week 8 — 24 November: Contrast, Affordance &amp; User Guidance</h2>
+    <h3>Directing the Eye, and Naming Things Clearly (Empathize, Prototype &amp; Test)</h3>
+    <a class="to-list" href="checklists.html#week-8">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 3 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Apply Norman's core distinction: an <strong>affordance</strong> is what the element lets you do; a <strong>signifier</strong> is the perceptible cue that tells you so. A button affords clicking whether or not it looks clickable — the signifier is your job.</li>
+    <li>Use the rest of Norman's vocabulary deliberately: <strong>mapping</strong>, <strong>feedback</strong> and <strong>constraints</strong>.</li>
+    <li>Build a button with proper states as one reusable element, and place it where it is used.</li>
+    <li>Understand that a label is a design decision, and that it can be tested.</li>
+    <li>Signal state by more than colour alone.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Empathize, then Test (Evidence before Preference)</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: Norman's <em>The Design of Everyday Things</em> on affordances, signifiers, mapping and feedback.</li>
+    <li><strong>Read</strong>: Call-to-action patterns—how contrast guides a user along an intended path.</li>
+    <li><strong>Watch</strong>: Reusable elements and their states in your chosen application: components and variants in Figma, symbols in Affinity, object states in InDesign.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Empathize</strong>: The button is labelled <strong>"RSVP"</strong>. Before you design anything, ask <strong>three people</strong> what it means, without letting them look it up. Write down what they actually said.</li>
+    <li><strong>Decide on evidence</strong>: Keep "RSVP" unless those answers give you a reason to change it. A change needs evidence from your test, not a hunch. Record a one-line verdict—kept or changed—and what the three answers showed.</li>
+    <li><strong>Ideate</strong>: Sketch the button in three states—Default, Hover, Pressed—before building it.</li>
+    <li><strong>Prototype</strong>: Build the button once and reuse it: primary, secondary and tertiary versions—<strong>"RSVP"</strong> (or the label your evidence gave you), <strong>"Add to calendar"</strong> and <strong>"Not this time"</strong>—each in Default, Hover and Pressed, using the Week 7 palette. In Figma, make it a component with variants; in Affinity, symbols on separate artboards; in Adobe, InDesign object states or Illustrator artboards. Only Figma makes it clickable; on the other routes the states sit side by side, and nobody loses marks for the route.</li>
+    <li><strong>Place it</strong>: Put the buttons on a one-screen <strong>RSVP page</strong> that asks for name, number of guests and dietary needs.</li>
+    <li><strong>Check</strong>: View the three states in greyscale. If they are indistinguishable without colour, redesign them until they are not.</li>
+    <li><strong>Name the signifiers</strong>: For each of the three states, name the specific cue that communicates it — a shadow, an inset, a border, a shift in weight. "It turns darker" is a colour change, not a signifier you can rely on. Then name the <strong>feedback</strong> the pressed state gives, and one <strong>constraint</strong> your design imposes.</li>
+    <li><strong>Test</strong>: Show the RSVP page to one person, ask them to confirm that they are coming, and note how quickly they find the button.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: The label verdict with your three answers, the button set in all its states, the RSVP page, the greyscale check, your signifier/feedback/constraint annotations, and three sentences on the usability test.</li>
+    <li><strong>In-Class Discussion (Week 9)</strong>: We will compare how many of the people you asked understood "RSVP" unprompted, and test each other's RSVP pages: does the primary action still stand out in context?</li>
+    </ul>
+    <hr />
+    <h2 id="week-9">Week 9 — 1 December: Semiotics &amp; Abstraction</h2>
+    <h3>Reduction to Sign (Define &amp; Prototype)</h3>
+    <a class="to-list" href="checklists.html#week-9">Checklist for this week</a>
+    <blockquote>
+    <p><strong>The class commits to one design in this session.</strong> We choose one promotion set from Weeks 6 and 7 by vote; its designer shares the key visual, the palette and the typefaces on the Miro board the same day. From now on, everything for the party matches it. You also draw your event piece for Week 10 by lot.</p>
+    </blockquote>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 3 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Distinguish icon, index and symbol, and know which one you are drawing.</li>
+    <li>Abstract an object down to the minimum that still communicates.</li>
+    <li>Hold a consistent visual grammar across a set.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Define (Reduction)</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: Peirce's icon / index / symbol distinction, and Otl Aicher's pictogram systems for Munich 1972 (<code>_schriftklassifikationen.pdf</code> context, Isotype background).</li>
+    <li><strong>Study</strong>: How a pictogram survives at small size—what gets kept and what gets thrown away.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Prototype</strong>: Design a set of <strong>five pictograms</strong> for the Christmas Party signage: coat check, food, drinks, photo booth, exit.</li>
+    <li><strong>System</strong>: Hold one visual grammar across all five—the same stroke weight, the same corner radius, the same construction grid. They must read as one family, not five drawings.</li>
+    <li><strong>Match the class design</strong>: Use its palette, and a stroke and corner style that sit with its key visual.</li>
+    <li><strong>Test at size</strong>: Print them at <strong>30 × 30 mm</strong>, at 100 % and not "fit to page", and look. Anything that dissolves gets simplified. Figma has no millimetres, but its PDFs count 1 px as 1 point: an A4 frame is 595 × 842 px, and a 30 mm icon is 85 × 85 px.</li>
+    <li><strong>Test without colour</strong>: Check that all five still work in pure black and white.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: The five pictograms as vectors, a sheet showing them at 30 × 30 mm, and a black-and-white version of the set.</li>
+    <li><strong>In-Class Discussion (Week 10)</strong>: We will pin the sets up at actual signage size and read them from across the room.</li>
+    </ul>
+    <hr />
+    <h2 id="week-10">Week 10 — 8 December: Micro-Typography &amp; Cognitive Load</h2>
+    <h3>Letterform Anatomy, and the Party Goes to Print (Discover &amp; Prototype)</h3>
+    <a class="to-list" href="checklists.html#week-10">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 3 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Name the parts of a letterform and place a typeface in a classification.</li>
+    <li>See the concrete differences between two typefaces that look superficially alike.</li>
+    <li>Set information people read in passing—times, dishes, directions—so it works at a glance.</li>
+    <li>Apply a design system someone else made, and keep it consistent.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Prototype (Real Size, Real Distance)</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: Letterform anatomy—x-height, ascender, descender, counter, terminal—and the main classification families (<code>_schriftklassifikationen.pdf</code>).</li>
+    <li><strong>Practise</strong>: KernType (<a href="https://type.method.ac/">https://type.method.ac/</a>) and Shape Type (<a href="https://shape.method.ac/">https://shape.method.ac/</a>).</li>
+    <li><strong>Draw</strong>: Your type classic is assigned by lottery (<a href="https://cyberhirsch.github.io/DesignGestalt/tools/type-lottery.html">https://cyberhirsch.github.io/DesignGestalt/tools/type-lottery.html</a>). You get two redraws. In class we compare it with its closest free substitute; in Week 11 it becomes your wallpaper.</li>
+    </ol>
+    </li>
+    <li>
+    <p><strong>Homework Task (Deliverable)</strong>: The event piece you drew in Week 9, in the class design, ready to print three days before the party.</p>
+    <ul>
+    <li><strong>Directional signs</strong>: two A2 signs that lead guests from the main entrance to the Main Hall, with arrows and your Week 9 pictograms.</li>
+    <li><strong>Welcome backdrop</strong>: the 3 × 2 m banner at the hall entrance that doubles as the photo spot. Design it at 1:10.</li>
+    <li><strong>Programme board</strong>: the evening's programme from the party fact sheet, at A1.</li>
+    <li><strong>Table cards</strong>: one folded A6 card per dish on the menu, each with its allergens.</li>
+    </ul>
+    <ol>
+    <li><strong>Match</strong>: Use the class design's key visual, palette and typefaces. Where it has no answer, extend it in its spirit and note what you added.</li>
+    <li><strong>Check at size</strong>: Print a section at 100 % and read it from its real distance. Fix what fails there.
+    *   <strong>Submission</strong>: Your piece as a print-ready PDF at its final size (the backdrop at 1:10), plus the editable source file or a project link, and your note on what you added to the design.
+    *   <strong>In-Class Discussion (Week 11)</strong>: The whole party laid out—every promotion set and every event piece—three days before it happens.</li>
+    </ol>
+    </li>
+    </ul>
+    <hr />
+    <h2 id="week-11">Week 11 — 15 December: Macro-Typography &amp; Emotion</h2>
+    <h3>Typeface as the Voice of Content (Ideate &amp; Prototype)</h3>
+    <a class="to-list" href="checklists.html#week-11">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 3–4 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Compose with type at large scale, where the letterform is the image.</li>
+    <li>Design for ambient reading rather than for focused reading.</li>
+    <li>Understand what a font licence actually permits, and work within it as a real constraint.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Prototype (Constraint-Driven)</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: How typography carries tone before a word is decoded.</li>
+    <li><strong>Install</strong>: The free substitute for your classic, found in class in Week 10.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Research</strong>: For the classic you drew, establish the designer, the year, the foundry, its classification and where it has been used. Note what the substitute's licence permits: commercial use, embedding, modification, redistribution.</li>
+    <li><strong>Prototype</strong>: Design a <strong>desktop wallpaper at 1920 × 1080</strong> and a <strong>phone lock screen at 1170 × 2532</strong> presenting your researched facts about the original typeface—designer, year, notable use, design principle.</li>
+    <li><strong>The twist</strong>: Close with a reveal line stating that this is not the typeface it describes—for example, <em>"This is not Futura."</em> Give it the visual weight of a punchline: larger, isolated, high contrast.</li>
+    <li><strong>The constraint</strong>: The finished files may contain <strong>only the free substitute</strong>. The original may appear in your research notes; it may not appear in the deliverable.</li>
+    <li><strong>Test as background</strong>: It has to work as ambient texture. Set it as your own wallpaper for a day. If it is exhausting to look at, it is not finished.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: Both wallpaper exports, your research notes, and one line naming the substitute and what its licence permits.</li>
+    <li><strong>In-Class Discussion (Week 12)</strong>: We will project them and see how long the reveal takes to land. Then the Guerilla Rebrand brief is handed out.</li>
+    </ul>
+    <hr />
+    <h2 id="week-12">Week 12 — 22 December: Guerilla Rebrand — Kickoff</h2>
+    <h3>Brand Audit and Strategic Vision (Discover &amp; Define)</h3>
+    <a class="to-list" href="checklists.html#week-12">Checklist for this week</a>
+    <blockquote>
+    <p><strong>This brief is handed out before the winter break and is due back on 12 January.</strong> The audit and the twenty sketches are holiday work. Starting them on 11 January will be visible.</p>
+    </blockquote>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 5–6 hours, spread across the break</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Audit an existing identity against objective criteria rather than taste.</li>
+    <li>Establish a strategic direction before drawing anything.</li>
+    <li>Generate quantity before selecting quality.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Discover &amp; Define</strong>, then divergent ideation.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: What a brand audit examines, and how to separate an objective failure from a personal dislike.</li>
+    <li><strong>Research</strong>: Find a local company, organisation or institution—a bakery, a public service, a club, TH Rosenheim itself—with an outdated, inconsistent or weak visual identity. This is an unsolicited <em>guerilla</em> rebrand: you develop it without asking, and may later offer it as a free gift.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Discover (Visual Audit)</strong>: Document the current identity—logo, typography, colours, layout formats, and how it appears across different media.</li>
+    <li><strong>Define (Objective Flaws)</strong>: Name <strong>three concrete design flaws</strong>, each tied to something we have covered: a Gestalt violation, a hierarchy failure, a legibility or contrast problem. "I don't like it" is not a finding.</li>
+    <li><strong>Define (Strategy)</strong>: Establish <strong>three brand attributes</strong> to steer the redesign. Build a persona of a typical customer or student and map how the current identity fails that person.</li>
+    <li><strong>Ideate</strong>: Draw <strong>at least 20 rough thumbnail logo concepts</strong>, on paper or with a stylus. Do not self-censor; quantity is the point at this stage.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: A brand audit and strategy PDF, plus photographs or exports of your 20 thumbnails.</li>
+    <li><strong>In-Class Discussion (Week 13)</strong>: A peer audit review. We will test whether the flaws you identified are objective, and whether your sketches actually answer them.</li>
+    </ul>
+    <hr />
+    <h2 id="week-13">Week 13 — 12 January: Guerilla Rebrand — System &amp; Context</h2>
+    <h3>From Sketch to System, and Out into the World (Prototype &amp; Test)</h3>
+    <a class="to-list" href="checklists.html#week-13">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 5–6 hours — the heaviest week of the semester</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Develop one concept into a reusable system.</li>
+    <li>Apply the accessibility standard from Week 7 to your own brand work.</li>
+    <li>Judge a design at its real viewing distance rather than at 100% on a screen.</li>
+    <li>Take feedback from outside the studio.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Prototype &amp; Test</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: What belongs in a minimum viable brand style sheet.</li>
+    <li><strong>Review</strong>: Your own Week 7 contrast findings.</li>
+    <li><strong>Read</strong>: Context of use—why a shop sign, a poster and an app screen demand different contrast, scale and detail.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Select</strong>: Choose the strongest thumbnail from your twenty and digitize it as a clean vector.</li>
+    <li><strong>Prototype</strong>: Produce logo variants for light and dark backgrounds.</li>
+    <li><strong>Prototype</strong>: Establish a type scale—display, body, caption—with named sizes and weights.</li>
+    <li><strong>Test</strong>: Build the colour palette and verify every text pair against <strong>WCAG AA</strong> using the contrast checker. Record the ratios.</li>
+    <li><strong>Assemble</strong>: Bring all of it together as a single style sheet.</li>
+    <li><strong>Place it</strong>: Put your assets into a realistic mockup—storefront, campus signage, packaging, a public poster or an app screen.</li>
+    <li><strong>Check the distance</strong>: View it at the size and distance it would really be seen. Print it, or step back from the screen. Fix what fails there.</li>
+    <li><strong>Test on a person</strong>: Show the mockup to an actual customer or stakeholder of the organisation. Ask whether the new system feels more professional, more legible or more trustworthy than the current one, and what values it projects.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: The style sheet with recorded contrast ratios, the mockup renders, and two sentences summarising the feedback.</li>
+    <li><strong>Start early.</strong> This week carries what used to be two sessions. Digitize the logo before the week begins, or the mockups will be rushed.</li>
+    <li><strong>Due</strong>: With the pitch, on 19 January. The system, the mockups and the feedback all go into your pitch, together with the change you made because of the feedback.</li>
+    </ul>
+    <hr />
+    <h2 id="week-14">Week 14 — 19 January: The Pitch</h2>
+    <h3>Presenting the Rebrand (Deliver)</h3>
+    <a class="to-list" href="checklists.html#week-14">Checklist for this week</a>
+    <ul>
+    <li><strong>Estimated Study &amp; Task Time</strong>: 4 hours</li>
+    <li><strong>Learning Objectives</strong>:<ul>
+    <li>Present design work as an argument rather than as a gallery.</li>
+    <li>Justify decisions by reference to principle and evidence.</li>
+    </ul>
+    </li>
+    <li><strong>Design Thinking Focus</strong>: <strong>Deliver</strong>.</li>
+    <li><strong>Pre-Class Study (Learn at Home)</strong>:<ol>
+    <li><strong>Read</strong>: How a design pitch is structured—problem, insight, solution, proof.</li>
+    <li><strong>Prepare</strong>: Rehearse to five minutes. Twice.</li>
+    </ol>
+    </li>
+    <li><strong>Homework Task (Deliverable)</strong>:<ol>
+    <li><strong>Act on the feedback</strong>: Change <strong>one thing</strong> in response to what your stakeholder told you in Week 13. Note what you changed and why.</li>
+    <li><strong>Build the deck</strong>: Carry the audit, the strategy, the system and the mockups as one continuous narrative.</li>
+    <li><strong>Argue</strong>: For each of the three flaws you identified in Week 12, show how the redesign answers it.</li>
+    <li><strong>Cite</strong>: Reference at least two course readings when explaining your major hierarchy, typography, interaction or accessibility decisions.</li>
+    <li><strong>Check</strong>: Export everything and confirm it works offline before you present. Assume the network will fail.</li>
+    </ol>
+    </li>
+    <li><strong>Submission</strong>: The presentation deck, uploaded to the Miro board before the session.</li>
+    <li><strong>In-Class (Week 14)</strong>: <strong>The Final Pitch.</strong> You present the rebrand as though you were offering it to the organisation for free—because, if you choose to send it, you are. Five minutes each, plus two minutes of questions.</li>
+    </ul>
+  </article>
+
+</div>
+</body>
+</html>

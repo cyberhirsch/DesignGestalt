@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Submission Checklists</title>
-<meta name="description" content="What to hand in each week — Design &amp; Gestalt, Smart Interactive Media.">
+<title>Homework Checklist</title>
+<meta name="description" content="Every step of each week's homework, and what to hand in — Design &amp; Gestalt, Smart Interactive Media.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -296,6 +296,22 @@
   button:hover { border-color: var(--accent); color: var(--accent); }
 
   a { color: var(--accent); }
+  /* ---------- rules, links, groups ---------- */
+  .rules { margin: 18px 0 0; gap: 5px; max-width: 64ch; font-size: 14px; color: var(--ink-2); }
+  .rules b { color: var(--ink); font-weight: 600; }
+  .rules code { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
+
+  .links { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .links .tool-link { margin-bottom: 0; }
+
+  .group {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 16px 0 4px 10px;
+  }
 </style>
 </head>
 <body>
@@ -303,12 +319,19 @@
 
   <header>
     <a class="back" href="index.html">&larr; Design &amp; Gestalt</a>
-    <h1>Submission checklists</h1>
+    <h1>Homework checklist</h1>
     <p class="standfirst">
-      Exactly what to hand in each week. Tick items off as you finish them — your ticks are
-      saved in this browser, on this device only, so nothing is submitted from this page and
-      nobody else sees it. Use it as a last check before you upload.
+      Every step of each week's homework: what to hand in, and what to check before you upload.
+      Tick items off as you finish them. Your ticks are saved in this browser, on this device only, so nothing
+      is submitted from this page and nobody else sees it.
     </p>
+    <ul class="rules">
+      <li><b>Due</b> before class at the next session, unless the week says otherwise.</li>
+      <li><b>Upload</b> to the <a href="https://miro.com/app/board/uXjVHhgHJV8=/?share_link_id=566460259605" target="_blank" rel="noopener noreferrer">course Miro board</a>, one file named <code>WNN_Lastname</code>, e.g. <code>W02_Hirsch.pdf</code>.</li>
+      <li><b>Show your process:</b> every week includes your sketches and discarded drafts.</li>
+      <li><b>Generative AI:</b> allowed in any week if you declare it. Your prompts and what the tool gave you go in with your drafts; the pieces you hand in stay your own work.</li>
+      <li><b>Portfolio:</b> your weekly work is graded together with the final pitch.</li>
+    </ul>
   </header>
 
   <div class="nav">
@@ -328,205 +351,263 @@
 <script>
   const WEEKS = [
     {
-      n: 1, date: "6 Oct", topic: "Your First Artifact",
+      n: 1, set: "6 Oct", due: "13 Oct, before class", topic: "Your First Artifact",
       theory: "Gestalt Principles",
       tool: { href: "tools/gestalt.html", label: "Gestalt Playground" },
       brief: "Find Gestalt in the wild, then choose something you actually want to make — and make it.",
-      items: [
-        "Three real-world designs that use Gestalt principles, screenshotted",
+      hand: [
+        "Three real-world designs that use Gestalt principles, screenshotted or photographed",
         "One sentence per example on how it affects perception",
-        "One artifact chosen: poster, flyer, invitation, book cover, album cover, app icon, wallpaper, ticket, label, sticker, T-shirt print, menu, business card — whatever you actually want to make",
-        "Twelve rough variations of it, on paper or with a stylus — genuinely different, not one idea drawn twelve times",
+        "Twelve rough variations of the artifact you chose, on paper or with a stylus",
         "The strongest one built properly, using at least two of the seven Gestalt laws deliberately",
         "The two laws named, with one sentence each on where they appear",
-        "Everything in one viewable PDF, plus the editable source file or project link, on whichever route you chose",
-        "Every file kept — Week 9 sets a pictogram set beside this piece"
+        "Your sketches and discarded drafts",
+        "Everything in one viewable PDF, plus the editable source file or a project link"
+      ],
+      check: [
+        "An artifact you actually want to make: a poster, a flyer, a cover, an app icon, a wallpaper, a T-shirt print, your CV — the brief lists more",
+        "The twelve are genuinely different, not one idea drawn twelve times",
+        "Keep your files: in Week 9 your pictograms go next to this piece"
       ]
     },
     {
-      n: 2, date: "13 Oct", topic: "Hierarchy Variants", party: true,
+      n: 2, set: "13 Oct", due: "20 Oct, before class", topic: "Hierarchy Variants", party: true,
       theory: "Visual Hierarchy & Page Structure",
-      brief: "One message, three readings — “Campus Christmas Party, 18 Dec, Main Hall”.",
-      items: [
+      brief: "One message, three readings — “Campus Christmas Party — 18 December, Main Hall, free entry”.",
+      hand: [
         "Three compositions of the same message",
-        "Each version leads with a different fact — date, place, or entry",
-        "Scale, weight, contrast, spacing and alignment doing the work (no decoration)",
         "A note on the reading order each version produces",
-        "One viewable PDF with all three and the notes, plus the editable source file or project link"
+        "Your sketches and discarded drafts",
+        "One viewable PDF with all three and the notes, plus the editable source file or a project link"
+      ],
+      check: [
+        "The message exactly as given, including “free entry”",
+        "Each version leads with a different fact: the date, the place, or free entry",
+        "Type only: scale, weight, contrast, spacing and alignment do the work — no pictures, no decoration"
       ]
     },
     {
-      n: 3, date: "20 Oct", topic: "Figure-Ground Composition", party: true,
+      n: 3, set: "20 Oct", due: "27 Oct, before class", topic: "Figure-Ground Composition", party: true,
       theory: "Figure-Ground & Whitespace",
       brief: "Cut paper, and make the white space as deliberate as the black.",
-      items: [
-        "Five abstract shapes cut from black paper",
-        "Three trial arrangements, each photographed before anything is glued",
-        "The final composition glued down",
-        "A clean, evenly lit photograph of the final piece"
+      hand: [
+        "Photos of your three trial arrangements, each taken before anything is glued",
+        "A clean, evenly lit photo of the final composition, square to the camera",
+        "Your sketches and discarded drafts",
+        "The glued piece itself, brought to class on 27 Oct for the pin-up"
+      ],
+      check: [
+        "Five abstract shapes cut from black paper, abstracted from a Christmas motif: a tree, a star, an ornament, a candle",
+        "Abstract enough to read as form first and motif second",
+        "Glued on A4 white card",
+        "The white reads as deliberate shape, not as leftover background"
       ]
     },
     {
-      n: 4, date: "27 Oct", topic: "Magazine Grid Analysis",
+      n: 4, set: "27 Oct", due: "3 Nov, before class", topic: "Magazine Grid Analysis",
       theory: "Grid Systems & Cognitive Security",
       brief: "Take a professional page apart and find the structure underneath it.",
-      items: [
-        "A professional magazine page, scanned or as PDF",
-        "Margins, column count, gutter width and baseline grid traced over it",
+      hand: [
+        "A professional magazine page — scanned, photographed or as PDF — with the grid drawn over it",
         "Three sentences on how the grid helps the reader scan the page",
-        "Exported as a single PDF with your overlay visible"
+        "Your sketches and discarded drafts",
+        "One PDF with your overlay visible"
+      ],
+      check: [
+        "Margins, column count, gutter width and baseline all marked",
+        "The lines drawn by hand over the page: tracing needs no grid feature, and Figma has no baseline grid anyway"
       ]
     },
     {
-      n: 5, date: "3 Nov", party: true,
+      n: 5, set: "3 Nov", due: "10 Nov, before class", topic: "The Key Visual", party: true,
       theory: "Shape Semantics & the Bouba-Kiki Effect",
-      brief: "Decide what this party feels like, then build the form that says so.",
-      items: [
-        "Spike/Bloom warm-up: associations mapped, five thumbnails per word",
-        "One character chosen for the party — warm and quiet, or bright and loud",
-        "Twelve thumbnails for a key visual carrying that character",
-        "Abstract form only: no lettering, no clip art",
-        "The strongest traced as a vector and refined",
+      brief: "Decide what this party feels like, see what a machine makes of it, then build the form that says so yourself.",
+      hand: [
+        "The Spike/Bloom warm-up: associations mapped, five thumbnails per word",
+        "Twelve thumbnails for a key visual carrying the party's character",
+        "At least eight generated images, with the prompts you used",
+        "Two lines on them: one formal property the generator got right, one cliché it fell into",
+        "The strongest of your own thumbnails traced as a vector and refined",
         "One sentence naming the formal property that carries the mood",
-        "“It feels festive” does not count as that sentence"
+        "Your sketches and discarded drafts",
+        "Everything in one viewable PDF, plus the editable source file or a project link"
       ],
-      topic: "The Key Visual"
+      check: [
+        "One character chosen for the party: warm and quiet, or bright and loud, not both",
+        "Your thumbnails first, the generator after them",
+        "Prompts about form, not Christmas: “soft, rounded, slow”, not “Christmas tree”",
+        "The key visual is your own drawing: never a generated image, never a traced one",
+        "Abstract form only: no lettering, no clip art",
+        "The sentence names a property — roundness, angle, symmetry, density, weight. “It feels festive” doesn't count"
+      ]
     },
     {
-      n: 6, date: "10 Nov", party: true,
+      n: 6, set: "10 Nov", due: "17 Nov, before class", topic: "The Promotion Set", party: true,
       theory: "Proportion & Format Adaptation",
-      brief: "One key visual, three shapes — and the hierarchy survives all three.",
-      items: [
-        "The party poster at 16:9, built around your Week 5 key visual",
-        "Adapted to 1:1 (a social post)",
-        "Adapted to 9:16 (a story)",
-        "Each format rebuilt, not scaled",
-        "The key visual still readable at the smallest size",
-        "The Week 2 hierarchy still surviving in all three",
-        "All three formats in one viewable PDF, plus the editable source file or project link"
+      brief: "One key visual, five formats — and the hierarchy survives all five.",
+      hand: [
+        "The party poster at A3 portrait, built around your Week 5 key visual",
+        "The Main Hall lobby screen at 16:9, 1920 × 1080 px",
+        "An Instagram post at 1:1",
+        "A story at 9:16",
+        "The mailing-list banner at 600 × 200 px",
+        "Your sketches and discarded drafts",
+        "All five in one viewable PDF, plus the editable source file or a project link"
       ],
-      topic: "Format-Adapted Event Poster"
+      check: [
+        "Every format carries the event name, the date, the place and “RSVP by 11 December”",
+        "Each format rebuilt, not scaled",
+        "The poster still reads printed at A6, flyer size: 35 % on an A4 sheet",
+        "The key visual still readable at the smallest size",
+        "The Week 2 hierarchy still surviving in all five"
+      ]
     },
     {
-      n: 7, date: "17 Nov", topic: "Itten Contrast Studies", party: true,
+      n: 7, set: "17 Nov", due: "24 Nov, before class", topic: "Itten Contrast Studies", party: true,
       theory: "Colour Psychology & Accessibility (WCAG AA)",
-      brief: "Make the colour contrasts yourself — then find out whether the one you picked can actually carry text.",
+      brief: "Make the colour contrasts yourself — then find out whether your palette can carry the text on your own promotion set.",
       tool: { href: "tools/contrast.html", label: "Contrast Checker" },
-      items: [
-        "Two or three of Itten's seven contrasts, each as an original piece",
-        "Each piece labelled with the contrast it demonstrates",
-        "Made, not sourced — drawing, collage, or your own photography",
+      hand: [
+        "Two or three of Itten's seven contrasts, each as an original piece labelled with its contrast",
         "One study nominated as the party's colour direction, with a sentence on why",
-        "That palette written out as named hex values",
-        "Every text-on-background pair run through the contrast checker, ratios noted",
-        "Anything under 4.5:1 for body text adjusted until it passes — fix the colour, keep the idea",
-        "The palette seen through the colour-blindness simulation, with a note on what survives"
+        "The palette: each colour with a name and its hex value",
+        "Your Week 6 promotion set in the new palette",
+        "The contrast ratio of every text-on-background pair in that set, before and after any repair",
+        "A note on what survives the colour-blindness simulation",
+        "Your sketches and discarded drafts"
+      ],
+      check: [
+        "Made, not sourced: drawing, collage, or your own photography",
+        "Body text at 4.5:1 or more, large text at 3:1 — fix the colour, keep the idea"
       ]
     },
     {
-      n: 8, date: "24 Nov", topic: "The RSVP Button", party: true,
+      n: 8, set: "24 Nov", due: "1 Dec, before class", topic: "The RSVP Button", party: true,
       theory: "Contrast, Affordance & User Guidance (Norman)",
-      brief: "The label is “RSVP”. Test it before you touch it — it only changes if the answers say so.",
-      items: [
-        "Ask three people what “RSVP” means, without letting them look it up — write down what they said",
-        "“RSVP” kept unless those answers say otherwise — changing it needs evidence, not a hunch",
+      brief: "The label is “RSVP”. Ask three people before you touch it — it only changes if their answers say so.",
+      hand: [
+        "What three people said “RSVP” means, asked before they could look it up",
         "A one-line verdict: kept or changed, and what the three answers showed",
-        "The button sketched in three states before you build anything",
-        "Built as a component with variants: Default, Hover, Pressed",
-        "Primary, secondary and tertiary versions",
-        "The states readable without relying on colour alone — check it in greyscale",
-        "Each state's signifier named: the actual cue carrying it — a shadow, an inset, a border, a shift in weight",
-        "The feedback the pressed state gives, and one constraint your design imposes, both named",
-        "Shown to one person: ask which they would click to confirm, note how fast they found it",
-        "Three sentences summarising that test"
+        "The button sketched in three states before you built it",
+        "The buttons built once and reused: “RSVP” (or the label your evidence gave you), “Add to calendar” and “Not this time”, each in Default, Hover and Pressed",
+        "The buttons on a one-screen RSVP page asking for name, number of guests and dietary needs",
+        "The greyscale check",
+        "Each state's signifier named, plus the feedback the pressed state gives and one constraint your design imposes",
+        "Three sentences on your usability test",
+        "Your sketches and discarded drafts"
+      ],
+      check: [
+        "Figma: a component with variants. Affinity: symbols on separate artboards. Adobe: InDesign object states or Illustrator artboards. Only Figma is clickable, and nobody loses marks for the route",
+        "The label changes only on evidence from the three answers, not on a hunch",
+        "The states stay readable without colour",
+        "Each signifier is a cue — a shadow, an inset, a border, a shift in weight. “It turns darker” is only a colour change",
+        "The test: show one person your RSVP page, ask them to confirm they're coming, note how fast they find the button"
       ]
     },
     {
-      n: 9, date: "1 Dec", topic: "Event Signage Pictograms", party: true, last: true,
+      n: 9, set: "1 Dec", due: "8 Dec, before class", topic: "Event Signage Pictograms", party: true,
       theory: "Semiotics & Abstraction",
-      brief: "Five signs that work without a single word. Last party deliverable.",
-      items: [
-        "Five icons: coat check, food, drinks, photo booth, exit",
-        "One consistent visual grammar — same stroke weight, corner radius and grid",
-        "Legible at 30 × 30 mm",
-        "Works in pure black and white as well as in colour",
-        "Uses the colour direction chosen in Week 7"
+      brief: "Five signs that work without a single word. Today the class commits to one design, and you draw your event piece for Week 10.",
+      hand: [
+        "Five pictograms as vector files: coat check, food, drinks, photo booth, exit",
+        "A sheet with all five at 30 × 30 mm, printed at 100 %",
+        "The set in pure black and white",
+        "Your sketches and discarded drafts"
+      ],
+      check: [
+        "One visual grammar: the same stroke weight, corner radius and grid",
+        "In the class design: its palette, and a style that sits with its key visual",
+        "Printed at 100 %, not “fit to page”. In Figma, which has no millimetres: an A4 frame is 595 × 842 px and a 30 mm icon is 85 × 85 px",
+        "Anything that dissolves at 30 mm simplified"
       ]
     },
     {
-      n: 10, date: "8 Dec", topic: "Famous Font: Research",
+      n: 10, set: "8 Dec", due: "15 Dec, before class", topic: "Your Event Piece", party: true, last: true,
       theory: "Micro-Typography & Cognitive Load",
       tool: { href: "tools/type-lottery.html", label: "Type Lottery" },
-      brief: "Pick a classic, find the free stand-in, and prove you can see the difference.",
-      items: [
-        "A type classic chosen: designer, year, notable users, character",
-        "Its closest free or open-source substitute identified",
-        "The same word set in both at matching size, side by side",
-        "At least three concrete differences annotated — x-height, width, weight steps, character",
-        "A note on what the substitute's licence actually permits"
+      brief: "The piece you drew in Week 9, in the class design, ready to print three days before the party.",
+      hand: [
+        "Your piece as a print-ready PDF at its final size (the backdrop at 1:10), plus the editable source file or a project link",
+        "A note on anything you added to the class design, and why",
+        "Your sketches and discarded drafts"
+      ],
+      check: [
+        "The right size: signs 2 × A2 · backdrop 3 × 2 m, designed at 1:10 · programme board A1 · table cards folded A6, one per dish",
+        "The programme and the menu exactly as the party fact sheet gives them, allergens included",
+        "The class design's key visual, palette and typefaces",
+        "A section printed at 100 % and read from its real distance"
       ]
     },
     {
-      n: 11, date: "15 Dec", topic: "Famous Font: Wallpaper",
+      n: 11, set: "15 Dec", due: "22 Dec, before class", topic: "Famous Font: Wallpaper",
       theory: "Macro-Typography & Emotion",
       brief: "Facts about a typeface you are not allowed to use — with the reveal at the end.",
-      items: [
+      hand: [
         "Desktop wallpaper at 1920 × 1080",
         "Phone lock screen at 1170 × 2532",
-        "Your researched facts about the original typeface as the content",
-        "The reveal line, isolated and high contrast (“This is not Futura.”)",
-        "Set only in the free substitute — no licensed font in the final file",
-        "Legible as ambient background, not as a poster you read head-on"
+        "Your research on the classic you drew: designer, year, foundry, classification, where it has been used",
+        "One line naming the free substitute and what its licence permits",
+        "Your sketches and discarded drafts"
+      ],
+      check: [
+        "The researched facts are the content",
+        "Your own reveal line, isolated and high contrast: for example “This is not Futura.”",
+        "Set only in the free substitute: nothing in the original typeface",
+        "Works as ambient background: set it as your wallpaper for a day"
       ]
     },
     {
-      n: 12, date: "22 Dec", kickoff: true,
+      n: 12, set: "22 Dec", due: "12 Jan, before class", topic: "Guerilla Rebrand: Kickoff", kickoff: true,
       theory: "Brand audit and strategic vision",
       brief: "The brief lands before the break — the audit and the sketches are holiday work.",
-      items: [
-        "A local organisation chosen with a weak or inconsistent identity",
-        "Its current logo, typography, colours and formats documented",
-        "Three concrete design flaws named — Gestalt, legibility, or hierarchy",
-        "Three new brand attributes to steer the redesign",
-        "A user persona, and how the current identity fails them",
-        "Twenty rough thumbnail logo sketches — no self-censoring",
+      hand: [
+        "The brand audit and strategy as one PDF: the current logo, typography, colours and formats; three design flaws; three brand attributes; a persona",
+        "Photos or exports of twenty rough thumbnail logo sketches",
+        "Your sketches and discarded drafts"
+      ],
+      check: [
+        "A local organisation with a weak or inconsistent identity",
+        "Each flaw tied to the course — Gestalt, hierarchy, legibility or contrast. “I don't like it” is not a finding",
+        "The persona, and how the current identity fails them",
+        "No self-censoring in the thumbnails: quantity is the point",
         "Ready to show on 12 January, not started on 11 January"
-      ],
-      topic: "Guerilla Rebrand: Kickoff"
+      ]
     },
     {
-      n: 13, date: "12 Jan", heavy: true,
+      n: 13, set: "12 Jan", due: "19 Jan, with the pitch", topic: "Guerilla Rebrand: System & Context", heavy: true,
       theory: "From sketch to system, and out into the world",
-      brief: "The system and its first contact with reality share one session. Start before the week does.",
-      items: [
-        "The strongest thumbnail chosen and digitised as a vector",
-        "Logo variants for light and dark backgrounds",
-        "A type scale: display, body, caption",
-        "Colour swatches that pass WCAG AA — checked, not assumed",
-        "The whole set assembled as one style sheet",
-        "The assets placed in a realistic mockup — signage, storefront, packaging or screen",
-        "Checked at actual viewing distance, not just at 100 % on your screen",
-        "Feedback gathered from an actual customer or stakeholder",
-        "Two sentences on what they said"
+      brief: "The system and its first contact with reality share one week. Start before the week does.",
+      hand: [
+        "The style sheet: the logo as a clean vector with light and dark variants, the type scale (display, body, caption), and the palette with its recorded contrast ratios",
+        "The mockups: your assets in a realistic setting — signage, storefront, packaging or a screen",
+        "Two sentences on what a real customer or stakeholder said",
+        "Your sketches and discarded drafts"
       ],
-      topic: "Guerilla Rebrand: System & Context"
+      check: [
+        "Every text pair passes WCAG AA — checked, not assumed",
+        "Checked at real viewing distance: print it, or step back from the screen"
+      ]
     },
     {
-      n: 14, date: "19 Jan", final: true, topic: "The Pitch",
+      n: 14, set: "19 Jan", due: "19 Jan, before the session", topic: "The Pitch", final: true,
       theory: "Final presentation",
       brief: "Sell the rebrand as though you are giving it to them for free — because you are.",
-      items: [
-        "One thing changed in response to last week's feedback, and a note on why",
-        "A presentation deck",
+      hand: [
+        "The presentation deck, uploaded before the session",
+        "One change made because of last week's feedback, with a note on why",
+        "Your sketches and discarded drafts"
+      ],
+      check: [
+        "Five minutes, plus two minutes of questions: rehearsed to time, twice",
         "The audit, the strategy, the system and the mockups as one narrative",
         "The three flaws you found, and how the redesign answers each",
-        "Rehearsed to time",
-        "Everything exported and working offline before you present"
+        "At least two course readings cited for your major decisions",
+        "Exported and working offline"
       ]
     }
   ];
 
-  const KEY = "dg-checklists-v1";
+  const KEY = "dg-checklists-v2";
   const $ = (id) => document.getElementById(id);
   let state = {};
 
@@ -541,7 +622,35 @@
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* private mode */ }
   }
 
-  const idFor = (w, i) => "w" + w.n + "i" + i;
+  const idFor = (w, kind, i) => "w" + w.n + kind + i;
+  const idsFor = (w) => [
+    ...w.hand.map((_, i) => idFor(w, "h", i)),
+    ...w.check.map((_, i) => idFor(w, "c", i))
+  ];
+
+  function list(w, kind, items) {
+    const ul = document.createElement("ul");
+    items.forEach((text, i) => {
+      const li = document.createElement("li");
+      const label = document.createElement("label");
+      const box = document.createElement("input");
+      box.type = "checkbox";
+      box.dataset.week = w.n;
+      box.id = idFor(w, kind, i);
+      box.checked = !!state[box.id];
+      box.addEventListener("change", () => {
+        if (box.checked) state[box.id] = 1; else delete state[box.id];
+        save();
+        refresh();
+      });
+      const span = document.createElement("span");
+      span.textContent = text;
+      label.append(box, span);
+      li.appendChild(label);
+      ul.appendChild(li);
+    });
+    return ul;
+  }
 
   function build() {
     const weeksBox = $("weeks");
@@ -561,7 +670,7 @@
 
       const date = document.createElement("span");
       date.className = "week-date";
-      date.textContent = w.date;
+      date.textContent = "set " + w.set + " · due " + w.due;
 
       const count = document.createElement("span");
       count.className = "count";
@@ -585,7 +694,7 @@
       if (w.party) {
         const t2 = document.createElement("span");
         t2.className = "tag party";
-        t2.textContent = w.last ? "Christmas party · final piece" : "Christmas party";
+        t2.textContent = w.last ? "Christmas party · final pieces" : "Christmas party";
         tags.appendChild(t2);
       }
       if (w.heavy) {
@@ -603,42 +712,34 @@
       if (w.final) {
         const t3 = document.createElement("span");
         t3.className = "tag party";
-        t3.textContent = "Graded final";
+        t3.textContent = "Final pitch";
         tags.appendChild(t3);
       }
 
-      const ul = document.createElement("ul");
-      w.items.forEach((text, i) => {
-        const li = document.createElement("li");
-        const label = document.createElement("label");
-        const box = document.createElement("input");
-        box.type = "checkbox";
-        box.dataset.week = w.n;
-        box.id = idFor(w, i);
-        box.checked = !!state[box.id];
-        box.addEventListener("change", () => {
-          if (box.checked) state[box.id] = 1; else delete state[box.id];
-          save();
-          refresh();
-        });
-        const span = document.createElement("span");
-        span.textContent = text;
-        label.append(box, span);
-        li.appendChild(label);
-        ul.appendChild(li);
-      });
-
-      sec.append(head, h2, brief, tags);
-
+      const links = document.createElement("div");
+      links.className = "links";
+      const full = document.createElement("a");
+      full.className = "tool-link";
+      full.href = "briefs.html#week-" + w.n;
+      full.textContent = "Read the full brief";
+      links.appendChild(full);
       if (w.tool) {
         const toolLink = document.createElement("a");
         toolLink.className = "tool-link";
         toolLink.href = w.tool.href;
         toolLink.textContent = "Open the " + w.tool.label;
-        sec.appendChild(toolLink);
+        links.appendChild(toolLink);
       }
 
-      sec.appendChild(ul);
+      sec.append(head, h2, brief, tags, links);
+
+      [["Hand in", "h", w.hand], ["Check before you upload", "c", w.check]].forEach(([title, kind, items]) => {
+        const label = document.createElement("p");
+        label.className = "group";
+        label.textContent = title;
+        sec.append(label, list(w, kind, items));
+      });
+
       weeksBox.appendChild(sec);
 
       const link = document.createElement("a");
@@ -653,13 +754,14 @@
   function refresh() {
     let done = 0, total = 0;
     WEEKS.forEach((w) => {
-      const d = w.items.filter((_, i) => state[idFor(w, i)]).length;
+      const ids = idsFor(w);
+      const d = ids.filter((id) => state[id]).length;
       done += d;
-      total += w.items.length;
+      total += ids.length;
       const c = $("count-" + w.n);
-      c.textContent = d + " / " + w.items.length;
-      c.classList.toggle("complete", d === w.items.length);
-      $("jump-" + w.n).classList.toggle("complete", d === w.items.length);
+      c.textContent = d + " / " + ids.length;
+      c.classList.toggle("complete", d === ids.length);
+      $("jump-" + w.n).classList.toggle("complete", d === ids.length);
     });
     $("doneCount").textContent = done;
     $("totalCount").textContent = total;
