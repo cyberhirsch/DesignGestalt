@@ -267,9 +267,9 @@
     <a class="back" href="../index.html">&larr; Design &amp; Gestalt</a>
     <h1>Gestalt playground</h1>
     <p class="standfirst">
-      Seven principles you can push until they break. Move each slider slowly and watch for the
+      Nine principles you can push until they break. Move each slider slowly and watch for the
       moment the grouping flips — that tipping point is the whole lesson, and it is much easier
-      to feel than to be told. One of the seven hardly breaks at all.
+      to feel than to be told. One of the nine hardly breaks at all.
     </p>
   </header>
 
@@ -313,14 +313,10 @@
     <div class="demo-head">
       <p class="law">Law of Closure</p>
       <h2>The eye finishes the shape</h2>
-      <p class="say">Take the outline away and the eye keeps drawing the circle in. With one big gap it turns into a C quite soon. Spread the same loss over five uneven gaps and you still see a circle when most of it is missing. Find where each version stops being one.</p>
+      <p class="say">Take the outline away and the eye keeps drawing the circle in. Here it goes missing in five uneven gaps, and you still see a circle when most of the outline is gone. Find the point where it stops being one.</p>
     </div>
     <svg class="stage" id="closeSvg" viewBox="0 0 700 220" role="img" aria-label="A circle with part of its outline missing"></svg>
     <div class="controls">
-      <div class="seg" role="group" aria-label="Missing part split into">
-        <button class="toggle" type="button" data-gaps="1" aria-pressed="true">One gap</button>
-        <button class="toggle" type="button" data-gaps="5" aria-pressed="false">Five gaps</button>
-      </div>
       <label for="close">Missing</label>
       <input type="range" id="close" min="0" max="94" value="20">
       <span class="readout" id="closeOut" aria-hidden="true"></span>
@@ -385,6 +381,36 @@
       <input type="range" id="fg" min="0" max="100" value="50">
       <button class="toggle" type="button" id="fgHint" aria-pressed="false">Show both readings</button>
       <span class="readout" id="fgOut" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <!-- COMMON REGION -->
+  <section class="demo">
+    <div class="demo-head">
+      <p class="law">Law of Common Region</p>
+      <h2>A frame beats distance</h2>
+      <p class="say">The dots sit in pairs, close together. Raise the frames and neighbours from different pairs share a boundary. Find the point where you regroup the dots by frame instead of by distance. That is why a card holds whatever it holds.</p>
+    </div>
+    <svg class="stage" id="regSvg" viewBox="0 0 700 220" role="img" aria-label="Dots in pairs by distance, with frames you can fade in around neighbours from different pairs"></svg>
+    <div class="controls">
+      <label for="reg">Frames</label>
+      <input type="range" id="reg" min="0" max="100" value="0">
+      <span class="readout" id="regOut" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <!-- CONNECTEDNESS -->
+  <section class="demo">
+    <div class="demo-head">
+      <p class="law">Law of Connectedness</p>
+      <h2>A line beats likeness</h2>
+      <p class="say">Circles and squares alternate at even spacing, so likeness sorts them into columns. Raise the lines and each circle is tied to the square beside it. Find the point where the pairs win over the columns. A line between steps makes a checkout read as one process.</p>
+    </div>
+    <svg class="stage" id="conSvg" viewBox="0 0 700 220" role="img" aria-label="Alternating circles and squares, with lines you can fade in between each circle and the square beside it"></svg>
+    <div class="controls">
+      <label for="con">Lines</label>
+      <input type="range" id="con" min="0" max="100" value="0">
+      <span class="readout" id="conOut" aria-hidden="true"></span>
     </div>
   </section>
 
@@ -513,7 +539,6 @@
 
   /* ---------- closure ---------- */
   const closeSvg = $("closeSvg"), close = $("close"), closeOut = $("closeOut");
-  let closeGaps = 1;
   // Five pieces of uneven length with uneven gaps between them. The weights
   // are fixed, so every visit shows the same irregular pattern.
   const INK = [1.35, 0.55, 1.0, 0.75, 1.35];
@@ -536,25 +561,22 @@
         cx: cx, cy: cy, r: r, fill: "none", stroke: "var(--mark)", "stroke-width": 10
       }));
     } else {
-      const ink = closeGaps === 1 ? [1] : INK, gap = closeGaps === 1 ? [1] : GAP;
-      const inkSum = ink.reduce((a, b) => a + b), gapSum = gap.reduce((a, b) => a + b);
+      const inkSum = INK.reduce((a, b) => a + b), gapSum = GAP.reduce((a, b) => a + b);
       const inkDeg = 360 * (1 - missing), gapDeg = 360 * missing;
-      // Arc, gap, arc, gap… around the circle. The one gap stays centred at
-      // the top; the last of the five stays centred at -63 degrees.
-      let a = (closeGaps === 1 ? -90 : -63) + gapDeg * gap[gap.length - 1] / gapSum / 2;
-      for (let i = 0; i < ink.length; i++) {
-        const len = inkDeg * ink[i] / inkSum;
+      // Arc, gap, arc, gap… around the circle; the last gap stays centred at -63 degrees.
+      let a = -63 + gapDeg * GAP[GAP.length - 1] / gapSum / 2;
+      for (let i = 0; i < INK.length; i++) {
+        const len = inkDeg * INK[i] / inkSum;
         closeSvg.appendChild(el("path", {
           d: arcPath(cx, cy, r, a, a + len),
           fill: "none", stroke: "var(--mark)", "stroke-width": 10, "stroke-linecap": "butt"
         }));
-        a += len + gapDeg * gap[i] / gapSum;
+        a += len + gapDeg * GAP[i] / gapSum;
       }
     }
     say(close, closeOut, Math.round((1 - missing) * 100) + " % of the outline");
   }
   close.addEventListener("input", drawClose);
-  segmented("[data-gaps]", (b) => { closeGaps = +b.dataset.gaps; drawClose(); });
 
   /* ---------- continuity ---------- */
   const contSvg = $("contSvg"), cont = $("cont"), contOut = $("contOut");
@@ -759,7 +781,61 @@
     drawFg();
   });
 
-  drawProx(); drawSim(); drawClose(); drawCont(); drawPrag(); drawFg();
+
+  /* ---------- common region ---------- */
+  const regSvg = $("regSvg"), reg = $("reg"), regOut = $("regOut");
+  const REG_X = [150, 186, 270, 306, 390, 426, 510, 546];   // pairs by distance: 36 apart, 84 between
+  const REG_ROWS = [62, 110, 158];
+  const REG_FRAMES = [[186, 270], [306, 390], [426, 510]];   // neighbours from different pairs
+
+  function drawReg() {
+    const t = +reg.value / 100;
+    clear(regSvg);
+    if (t > 0) {
+      REG_FRAMES.forEach(([a, b]) => regSvg.appendChild(el("rect", {
+        x: a - 12, y: 43, width: b - a + 24, height: 134, rx: 14,
+        fill: "var(--mark-2)", "fill-opacity": 0.7 * t,
+        stroke: "var(--mark)", "stroke-opacity": 0.8 * t, "stroke-width": 2
+      })));
+    }
+    REG_ROWS.forEach((y) => REG_X.forEach((x) => regSvg.appendChild(el("circle", { cx: x, cy: y, r: 7, fill: "var(--mark)" }))));
+    say(reg, regOut, t === 0 ? "pairs by distance" : t < 0.15 ? "distance still wins" : t < 0.35 ? "both compete" : "pairs by frame");
+  }
+  reg.addEventListener("input", drawReg);
+
+  /* ---------- connectedness ---------- */
+  const conSvg = $("conSvg"), con = $("con"), conOut = $("conOut");
+
+  function drawCon() {
+    const t = +con.value / 100;
+    const cols = 8, rows = 3, gap = 60, r = 8;
+    const side = r * Math.sqrt(Math.PI);                     // a square with the circle's area
+    const x0 = 350 - (cols - 1) * gap / 2;                   // 140 to 560: inside the phone band
+    const y0 = 110 - (rows - 1) * gap / 2;                   // even spacing, so distance stays neutral
+    clear(conSvg);
+    for (let row = 0; row < rows; row++) {
+      const y = y0 + row * gap;
+      if (t > 0) {
+        for (let c = 0; c < cols; c += 2) {                  // each circle tied to the square on its right
+          const x = x0 + c * gap;
+          conSvg.appendChild(el("line", {
+            x1: x + r, y1: y, x2: x + gap - side / 2, y2: y,
+            stroke: "var(--mark)", "stroke-width": 1 + 2 * t, "stroke-opacity": t
+          }));
+        }
+      }
+      for (let c = 0; c < cols; c++) {
+        const x = x0 + c * gap;
+        conSvg.appendChild(c % 2 === 0
+          ? el("circle", { cx: x, cy: y, r: r, fill: "var(--mark)" })
+          : el("rect", { x: x - side / 2, y: y - side / 2, width: side, height: side, fill: "var(--mark)" }));
+      }
+    }
+    say(con, conOut, t === 0 ? "columns by shape" : t < 0.15 ? "shape still wins" : t < 0.35 ? "both compete" : "pairs by connection");
+  }
+  con.addEventListener("input", drawCon);
+
+  drawProx(); drawSim(); drawClose(); drawCont(); drawPrag(); drawFg(); drawReg(); drawCon();
 </script>
 </body>
 </html>
