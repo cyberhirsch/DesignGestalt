@@ -313,13 +313,13 @@
     <div class="demo-head">
       <p class="law">Law of Closure</p>
       <h2>The eye finishes the shape</h2>
-      <p class="say">Take the outline away and the eye keeps drawing the circle in. With one big gap it turns into a C quite soon. Spread the same loss over eight small gaps and you still see a circle when most of it is missing. Find where each version stops being one.</p>
+      <p class="say">Take the outline away and the eye keeps drawing the circle in. With one big gap it turns into a C quite soon. Spread the same loss over five uneven gaps and you still see a circle when most of it is missing. Find where each version stops being one.</p>
     </div>
     <svg class="stage" id="closeSvg" viewBox="0 0 700 220" role="img" aria-label="A circle with part of its outline missing"></svg>
     <div class="controls">
       <div class="seg" role="group" aria-label="Missing part split into">
         <button class="toggle" type="button" data-gaps="1" aria-pressed="true">One gap</button>
-        <button class="toggle" type="button" data-gaps="8" aria-pressed="false">Eight gaps</button>
+        <button class="toggle" type="button" data-gaps="5" aria-pressed="false">Five gaps</button>
       </div>
       <label for="close">Missing</label>
       <input type="range" id="close" min="0" max="94" value="20">
@@ -514,6 +514,10 @@
   /* ---------- closure ---------- */
   const closeSvg = $("closeSvg"), close = $("close"), closeOut = $("closeOut");
   let closeGaps = 1;
+  // Five pieces of uneven length with uneven gaps between them. The weights
+  // are fixed, so every visit shows the same irregular pattern.
+  const INK = [1.35, 0.55, 1.0, 0.75, 1.35];
+  const GAP = [0.6, 1.45, 0.85, 1.6, 0.5];
 
   function arcPath(cx, cy, r, a0, a1) {
     const p = (a) => (cx + r * Math.cos(a * Math.PI / 180)) + " " + (cy + r * Math.sin(a * Math.PI / 180));
@@ -532,14 +536,19 @@
         cx: cx, cy: cy, r: r, fill: "none", stroke: "var(--mark)", "stroke-width": 10
       }));
     } else {
-      const sector = 360 / closeGaps;            // each piece owns one sector
-      const drawn = sector * (1 - missing);      // the inked part of it
-      for (let i = 0; i < closeGaps; i++) {
-        const a0 = -90 + i * sector + (sector - drawn) / 2;
+      const ink = closeGaps === 1 ? [1] : INK, gap = closeGaps === 1 ? [1] : GAP;
+      const inkSum = ink.reduce((a, b) => a + b), gapSum = gap.reduce((a, b) => a + b);
+      const inkDeg = 360 * (1 - missing), gapDeg = 360 * missing;
+      // Arc, gap, arc, gap… around the circle. The one gap stays centred at
+      // the top; the last of the five stays centred at -63 degrees.
+      let a = (closeGaps === 1 ? -90 : -63) + gapDeg * gap[gap.length - 1] / gapSum / 2;
+      for (let i = 0; i < ink.length; i++) {
+        const len = inkDeg * ink[i] / inkSum;
         closeSvg.appendChild(el("path", {
-          d: arcPath(cx, cy, r, a0, a0 + drawn),
+          d: arcPath(cx, cy, r, a, a + len),
           fill: "none", stroke: "var(--mark)", "stroke-width": 10, "stroke-linecap": "butt"
         }));
+        a += len + gapDeg * gap[i] / gapSum;
       }
     }
     say(close, closeOut, Math.round((1 - missing) * 100) + " % of the outline");
