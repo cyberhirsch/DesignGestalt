@@ -11,7 +11,7 @@ Published site: https://cyberhirsch.github.io/DesignGestalt/
 - `briefs.html` — the full homework brief for every week. Generated: edit the homework
   document, then run `python scripts/build_briefs.py` (needs the `markdown` package)
 - `tools/`
-  - `gestalt.html` — interactive demos of the seven Gestalt principles (Week 1)
+  - `gestalt.html` — interactive demos of nine Gestalt principles (Week 1)
   - `contrast.html` — WCAG AA/AAA checker with colour-blindness simulation (Week 7)
   - `style-lottery.html` — assigns each student a design style to present (62 movements)
   - `type-lottery.html` — the same for FontShop's 100 Best Fonts
