@@ -14,6 +14,7 @@ Published site: https://cyberhirsch.github.io/DesignGestalt/
   credits page per deck (`week-01.html`, `week-01-credits.html`)
 - `tools/`
   - `gestalt.html` — interactive demos of nine Gestalt principles (Week 1)
+  - `grid.html` — unit converter and page-grid calculator: columns, fields, baseline, type sizes, settings per tool (Week 4)
   - `contrast.html` — WCAG AA/AAA checker with colour-blindness simulation (Week 7)
   - `style-lottery.html` — assigns each student a design style to present (62 movements)
   - `type-lottery.html` — the same for FontShop's 100 Best Fonts

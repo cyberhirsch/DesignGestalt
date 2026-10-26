@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grid Calculator</title>
+<meta name="description" content="Convert pt, px, mm and inches, build a page grid with columns, fields and a baseline, and get the numbers for Figma, Affinity and InDesign.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #EDEEF1;
+    --surface: #FFFFFF;
+    --ink: #14161B;
+    --ink-2: #565D6C;
+    --ink-3: #878E9E;
+    --rule: #D3D7E0;
+    --accent: #2439D4;
+    --col: rgba(36, 57, 212, 0.10);
+    --base: rgba(36, 57, 212, 0.28);
+    --field: #E8590C;
+    --pass: #1B7A4B;
+    --fail: #B3261E;
+
+    --display: "Syne", "Archivo", system-ui, sans-serif;
+    --body: "Archivo", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D0F14;
+      --surface: #161A23;
+      --ink: #EDEFF4;
+      --ink-2: #A4ACBB;
+      --ink-3: #6C7488;
+      --rule: #2A303C;
+      --accent: #6B7FFF;
+      --col: rgba(107, 127, 255, 0.16);
+      --base: rgba(107, 127, 255, 0.38);
+      --field: #FF8A3D;
+      --pass: #4ECB8A;
+      --fail: #FF6B6B;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D0F14;
+    --surface: #161A23;
+    --ink: #EDEFF4;
+    --ink-2: #A4ACBB;
+    --ink-3: #6C7488;
+    --rule: #2A303C;
+    --accent: #6B7FFF;
+    --col: rgba(107, 127, 255, 0.16);
+    --base: rgba(107, 127, 255, 0.38);
+    --field: #FF8A3D;
+    --pass: #4ECB8A;
+    --fail: #FF6B6B;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.5;
+  }
+
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px 90px; }
+
+  header { padding: 52px 0 26px; }
+
+  .back {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 22px;
+  }
+  .back:hover { color: var(--accent); }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 56px);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    margin: 0 0 16px;
+  }
+
+  .standfirst {
+    font-size: 16px;
+    color: var(--ink-2);
+    max-width: 64ch;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  h2 {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    font-weight: 400;
+    margin: 40px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 18px;
+  }
+
+  label, .lab {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+
+  input[type="text"], select {
+    width: 100%;
+    min-width: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    padding: 9px 10px;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+  input.bad { border-color: var(--fail); }
+
+  button {
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+
+  .check { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--ink-2); font-family: var(--body); margin: 0; }
+
+  /* ---------- converter ---------- */
+  .conv-in { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; max-width: 420px; }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .tile { background: var(--surface); padding: 12px 14px; min-width: 0; }
+  .tile-val { font-family: var(--mono); font-size: 18px; font-weight: 500; margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .tile-name { font-size: 12px; color: var(--ink-3); margin: 2px 0 0; }
+
+  /* ---------- grid ---------- */
+  .grid-layout { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 18px; align-items: start; }
+  @media (max-width: 760px) { .grid-layout { grid-template-columns: minmax(0, 1fr); } }
+
+  .form { display: grid; gap: 14px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .row2 > div, .row3 > div { min-width: 0; }
+  .presets { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hint { font-size: 12px; color: var(--ink-3); margin: 0; }
+
+  .preview { display: grid; gap: 14px; min-width: 0; }
+  .stage { background: var(--ground); border: 1px solid var(--rule); border-radius: 2px; padding: 16px; display: flex; justify-content: center; }
+  .stage svg { display: block; max-width: 100%; max-height: 640px; height: auto; }
+  .page { fill: var(--surface); stroke: var(--ink-3); }
+  .typearea { fill: none; stroke: var(--accent); }
+  .colrect { fill: var(--col); }
+  .baseline { stroke: var(--base); }
+  .fieldrect { fill: none; stroke: var(--field); }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink-2); }
+  .legend span::before { content: ""; display: inline-block; width: 14px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+  .lg-col::before { background: var(--col); border: 1px solid var(--accent); }
+  .lg-base::before { height: 2px !important; background: var(--base); vertical-align: 3px !important; }
+  .lg-field::before { border: 2px solid var(--field); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--ink-3); }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .scroll { overflow-x: auto; }
+
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
+  .checks li { padding-left: 24px; position: relative; text-wrap: pretty; }
+  .checks li::before { position: absolute; left: 0; font-weight: 600; }
+  .checks li.ok::before { content: "✓"; color: var(--pass); }
+  .checks li.no::before { content: "!"; color: var(--fail); left: 4px; }
+  .fix { margin-left: 6px; font-size: 12px; padding: 2px 8px; }
+
+  /* ---------- routes ---------- */
+  .routes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .route h3 { font-family: var(--display); font-weight: 700; font-size: 20px; margin: 0 0 10px; letter-spacing: -0.02em; }
+  .route ol { margin: 0 0 12px; padding-left: 20px; font-size: 13px; display: grid; gap: 6px; }
+  .route li { text-wrap: pretty; }
+  .route code { font-family: var(--mono); font-size: 12px; }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 40px;
+    padding-top: 22px;
+    font-size: 13px;
+    color: var(--ink-3);
+    text-wrap: pretty;
+  }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a class="back" href="../index.html">&larr; Design &amp; Gestalt</a>
+    <h1>Grid calculator</h1>
+    <p class="standfirst">
+      Convert between points, pixels, millimetres and inches. Then build a page grid with columns,
+      fields and a baseline, check that it adds up in whole lines, and get the same numbers
+      written out for Figma, Affinity and InDesign. Any field takes a unit: type <code>17mm</code>
+      or <code>48pt</code>.
+    </p>
+  </header>
+
+  <!-- ===================== converter ===================== -->
+  <h2>Units</h2>
+  <div class="panel">
+    <div class="conv-in">
+      <div>
+        <label for="cvVal">Value</label>
+        <input type="text" id="cvVal" value="12" autocomplete="off" spellcheck="false">
+      </div>
+      <div>
+        <label for="cvUnit">Unit</label>
+        <select id="cvUnit"></select>
+      </div>
+    </div>
+    <div class="tiles" id="cvOut"></div>
+    <p class="hint" style="margin-top:12px">
+      1 pt = 1/72 inch ≈ 0.353 mm. Figma has no points: its PDF export writes 1 px as 1 pt, so in
+      Figma you type the point values as pixels. CSS pixels are 1/96 inch. For a print image,
+      pixels depend on the resolution: 300 ppi is the usual minimum.
+    </p>
+  </div>
+
+  <!-- ===================== grid ===================== -->
+  <h2>Page grid</h2>
+  <div class="grid-layout">
+    <div class="panel form">
+      <div>
+        <span class="lab">Start from</span>
+        <div class="presets">
+          <button data-preset="studio">Week 4 studio</button>
+          <button data-preset="a4">A4 · 12 columns</button>
+          <button data-preset="mb">MB square</button>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label for="fmt">Format</label>
+          <select id="fmt"></select>
+        </div>
+        <div>
+          <label for="orient">Orientation</label>
+          <select id="orient">
+            <option value="p">Portrait</option>
+            <option value="l">Landscape</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <div><label for="pw">Width</label><input type="text" id="pw" autocomplete="off" spellcheck="false"></div>
+        <div><label for="ph">Height</label><input type="text" id="ph" autocomplete="off" spellcheck="false"></div>
+      </div>
+
+      <div>
+        <label for="unit">Plain numbers are</label>
+        <select id="unit">
+          <option value="pt">Points</option>
+          <option value="mm">Millimetres</option>
+        </select>
+      </div>
+
+      <div class="row2">
+        <div><label for="mt">Head margin</label><input type="text" id="mt" autocomplete="off" spellcheck="false"></div>
+        <div><label for="mb">Foot margin</label><input type="text" id="mb" autocomplete="off" spellcheck="false"></div>
+      </div>
+      <div class="row2">
+        <div><label for="ml" id="mlLab">Left margin</label><input type="text" id="ml" autocomplete="off" spellcheck="false"></div>
+        <div><label for="mr" id="mrLab">Right margin</label><input type="text" id="mr" autocomplete="off" spellcheck="false"></div>
+      </div>
+      <p class="check"><input type="checkbox" id="spread"><label for="spread" class="check" style="margin:0">Facing pages: left and right become inside and outside</label></p>
+
+      <div class="row3">
+        <div><label for="cols">Columns</label><input type="text" id="cols" autocomplete="off" spellcheck="false"></div>
+        <div><label for="gut">Gutter</label><input type="text" id="gut" autocomplete="off" spellcheck="false"></div>
+        <div><label for="base">Baseline</label><input type="text" id="base" autocomplete="off" spellcheck="false"></div>
+      </div>
+      <div class="row2">
+        <div><label for="rows">Fields down the page</label><input type="text" id="rows" autocomplete="off" spellcheck="false"></div>
+        <div><label for="rgap">Gap between fields, in lines</label><input type="text" id="rgap" autocomplete="off" spellcheck="false"></div>
+      </div>
+      <p class="hint">A field is one cell: one column wide and one row tall. Müller-Brockmann leaves one empty line between fields, so text in neighbouring fields still shares the baselines.</p>
+    </div>
+
+    <div class="preview">
+      <div class="stage"><svg id="svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Preview of the page grid"></svg></div>
+      <div class="legend">
+        <span class="lg-col">Columns</span>
+        <span class="lg-base">Baselines</span>
+        <span class="lg-field">Fields</span>
+        <label class="check" style="margin:0"><input type="checkbox" id="showBase" checked> baselines</label>
+        <label class="check" style="margin:0"><input type="checkbox" id="showFields" checked> fields</label>
+      </div>
+      <div class="panel scroll"><table id="measures"></table></div>
+      <div class="panel"><ul class="checks" id="checks"></ul></div>
+    </div>
+  </div>
+
+  <!-- ===================== type ===================== -->
+  <h2>Type sizes on the baseline</h2>
+  <div class="panel">
+    <div class="row2" style="max-width:520px; margin-bottom:14px">
+      <div><label for="sizes">Type sizes, in pt</label><input type="text" id="sizes" value="9, 12, 18, 24, 36, 60" autocomplete="off" spellcheck="false"></div>
+      <div><label for="lead">Leading at least</label>
+        <select id="lead">
+          <option value="1.15">115 % of the size</option>
+          <option value="1.2" selected>120 % of the size</option>
+          <option value="1.3">130 % of the size</option>
+          <option value="1.4">140 % of the size</option>
+        </select>
+      </div>
+    </div>
+    <div class="scroll"><table id="typeTable"></table></div>
+    <p class="hint" style="margin-top:12px">Every line spacing is a whole number of baselines, so every line in every column lands on the grid. A size whose leading takes one baseline step more than you expect simply gets more air.</p>
+  </div>
+
+  <!-- ===================== routes ===================== -->
+  <h2>Set it up in your tool</h2>
+  <div class="routes" id="routes"></div>
+
+  <footer>
+    Week 4 · Grid Systems. The grid follows Josef Müller-Brockmann, <em>Grid Systems in Graphic
+    Design</em> (1981): type area, columns and fields measured in whole lines of the baseline.
+    Menu names are for Figma, Affinity and InDesign as of autumn 2026. Nothing you enter here leaves this page.
+  </footer>
+
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  /* ---------- units ---------- */
+
+  const MM = 72 / 25.4;               // points per millimetre
+  const UNITS = {
+    pt: { name: "pt", label: "Points", per: 1 },
+    mm: { name: "mm", label: "Millimetres", per: MM },
+    cm: { name: "cm", label: "Centimetres", per: MM * 10 },
+    in: { name: "in", label: "Inches", per: 72 },
+    px: { name: "px", label: "Figma px (1 px = 1 pt)", per: 1 },
+    css: { name: "px", label: "CSS px (96 per inch)", per: 72 / 96 },
+    p300: { name: "px", label: "Pixels at 300 ppi", per: 72 / 300 }
+  };
+
+  const round = (v, d) => {
+    const f = Math.pow(10, d);
+    return String(Math.round(v * f) / f);
+  };
+  const fpt = (v) => round(v, 2) + " pt";
+  const fmm = (v) => round(v / MM, 1) + " mm";
+  const both = (v) => fpt(v) + " · " + fmm(v);
+
+  // "17mm", "48 pt", "1.5in", "48" → points; plain numbers use the chosen unit
+  function parseLen(str, def) {
+    const m = String(str).trim().replace(",", ".").match(/^(-?\d*\.?\d+)\s*(pt|mm|cm|in|px)?$/i);
+    if (!m) return null;
+    const v = parseFloat(m[1]);
+    const u = (m[2] || def).toLowerCase();
+    return v * UNITS[u].per;
+  }
+
+  const cvUnit = $("cvUnit");
+  ["pt", "mm", "cm", "in", "px", "css", "p300"].forEach((k) => {
+    const o = document.createElement("option");
+    o.value = k; o.textContent = UNITS[k].label;
+    cvUnit.appendChild(o);
+  });
+
+  function renderConverter() {
+    const raw = $("cvVal").value.trim().replace(",", ".");
+    const v = parseFloat(raw);
+    const ok = /^-?\d*\.?\d+$/.test(raw);
+    $("cvVal").classList.toggle("bad", !ok);
+    if (!ok) return;
+    const pt = v * UNITS[cvUnit.value].per;
+    const out = [
+      [round(pt, 2) + " pt", "Points: Affinity, InDesign"],
+      [round(pt / MM, 2) + " mm", "Millimetres"],
+      [round(pt / 72, 3) + " in", "Inches"],
+      [round(pt, 2) + " px", "Figma pixels"],
+      [round(pt * 96 / 72, 2) + " px", "CSS pixels"],
+      [round(pt * 300 / 72, 0) + " px", "Pixels at 300 ppi"]
+    ];
+    $("cvOut").innerHTML = out.map(([v, n]) =>
+      `<div class="tile"><p class="tile-val">${v}</p><p class="tile-name">${n}</p></div>`).join("");
+  }
+  $("cvVal").addEventListener("input", renderConverter);
+  cvUnit.addEventListener("change", renderConverter);
+
+  /* ---------- formats ---------- */
+
+  const FORMATS = {
+    A6: [105, 148], A5: [148, 210], A4: [210, 297], A3: [297, 420], A2: [420, 594], A1: [594, 841],
+    "US Letter": [215.9, 279.4], Tabloid: [279.4, 431.8], Square: [210, 210]
+  };
+  const fmt = $("fmt");
+  Object.keys(FORMATS).concat(["Custom"]).forEach((k) => {
+    const o = document.createElement("option");
+    o.value = k; o.textContent = k === "Custom" ? "Custom" : `${k} · ${FORMATS[k][0]} × ${FORMATS[k][1]} mm`;
+    fmt.appendChild(o);
+  });
+
+  const PRESETS = {
+    studio: { fmt: "A3", orient: "p", unit: "pt", mt: "48", mb: "75", ml: "36", mr: "36", cols: "4", gut: "24", base: "12", rows: "1", rgap: "1", spread: false },
+    a4: { fmt: "A4", orient: "p", unit: "mm", mt: "15", mb: "", ml: "12", mr: "12", cols: "12", gut: "12pt", base: "12pt", rows: "6", rgap: "1", spread: false },
+    mb: { fmt: "Square", orient: "p", unit: "mm", mt: "20", mb: "", ml: "20", mr: "20", cols: "4", gut: "12pt", base: "12pt", rows: "4", rgap: "1", spread: false }
+  };
+
+  function applyFormat() {
+    if (fmt.value === "Custom") return;
+    let [w, h] = FORMATS[fmt.value];
+    if ($("orient").value === "l") [w, h] = [h, w];
+    $("pw").value = round(w, 1) + "mm";
+    $("ph").value = round(h, 1) + "mm";
+  }
+  fmt.addEventListener("change", () => { applyFormat(); renderGrid(); });
+  $("orient").addEventListener("change", () => {
+    if (fmt.value === "Custom") { const t = $("pw").value; $("pw").value = $("ph").value; $("ph").value = t; }
+    else applyFormat();
+    renderGrid();
+  });
+  ["pw", "ph"].forEach((id) => $(id).addEventListener("input", () => { fmt.value = "Custom"; }));
+
+  function loadPreset(name) {
+    const p = PRESETS[name];
+    fmt.value = p.fmt; $("orient").value = p.orient; $("unit").value = p.unit;
+    applyFormat();
+    if (name === "studio") { $("pw").value = "842pt"; $("ph").value = "1191pt"; }
+    ["mt", "mb", "ml", "mr", "cols", "gut", "base", "rows", "rgap"].forEach((k) => { $(k).value = p[k]; });
+    $("spread").checked = p.spread;
+    // presets without a foot margin get the one that makes the fields whole lines
+    if (!p.mb) {
+      $("mb").value = p.mt;
+      const g = readGrid();
+      if (g) { $("mb").value = round(footFor(g, Math.floor((g.H - g.mt - g.mt) / g.base)), 2) + "pt"; }
+    }
+    renderGrid();
+  }
+  document.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => loadPreset(b.dataset.preset)));
+
+  /* ---------- grid maths ---------- */
+
+  // the foot margin for the nearest line count at or below L that splits into whole fields
+  function footFor(g, L) {
+    for (let n = L; n > g.rows; n--) {
+      if ((n - (g.rows - 1) * g.rgap) % g.rows === 0) return g.H - g.mt - n * g.base;
+    }
+    return g.H - g.mt - L * g.base;
+  }
+
+  function readGrid() {
+    const u = $("unit").value;
+    const g = {};
+    let ok = true;
+    const len = (id, allowZero) => {
+      const v = parseLen($(id).value, u);
+      const bad = v === null || v < 0 || (!allowZero && v === 0);
+      $(id).classList.toggle("bad", bad);
+      if (bad) ok = false;
+      return v;
+    };
+    const int = (id, min) => {
+      const v = Number($(id).value);
+      const bad = !Number.isInteger(v) || v < min;
+      $(id).classList.toggle("bad", bad);
+      if (bad) ok = false;
+      return v;
+    };
+    g.W = len("pw"); g.H = len("ph");
+    g.mt = len("mt", true); g.mb = len("mb", true); g.ml = len("ml", true); g.mr = len("mr", true);
+    g.cols = int("cols", 1); g.gut = len("gut", true); g.base = len("base");
+    g.rows = int("rows", 1); g.rgap = int("rgap", 0);
+    if (!ok) return null;
+    g.spread = $("spread").checked;
+    g.tw = g.W - g.ml - g.mr;
+    g.th = g.H - g.mt - g.mb;
+    g.colW = (g.tw - (g.cols - 1) * g.gut) / g.cols;
+    g.lines = g.th / g.base;
+    g.whole = Math.abs(g.lines - Math.round(g.lines)) < 0.01;
+    g.L = Math.round(g.lines);
+    g.fieldLines = (g.L - (g.rows - 1) * g.rgap) / g.rows;
+    g.fieldWhole = g.whole && Number.isInteger(g.fieldLines) && g.fieldLines > 0;
+    g.fieldH = g.fieldWhole ? g.fieldLines * g.base : (g.th - (g.rows - 1) * g.rgap * g.base) / g.rows;
+    return g;
+  }
+
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  }
+
+  function drawPage(svg, g, x0, mirror) {
+    const ml = mirror ? g.mr : g.ml;
+    const sw = g.W / 400;
+    el("rect", { x: x0, y: 0, width: g.W, height: g.H, class: "page", "stroke-width": sw }, svg);
+    if (g.tw <= 0 || g.th <= 0 || g.colW <= 0) return;
+    const tx = x0 + ml, ty = g.mt;
+    for (let c = 0; c < g.cols; c++) {
+      el("rect", { x: tx + c * (g.colW + g.gut), y: ty, width: g.colW, height: g.th, class: "colrect" }, svg);
+    }
+    if ($("showBase").checked) {
+      const n = Math.floor(g.th / g.base + 0.01);
+      for (let i = 1; i <= n; i++) {
+        const y = ty + i * g.base;
+        el("line", { x1: tx, x2: tx + g.tw, y1: y, y2: y, class: "baseline", "stroke-width": sw * 0.7 }, svg);
+      }
+    }
+    if ($("showFields").checked && g.rows > 0 && g.fieldH > 0) {
+      for (let r = 0; r < g.rows; r++) {
+        const y = ty + r * (g.fieldH + g.rgap * g.base);
+        for (let c = 0; c < g.cols; c++) {
+          el("rect", { x: tx + c * (g.colW + g.gut), y, width: g.colW, height: g.fieldH, class: "fieldrect", "stroke-width": sw * 1.6 }, svg);
+        }
+      }
+    }
+    el("rect", { x: tx, y: ty, width: g.tw, height: g.th, class: "typearea", "stroke-width": sw * 1.2 }, svg);
+  }
+
+  function renderGrid() {
+    $("mlLab").textContent = $("spread").checked ? "Inside margin" : "Left margin";
+    $("mrLab").textContent = $("spread").checked ? "Outside margin" : "Right margin";
+    const g = readGrid();
+    const svg = $("svg");
+    svg.innerHTML = "";
+    if (!g) { $("measures").innerHTML = ""; $("checks").innerHTML = ""; $("routes").innerHTML = ""; return; }
+
+    const pad = g.W * 0.02;
+    if (g.spread) {
+      svg.setAttribute("viewBox", `${-pad} ${-pad} ${2 * g.W + 2 * pad} ${g.H + 2 * pad}`);
+      drawPage(svg, g, 0, true);   // left page: inside margin on its right
+      drawPage(svg, g, g.W, false);
+    } else {
+      svg.setAttribute("viewBox", `${-pad} ${-pad} ${g.W + 2 * pad} ${g.H + 2 * pad}`);
+      drawPage(svg, g, 0, false);
+    }
+
+    // measures
+    const rows = [
+      ["Page", `${fpt(g.W)} × ${fpt(g.H)}`, `${fmm(g.W)} × ${fmm(g.H)}`],
+      ["Type area", `${fpt(g.tw)} × ${fpt(g.th)}`, `${fmm(g.tw)} × ${fmm(g.th)}`],
+      ["Column", fpt(g.colW), fmm(g.colW)],
+      ["Gutter", fpt(g.gut), fmm(g.gut)],
+      ["Baseline", fpt(g.base), fmm(g.base)],
+      ["Lines in the type area", round(g.lines, 2), ""],
+      ["Field", `${fpt(g.colW)} × ${fpt(g.fieldH)}`, `${fmm(g.colW)} × ${fmm(g.fieldH)}`],
+      ["Lines per field", g.fieldWhole ? g.fieldLines : round(g.fieldH / g.base, 2), ""]
+    ];
+    $("measures").innerHTML = "<tr><th></th><th>Points</th><th>Millimetres</th></tr>" +
+      rows.map(([a, b, c]) => `<tr><td>${a}</td><td class="num">${b}</td><td class="num">${c}</td></tr>`).join("");
+
+    // checks
+    const items = [];
+    if (g.tw <= 0 || g.th <= 0) items.push(["no", "The margins are wider than the page."]);
+    else if (g.colW <= 0) items.push(["no", "The gutters take up the whole type area. Use fewer columns or a smaller gutter."]);
+    if (g.th > 0) {
+      if (g.whole) items.push(["ok", `The type area is exactly ${g.L} lines of ${fpt(g.base)}.`]);
+      else {
+        const L = Math.floor(g.lines);
+        const fixMb = g.H - g.mt - L * g.base;
+        items.push(["no", `The type area is ${round(g.lines, 2)} lines, not a whole number. A foot margin of ${both(fixMb)} makes it ${L} lines.`,
+          { label: "Use it", run: () => { $("mb").value = round(fixMb, 2) + "pt"; renderGrid(); } }]);
+      }
+    }
+    if (g.whole && g.rows > 1) {
+      if (g.fieldWhole) items.push(["ok", `${g.rows} fields of ${g.fieldLines} lines, with ${g.rgap} empty line${g.rgap === 1 ? "" : "s"} between them.`]);
+      else {
+        const fits = [];
+        for (let n = 2; n <= 16; n++) {
+          const f = (g.L - (n - 1) * g.rgap) / n;
+          if (Number.isInteger(f) && f > 0) fits.push(n);
+        }
+        items.push(["no", `${g.L} lines don't split into ${g.rows} fields of whole lines. ` +
+          (fits.length ? `With a gap of ${g.rgap}, these counts work: ${fits.join(", ")}. ` : "") +
+          `${fits.length ? "Or keep" : "To keep"} ${g.rows} fields with a foot margin of ${both(footFor(g, g.L))}.`,
+          { label: "Use it", run: () => { $("mb").value = round(footFor(g, g.L), 2) + "pt"; renderGrid(); } }]);
+      }
+    }
+    const gl = g.gut / g.base;
+    if (Math.abs(gl - Math.round(gl)) < 0.01 && gl >= 1) items.push(["ok", `The gutter is ${Math.round(gl)} line${Math.round(gl) === 1 ? "" : "s"} wide, so it matches the rhythm of the baseline.`]);
+    else items.push(["no", `The gutter is ${round(gl, 2)} lines wide. That works, but a gutter of whole lines (${both(Math.max(1, Math.round(gl)) * g.base)}) keeps one rhythm across and down.`]);
+    if (g.spread && g.ml < g.mr) items.push(["no", "The inside margin is narrower than the outside. In a bound document the inside usually gets more, because the fold eats it."]);
+    if (!g.spread && Math.abs(g.ml - g.mr) > 0.01) items.push(["no", "Left and right margins differ. Fine on purpose; Figma's centred column grid can't do it, see below."]);
+
+    const ul = $("checks");
+    ul.innerHTML = "";
+    items.forEach(([cls, text, fix]) => {
+      const li = document.createElement("li");
+      li.className = cls;
+      li.textContent = text;
+      if (fix) {
+        const b = document.createElement("button");
+        b.className = "fix"; b.textContent = fix.label;
+        b.addEventListener("click", fix.run);
+        li.appendChild(b);
+      }
+      ul.appendChild(li);
+    });
+
+    renderRoutes(g);
+    renderType(g);
+  }
+
+  ["pw", "ph", "mt", "mb", "ml", "mr", "cols", "gut", "base", "rows", "rgap"].forEach((id) => $(id).addEventListener("input", renderGrid));
+  ["unit", "spread", "showBase", "showFields"].forEach((id) => $(id).addEventListener("change", renderGrid));
+
+  /* ---------- type sizes ---------- */
+
+  function renderType(g) {
+    const b = g ? g.base : 12;
+    const k = parseFloat($("lead").value);
+    const sizes = $("sizes").value.split(/[,\s]+/).map((s) => parseFloat(s.replace(",", "."))).filter((v) => v > 0);
+    $("typeTable").innerHTML = "<tr><th>Size</th><th>Leading</th><th>Baselines per line</th><th>Lines per field</th><th>Write it as</th></tr>" +
+      sizes.map((s) => {
+        const steps = Math.max(1, Math.ceil(s * k / b - 0.001));
+        const lead = steps * b;
+        const perField = g && g.fieldWhole ? Math.floor(g.fieldLines / steps) : "–";
+        return `<tr><td class="num">${round(s, 2)} pt</td><td class="num">${round(lead, 2)} pt</td><td class="num">${steps}</td><td class="num">${perField}</td><td class="num">${round(s, 2)}/${round(lead, 2)}</td></tr>`;
+      }).join("");
+  }
+  $("sizes").addEventListener("input", () => renderType(readGrid()));
+  $("lead").addEventListener("change", () => renderType(readGrid()));
+
+  /* ---------- routes ---------- */
+
+  function renderRoutes(g) {
+    const n = (v) => round(v, 2);
+    const inn = g.spread ? "inside" : "left", out = g.spread ? "outside" : "right";
+    const sym = Math.abs(g.ml - g.mr) < 0.01;
+    const rowGap = g.rgap * g.base;
+
+    const figma = [
+      `Frame: <code>${n(g.W)} × ${n(g.H)}</code> px. Type the point values as pixels.`,
+      sym
+        ? `Layout grid › Columns: count <code>${g.cols}</code>, type Stretch, margin <code>${n(g.ml)}</code>, gutter <code>${n(g.gut)}</code>.`
+        : `Layout grid › Columns: count <code>${g.cols}</code>, type Left, offset <code>${n(g.ml)}</code>, width <code>${n(g.colW)}</code>, gutter <code>${n(g.gut)}</code>. Stretch can't do unequal margins.`,
+      g.rows > 1 && g.fieldWhole
+        ? `Layout grid › Rows: count <code>${g.rows}</code>, type Top, offset <code>${n(g.mt)}</code>, height <code>${n(g.fieldH)}</code>, gutter <code>${n(rowGap)}</code>.`
+        : `Figma draws no head or foot margin: keep text between <code>${n(g.mt)}</code> and <code>${n(g.H - g.mb)}</code> from the top.`,
+      `Baseline: Figma has none. Add a second row grid as a stand-in: count <code>${g.L}</code>, type Top, offset <code>${n(g.mt)}</code>, height <code>${n(g.base)}</code>, gutter <code>0</code>. Set every line height to a multiple of <code>${n(g.base)}</code>.`
+    ];
+    const affinity = [
+      `New document: <code>${n(g.W)} × ${n(g.H)} pt</code>, Document Units set to Points${g.spread ? ", Facing Pages on" : ""}.`,
+      `Margins and Guides dialog: top <code>${n(g.mt)} pt</code>, bottom <code>${n(g.mb)} pt</code>, ${g.spread ? "inside" : "left"} <code>${n(g.ml)} pt</code>, ${g.spread ? "outside" : "right"} <code>${n(g.mr)} pt</code>.`,
+      `Same dialog, Column Guides: columns <code>${g.cols}</code>, rows <code>${g.rows}</code>, gutter <code>${n(g.gut)} pt</code>.` +
+        (g.rows > 1 && Math.abs(rowGap - g.gut) > 0.01 ? ` The dialog has one gutter for both; for a row gap of <code>${n(rowGap)} pt</code>, add the row lines as horizontal guides instead.` : ""),
+      `View › Baseline Grid: spacing <code>${n(g.base)} pt</code>, starting at <code>${n(g.mt)} pt</code>. Then align the text frames to the baseline grid.`
+    ];
+    const indesign = [
+      `File › New › Document: <code>${n(g.W)} × ${n(g.H)} pt</code>${g.spread ? ", Facing Pages on" : ", Facing Pages off"}.`,
+      `Margins: top <code>${n(g.mt)} pt</code>, bottom <code>${n(g.mb)} pt</code>, ${inn} <code>${n(g.ml)} pt</code>, ${out} <code>${n(g.mr)} pt</code>. Columns <code>${g.cols}</code>, gutter <code>${n(g.gut)} pt</code>.`,
+      g.rows > 1
+        ? `Layout › Create Guides: rows <code>${g.rows}</code>, gutter <code>${n(rowGap)} pt</code>, Fit Guides to Margins.`
+        : `No rows needed for a single field.`,
+      `Preferences › Grids: baseline start <code>${n(g.mt)} pt</code>, relative to the top of the page, every <code>${n(g.base)} pt</code>. Then Align to Baseline Grid in the Paragraph panel.`
+    ];
+
+    const box = (name, steps) => `<div class="panel route"><h3>${name}</h3><ol>${steps.map((s) => `<li>${s}</li>`).join("")}</ol><button data-copy>Copy</button></div>`;
+    const routes = $("routes");
+    routes.innerHTML = box("Figma", figma) + box("Affinity", affinity) + box("InDesign", indesign);
+    routes.querySelectorAll("[data-copy]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const list = btn.previousElementSibling;
+        const text = btn.parentElement.querySelector("h3").textContent + "\n" +
+          [...list.children].map((li, i) => `${i + 1}. ${li.textContent}`).join("\n");
+        const done = () => { btn.textContent = "Copied"; setTimeout(() => { btn.textContent = "Copy"; }, 1400); };
+        try {
+          navigator.clipboard.writeText(text).then(done, () => selectText(list));
+        } catch (e) { selectText(list); }
+      });
+    });
+  }
+
+  function selectText(node) {
+    const r = document.createRange();
+    r.selectNodeContents(node);
+    const s = window.getSelection();
+    s.removeAllRanges(); s.addRange(r);
+  }
+
+  renderConverter();
+  loadPreset("studio");
+</script>
+</body>
+</html>
