@@ -21,6 +21,8 @@ Published site: https://cyberhirsch.github.io/DesignGestalt/
 
 The hub also links out to four practice games by Method of Action — The Bézier Game,
 Color, KernType and Shape Type — each tied to the week it supports.
+Under "Other tools" it links six free design tools: Adobe Color, Coolors, Type Scale,
+Wakamai Fondue, Fontjoy and WhatTheFont.
 
 Slide decks are added per week as they are finished.
 
