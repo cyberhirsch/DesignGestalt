@@ -10,6 +10,8 @@ Published site: https://cyberhirsch.github.io/DesignGestalt/
 - `checklists.html` — the homework checklist: what to hand in each week and what to check first, as tick lists (14 weeks, 76 hand-ins and 64 checks)
 - `briefs.html` — the full homework brief for every week. Generated: edit the homework
   document, then run `python scripts/build_briefs.py` (needs the `markdown` package)
+- `methods.html` — the course's design methods and tests, sorted by the six design-thinking
+  modes, each with the week that teaches it
 - `slides/` — the finished decks as single HTML files, with teaching-only images left out, and a
   credits page per deck (`week-01.html`, `week-01-credits.html`)
 - `tools/`

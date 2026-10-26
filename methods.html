@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methods and Tests</title>
+<meta name="description" content="The design methods of Design & Gestalt, sorted by the six modes of design thinking, with the week that teaches each one.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #EDEEF1;
+    --surface: #FFFFFF;
+    --ink: #14161B;
+    --ink-2: #565D6C;
+    --ink-3: #878E9E;
+    --rule: #D3D7E0;
+    --accent: #2439D4;
+    --test: #E8590C;
+
+    --display: "Syne", "Archivo", system-ui, sans-serif;
+    --body: "Archivo", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D0F14;
+      --surface: #161A23;
+      --ink: #EDEFF4;
+      --ink-2: #A4ACBB;
+      --ink-3: #6C7488;
+      --rule: #2A303C;
+      --accent: #6B7FFF;
+      --test: #FF8A3D;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0D0F14;
+    --surface: #161A23;
+    --ink: #EDEFF4;
+    --ink-2: #A4ACBB;
+    --ink-3: #6C7488;
+    --rule: #2A303C;
+    --accent: #6B7FFF;
+    --test: #FF8A3D;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.5;
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px 90px; }
+
+  header { padding: 52px 0 26px; }
+
+  .back {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 22px;
+  }
+  .back:hover { color: var(--accent); }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 56px);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    margin: 0 0 16px;
+  }
+
+  .standfirst {
+    font-size: 16px;
+    color: var(--ink-2);
+    max-width: 64ch;
+    margin: 0 0 12px;
+    text-wrap: pretty;
+  }
+
+  .modes { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 18px 0 0; font-size: 14px; }
+  .modes a { text-decoration: none; }
+  .modes a:hover { text-decoration: underline; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 6px; }
+  .filters button {
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  .filters button:hover { border-color: var(--accent); color: var(--accent); }
+  .filters button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--surface); }
+
+  .mode { margin-top: 38px; }
+  .mode h2 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -0.03em;
+    margin: 0 0 2px;
+  }
+  .mode .line {
+    color: var(--ink-2);
+    margin: 0 0 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .items { display: grid; gap: 12px; }
+
+  .item {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 2px;
+    padding: 16px 18px;
+  }
+  .item.test { border-left-color: var(--test); }
+  .item.extra { border-left-style: dashed; }
+
+  .kind {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin: 0 0 4px;
+  }
+  .item.test .kind { color: var(--test); }
+  .item.extra .kind { color: var(--ink-3); }
+
+  .item h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  .purpose { margin: 0 0 8px; color: var(--ink-2); max-width: 64ch; text-wrap: pretty; }
+  .item ol { margin: 0; padding-left: 20px; font-size: 14px; display: grid; gap: 3px; max-width: 64ch; }
+
+  .why {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 18px 20px;
+    margin-top: 20px;
+    max-width: 72ch;
+  }
+  .why p { margin: 0; text-wrap: pretty; }
+  .why p + p { margin-top: 8px; }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 40px;
+    padding-top: 22px;
+    font-size: 13px;
+    color: var(--ink-3);
+    text-wrap: pretty;
+  }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a class="back" href="index.html">&larr; Design &amp; Gestalt</a>
+    <h1>Methods and tests</h1>
+    <p class="standfirst">
+      Design thinking has six modes, and each has its own methods: ways to look, to understand,
+      to decide, to make ideas, to build and to check. Every brief names its mode. Here are the
+      methods for each, with the week that teaches them, plus a few more worth knowing.
+    </p>
+    <nav class="modes" id="modes" aria-label="Modes"></nav>
+    <div class="why">
+      <p><strong>Why test at all?</strong> With Gestalt principles you can argue for or against almost any design: the same closure can be called clever or confusing.</p>
+      <p>The principles explain <em>why</em> something works or fails. A test, with people who haven't seen your work, decides <em>whether</em> it does.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Show">
+      <button aria-pressed="true" data-filter="all">Everything</button>
+      <button aria-pressed="false" data-filter="taught">Taught in class</button>
+      <button aria-pressed="false" data-filter="extra">Beyond the course</button>
+    </div>
+  </header>
+
+  <main id="list"></main>
+
+  <footer>
+    Methods are added here as their week is taught. Crazy 8s comes from Google Ventures' design
+    sprints; the five-user rule from Jakob Nielsen (2000); SCAMPER from Bob Eberle (1971), after
+    Alex Osborn's checklist.
+  </footer>
+
+</div>
+
+<script>
+  // Each method: name, week it's taught (0 = beyond the course), what it's for, how to run it.
+  const MODES = [
+    { mode: "Discover", line: "Look before deciding.", items: [
+      { name: "Visual audit", week: 4, purpose: "Take finished work apart to learn the system underneath it.",
+        steps: ["Collect real examples, photographed square.", "Measure, don't estimate.", "Name the rule, then the place it breaks."] },
+      { name: "Brand audit", week: 12, purpose: "The visual audit on a whole brand, across every place it appears.",
+        steps: ["Photograph every touchpoint: sign, cup, website, app.", "Measure contrast and sizes.", "Write findings, not taste: each one names its principle."] },
+      { name: "Desk research", week: 11, purpose: "Back every fact with a source.",
+        steps: ["Start with primary sources: the maker, the archive.", "Check each fact in a second, independent source.", "Write the source down as you go.", "Two sources that disagree are a finding."] },
+      { name: "Moodboard", week: 0, purpose: "Collect references for a feeling before you design it.",
+        steps: ["Gather images, type and colour that carry the mood.", "Cut it down to what all of them share.", "Name that in words: it becomes part of your brief."] }
+    ]},
+    { mode: "Empathize", line: "Understand who it is for.", items: [
+      { name: "Context of use", week: 6, purpose: "Find out where, how far away and for how long it will be seen.",
+        steps: ["Where: a wall, a hand, a phone, a screen across a hall.", "How far, how long, and what competes with it.", "Then decide what has to survive."] },
+      { name: "Ask three people", week: 8, purpose: "Hear how real people understand one word or one sign.",
+        steps: ["People outside the course, one at a time.", "Ask an open question; give no hints.", "Write down their exact words."] },
+      { name: "Persona from observation", week: 12, purpose: "One user, described from what you saw, not invented.",
+        steps: ["Base it on people you watched or asked.", "Name their goal and where the design fails them.", "Use it to judge every decision."] },
+      { name: "Funnel interview", week: 13, purpose: "Ask without leading.",
+        steps: ["Start broad: how do they see it?", "Narrow down only at the end.", "Never put your answer in the question."] },
+      { name: "Observation", week: 0, purpose: "Watch what people do, not what they say they do.",
+        steps: ["Go where the design is used.", "Watch quietly; note what people struggle with.", "Note the workarounds: they show what's missing."] },
+      { name: "Empathy map", week: 0, purpose: "Sort what you learned about a user before you design for them.",
+        steps: ["Four fields: says, thinks, does, feels.", "Fill them from interviews and observation, not guesses.", "Look for where says and does disagree."] }
+    ]},
+    { mode: "Define", line: "Commit to one reading.", items: [
+      { name: "Content inventory", week: 2, purpose: "List every piece of content before you lay anything out.",
+        steps: ["Write down every fact the design must carry.", "Rank them: what must be seen first, second, last.", "Cut what nobody needs."] },
+      { name: "Brand attributes", week: 12, purpose: "Decide what it has to say, in words you can check.",
+        steps: ["Three attributes, each with its limit: smart but not snobbish.", "Avoid empty words like modern or quality.", "Check every design against them."] },
+      { name: "Finding or taste?", week: 12, purpose: "Turn a reaction into a statement someone can act on.",
+        steps: ["Start from what you noticed.", "Name the principle behind it.", "Say what it costs the user."] },
+      { name: "How might we…?", week: 0, purpose: "Turn a problem into a question that invites ideas.",
+        steps: ["Start from a finding: guests can't find the date.", "Rephrase it: how might we make the date the first thing seen?", "Not too wide, not too narrow: the question shouldn't contain the answer."] }
+    ]},
+    { mode: "Ideate", line: "Generate quantity, defer judgement.", items: [
+      { name: "Diverge, then converge", week: 1, purpose: "The basic rhythm of design work: go wide before you choose.",
+        steps: ["Make many different ideas, fast, without judging them.", "Choose the strongest against the brief.", "Build only that one; keep the others as your process."] },
+      { name: "Thumbnail sprint", week: 5, purpose: "Get past your first idea: many small sketches against the clock.",
+        steps: ["Stamp-sized boxes, about a minute each.", "New structures, not one idea redrawn.", "Google's design sprints call it Crazy 8s: eight ideas in eight minutes."] },
+      { name: "The machine as sparring partner", week: 5, purpose: "Use an image generator to see the clichés, then draw past them.",
+        steps: ["Sketch first, then prompt.", "Prompt about form, not about the subject.", "Judge the results by form, and keep your own drawing."] },
+      { name: "Abstraction ladder", week: 9, purpose: "Climb from the thing to the sign, one step at a time.",
+        steps: ["Photo, drawing, silhouette, pictogram.", "Each step takes something away.", "Stop on the highest step people still recognise."] },
+      { name: "Dot voting", week: 13, purpose: "Let a group choose quickly, without a long debate.",
+        steps: ["Hang all options side by side.", "Everyone places a few dots, at once and in silence.", "Discuss the winners, not every option."] },
+      { name: "Mind map", week: 0, purpose: "Spread out every association around one word.",
+        steps: ["The topic in the middle.", "Branches for everything it brings to mind, without judging.", "Look for the unexpected branch."] },
+      { name: "SCAMPER", week: 0, purpose: "Change an existing idea in seven systematic ways.",
+        steps: ["Substitute, combine, adapt, modify, put to another use, eliminate, reverse.", "Ask each question of your current design.", "Sketch every answer, however odd."] }
+    ]},
+    { mode: "Prototype", line: "Make it real enough to test.", items: [
+      { name: "Controlled variation", week: 2, purpose: "Find out what made the difference by changing one thing at a time.",
+        steps: ["Keep size, wording and typeface fixed.", "Change one driver per version.", "Compare side by side and name the driver that won."] },
+      { name: "Paper prototyping", week: 3, purpose: "Try it with your hands before you commit to it in software.",
+        steps: ["Cut the parts once, then move them freely.", "Photograph every arrangement worth keeping.", "Commit only when one arrangement beats the others."] },
+      { name: "Build once, rebuild per format", week: 6, purpose: "One key visual, recomposed for each format instead of scaled.",
+        steps: ["Make the key visual a component or symbol.", "Keep the order of the facts; rebuild the layout.", "Check each format in its own context."] },
+      { name: "Clickable states", week: 8, purpose: "Build the states of an element so people can actually press it.",
+        steps: ["Default, hover and pressed as one reusable element.", "Link them so a click shows the next state.", "Test it with a person, not a description."] },
+      { name: "Prototype at real size", week: 10, purpose: "Judge type at the size and distance it will really be read.",
+        steps: ["Print at 100 %, or show it at actual size.", "Stand where the reader stands.", "Fix what you missed and print again."] },
+      { name: "Mockup in context", week: 13, purpose: "Show the design where it will live: on the sign, the cup, the phone.",
+        steps: ["Use a real photo of the place.", "Match perspective, light and size.", "Then check it at its real distance."] }
+    ]},
+    { mode: "Test", line: "Let evidence beat preference.", items: [
+      { name: "Two-second test", week: 1, purpose: "What is seen first, and what it's for.",
+        steps: ["Someone who hasn't seen your sketches.", "Show it for two seconds, then hide it.", "Ask what they saw first. Write it down; don't explain."] },
+      { name: "Real-size test", week: 1, purpose: "Whether it still works at the size it will be seen.",
+        steps: ["A poster at arm's length, an icon at 24 × 24 px.", "Note what disappears or merges."] },
+      { name: "Three-second test", week: 2, purpose: "Which fact leads.",
+        steps: ["Show the layout for three seconds.", "Ask which fact they remember first."] },
+      { name: "Test at three scales", week: 3, purpose: "Whether the figure survives small and the details hold up large.",
+        steps: ["Thumbnail, actual size, enlarged.", "Different defects show at each scale."] },
+      { name: "Cold read", week: 4, purpose: "Whether the reading order arrives as planned.",
+        steps: ["A neighbour numbers the facts in the order they read them.", "The maker reads the planned order aloud.", "Where they differ, name the driver that broke it."] },
+      { name: "Race test", week: 4, purpose: "How fast a stranger finds one fact.",
+        steps: ["Show one version for three seconds.", "Ask for one fact; count the seconds; say nothing."] },
+      { name: "Blind read", week: 5, purpose: "Whether the character comes across without words.",
+        steps: ["Show the key visual without text.", "Ask: warm and quiet, or bright and loud?"] },
+      { name: "I like, I wish, what if", week: 7, purpose: "A critique format that keeps feedback specific.",
+        steps: ["I like: what works, and why.", "I wish: what's missing or in the way.", "What if: one change to try. The maker listens."] },
+      { name: "Contrast ratio", week: 7, purpose: "Whether every text colour can be read on its background.",
+        steps: ["Measure the worst spot, not the average.", "Body text 4.5 : 1, large text 3 : 1 (WCAG 2.2 AA)."] },
+      { name: "Guerrilla testing", week: 8, purpose: "Quick tests with real people, wherever you find them.",
+        steps: ["Three to five people find the biggest problems.", "Give a task, not a tour; ask them to think aloud.", "Write down what they did, not what they say they'd do."] },
+      { name: "Greyscale check", week: 8, purpose: "Whether a state is carried by more than colour.",
+        steps: ["Switch to greyscale.", "Every state must still be told apart."] },
+      { name: "Squint test", week: 9, purpose: "What survives distance and small size.",
+        steps: ["Squint, or blur the image.", "What stays recognisable is the sign."] },
+      { name: "Nameless test", week: 9, purpose: "Whether a pictogram works without its label.",
+        steps: ["Show the sign alone and ask what it means."] },
+      { name: "Day test", week: 11, purpose: "Whether a wallpaper works under everything the phone puts on top.",
+        steps: ["Use it for a day.", "Note what the clock, widgets and notifications cover."] },
+      { name: "A/B preference test", week: 0, purpose: "Which of two versions does the job better.",
+        steps: ["Show both, in random order.", "Ask which one does the job, not which they like.", "Ask why, and write it down."] }
+    ]}
+  ];
+
+  const list = document.getElementById("list");
+
+  document.getElementById("modes").innerHTML =
+    MODES.map((m) => `<a href="#${m.mode.toLowerCase()}">${m.mode}</a>`).join("");
+
+  function render(filter) {
+    list.innerHTML = "";
+    MODES.forEach((m) => {
+      const items = m.items.filter((it) => filter === "all" || (filter === "taught" ? it.week > 0 : it.week === 0));
+      if (!items.length) return;
+      const sec = document.createElement("section");
+      sec.className = "mode";
+      sec.id = m.mode.toLowerCase();
+      sec.innerHTML = `<h2>${m.mode}</h2><p class="line">${m.line}</p>`;
+      const box = document.createElement("div");
+      box.className = "items";
+      items.slice().sort((a, b) => (a.week || 99) - (b.week || 99)).forEach((it) => {
+        const el = document.createElement("article");
+        el.className = "item" + (m.mode === "Test" ? " test" : "") + (it.week ? "" : " extra");
+        el.innerHTML = `<p class="kind">${it.week ? "Week " + it.week : "Beyond the course"}</p><h3>${it.name}</h3><p class="purpose">${it.purpose}</p><ol>${it.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`;
+        box.appendChild(el);
+      });
+      sec.appendChild(box);
+      list.appendChild(sec);
+    });
+  }
+
+  document.querySelectorAll("[data-filter]").forEach((b) => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("[data-filter]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      render(b.dataset.filter);
+    });
+  });
+
+  render("all");
+</script>
+</body>
+</html>
