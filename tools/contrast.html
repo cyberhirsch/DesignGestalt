@@ -255,6 +255,52 @@
   .sim-name { font-size: 13px; font-weight: 600; margin: 0; }
   .sim-note { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin: 2px 0 0; font-variant-numeric: tabular-nums; }
 
+  /* ---------- image ---------- */
+  .drop {
+    display: block;
+    background: var(--surface);
+    border: 1px dashed var(--ink-3);
+    border-radius: 2px;
+    padding: 22px 18px;
+    margin-bottom: 18px;
+    text-align: center;
+    color: var(--ink-2);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .drop.over { border-color: var(--accent); color: var(--accent); }
+  .drop strong { color: var(--ink); font-weight: 600; }
+  .drop input { display: none; }
+
+  .imgtool { margin-bottom: 18px; }
+  .imgtool[hidden] { display: none; }
+  .imgbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .imgbar .hint { font-size: 13px; color: var(--ink-3); flex: 1 1 220px; }
+  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; }
+  .seg button + button { border-left: 1px solid var(--rule); }
+  .seg button.on { background: var(--accent); color: #fff; }
+
+  .stage { position: relative; line-height: 0; border: 1px solid var(--rule); touch-action: none; }
+  .stage canvas { width: 100%; height: auto; display: block; }
+  .stage canvas.overlay { position: absolute; inset: 0; height: 100%; cursor: crosshair; }
+
+  .worst {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .worst[hidden] { display: none; }
+  .worst b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .vision-img { margin-top: 12px; }
+  .vision[hidden] { display: none; }
+  .vision-img .sim canvas { width: 100%; height: auto; display: block; }
+
   footer {
     border-top: 1px solid var(--rule);
     margin-top: 34px;
@@ -276,9 +322,32 @@
     <p class="standfirst">
       Paste two colours and see whether text actually holds up on that background. The ratio is
       the WCAG 2 contrast formula — the same one Stark uses inside Figma — so you can check a
-      palette before you have committed to it, or outside Figma entirely.
+      palette before you have committed to it, or outside Figma entirely. Or drop in your poster
+      and measure it straight from the pixels.
     </p>
   </header>
+
+  <label class="drop" id="drop">
+    <input type="file" id="file" accept="image/*">
+    <strong>Measure an image</strong> &middot; drop your poster here, choose a file, or paste it with Ctrl V.
+    It stays in your browser; nothing is uploaded.
+  </label>
+
+  <div class="imgtool" id="imgtool" hidden>
+    <div class="imgbar">
+      <div class="seg" role="group" aria-label="What the next click picks">
+        <button id="pickFg" class="on">Click picks text</button>
+        <button id="pickBg">Click picks background</button>
+      </div>
+      <button id="clearImg">Remove image</button>
+      <span class="hint">Click to pick a colour. Drag a box over the background behind your text, not over the letters, to find its worst spot.</span>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="view"></canvas>
+      <canvas id="overlay" class="overlay"></canvas>
+    </div>
+    <div class="worst" id="worst" hidden></div>
+  </div>
 
   <div class="pair">
     <div class="field">
@@ -336,6 +405,7 @@
 
   <h2>Seen with colour blindness</h2>
   <div class="vision" id="vision"></div>
+  <div class="vision vision-img" id="visionImg" hidden></div>
 
   <footer>
     Week 7 &middot; Colour Psychology. The simulations approximate how the pair shifts for the three
@@ -484,12 +554,228 @@
   bindHex(bgHex, bgPick, false);
 
   $("swap").addEventListener("click", () => {
-    const t = fg; fg = bg; bg = t;
-    fgHex.value = toHex(fg); bgHex.value = toHex(bg);
-    fgPick.value = toHex(fg); bgPick.value = toHex(bg);
-    fgHex.classList.remove("bad"); bgHex.classList.remove("bad");
-    render();
+    const t = fg;
+    setColor(true, bg);
+    setColor(false, t);
   });
+
+  function setColor(isFg, rgb) {
+    const hex = toHex(rgb);
+    if (isFg) { fg = parseHex(hex); fgHex.value = hex; fgPick.value = hex; fgHex.classList.remove("bad"); }
+    else { bg = parseHex(hex); bgHex.value = hex; bgPick.value = hex; bgHex.classList.remove("bad"); }
+    render();
+  }
+
+  /* ---------- image: pick, worst spot, colour-blind views ---------- */
+
+  const MAX_SIDE = 2400;         // working resolution cap
+  const SIM_SIDE = 480;          // colour-blind previews
+  const work = document.createElement("canvas");
+  const wctx = work.getContext("2d", { willReadFrequently: true });
+  const view = $("view"), overlay = $("overlay");
+  const vctx = view.getContext("2d"), octx = overlay.getContext("2d");
+  let pixels = null;             // ImageData of the working canvas
+  let pickFg = true;
+  let marks = { fg: null, bg: null, box: null, worst: null };
+
+  const LIN = new Float64Array(256);
+  for (let i = 0; i < 256; i++) LIN[i] = toLinear(i);
+  const lumAt = (d, i) => 0.2126 * LIN[d[i]] + 0.7152 * LIN[d[i + 1]] + 0.0722 * LIN[d[i + 2]];
+
+  function setPickMode(isFg) {
+    pickFg = isFg;
+    $("pickFg").classList.toggle("on", isFg);
+    $("pickBg").classList.toggle("on", !isFg);
+  }
+  $("pickFg").addEventListener("click", () => setPickMode(true));
+  $("pickBg").addEventListener("click", () => setPickMode(false));
+
+  function loadFile(file) {
+    if (!file || !/^image\//.test(file.type)) return;
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+      work.width = Math.max(1, Math.round(img.naturalWidth * s));
+      work.height = Math.max(1, Math.round(img.naturalHeight * s));
+      wctx.drawImage(img, 0, 0, work.width, work.height);
+      pixels = wctx.getImageData(0, 0, work.width, work.height);
+      URL.revokeObjectURL(url);
+      view.width = overlay.width = work.width;
+      view.height = overlay.height = work.height;
+      vctx.drawImage(work, 0, 0);
+      marks = { fg: null, bg: null, box: null, worst: null };
+      $("worst").hidden = true;
+      $("imgtool").hidden = false;
+      setPickMode(true);
+      drawMarks();
+      renderImageVision();
+    };
+    img.onerror = () => URL.revokeObjectURL(url);
+    img.src = url;
+  }
+
+  $("file").addEventListener("change", (e) => loadFile(e.target.files[0]));
+  const drop = $("drop");
+  ["dragenter", "dragover"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach((t) => drop.addEventListener(t, () => drop.classList.remove("over")));
+  drop.addEventListener("drop", (e) => { e.preventDefault(); loadFile(e.dataTransfer.files[0]); });
+  document.addEventListener("paste", (e) => {
+    const item = [...(e.clipboardData?.items || [])].find((it) => it.type.startsWith("image/"));
+    if (item) { e.preventDefault(); loadFile(item.getAsFile()); }
+  });
+
+  $("clearImg").addEventListener("click", () => {
+    pixels = null;
+    $("imgtool").hidden = true;
+    $("visionImg").hidden = true;
+    $("file").value = "";
+  });
+
+  // Average of a 5 × 5 patch, so JPEG noise does not decide the colour.
+  function sampleAt(x, y) {
+    const d = pixels.data, w = pixels.width, h = pixels.height;
+    let r = 0, g = 0, b = 0, n = 0;
+    for (let yy = Math.max(0, y - 2); yy <= Math.min(h - 1, y + 2); yy++)
+      for (let xx = Math.max(0, x - 2); xx <= Math.min(w - 1, x + 2); xx++) {
+        const i = (yy * w + xx) * 4; r += d[i]; g += d[i + 1]; b += d[i + 2]; n++;
+      }
+    return [r / n, g / n, b / n];
+  }
+
+  // The pixel in the box whose contrast with the text colour is lowest (3 × 3 averages).
+  function worstSpot(box) {
+    const d = pixels.data, w = pixels.width;
+    const lf = luminance(fg);
+    let worst = null, worstR = Infinity;
+    const ratios = [];
+    for (let y = box.y0 + 1; y < box.y1 - 1; y += 2)
+      for (let x = box.x0 + 1; x < box.x1 - 1; x += 2) {
+        let l = 0;
+        for (let dy = -1; dy <= 1; dy++)
+          for (let dx = -1; dx <= 1; dx++) l += lumAt(d, ((y + dy) * w + x + dx) * 4);
+        l /= 9;
+        const r = (Math.max(l, lf) + 0.05) / (Math.min(l, lf) + 0.05);
+        ratios.push(r);
+        if (r < worstR) { worstR = r; worst = { x, y }; }
+      }
+    if (!worst) return null;
+    ratios.sort((a, b) => a - b);
+    return { ...worst, ratio: worstR, median: ratios[Math.floor(ratios.length / 2)] };
+  }
+
+  function toImageXY(e) {
+    const r = overlay.getBoundingClientRect();
+    return {
+      x: Math.max(0, Math.min(pixels.width - 1, Math.floor((e.clientX - r.left) / r.width * pixels.width))),
+      y: Math.max(0, Math.min(pixels.height - 1, Math.floor((e.clientY - r.top) / r.height * pixels.height)))
+    };
+  }
+
+  let dragStart = null;
+  overlay.addEventListener("pointerdown", (e) => {
+    if (!pixels) return;
+    overlay.setPointerCapture(e.pointerId);
+    dragStart = { ...toImageXY(e), cx: e.clientX, cy: e.clientY };
+  });
+  overlay.addEventListener("pointermove", (e) => {
+    if (!dragStart) return;
+    const p = toImageXY(e);
+    marks.box = { x0: Math.min(dragStart.x, p.x), y0: Math.min(dragStart.y, p.y), x1: Math.max(dragStart.x, p.x), y1: Math.max(dragStart.y, p.y) };
+    drawMarks();
+  });
+  overlay.addEventListener("pointerup", (e) => {
+    if (!dragStart) return;
+    const moved = Math.hypot(e.clientX - dragStart.cx, e.clientY - dragStart.cy);
+    const p = toImageXY(e);
+    if (moved < 5) {
+      marks.box = null;
+      const rgb = sampleAt(p.x, p.y);
+      if (pickFg) { marks.fg = p; setColor(true, rgb); setPickMode(false); }
+      else { marks.bg = p; setColor(false, rgb); }
+      marks.worst = null;
+      $("worst").hidden = true;
+    } else {
+      const box = { x0: Math.min(dragStart.x, p.x), y0: Math.min(dragStart.y, p.y), x1: Math.max(dragStart.x, p.x), y1: Math.max(dragStart.y, p.y) };
+      marks.box = box;
+      const ws = (box.x1 - box.x0 > 3 && box.y1 - box.y0 > 3) ? worstSpot(box) : null;
+      if (ws) {
+        marks.worst = ws; marks.bg = { x: ws.x, y: ws.y };
+        setColor(false, sampleAt(ws.x, ws.y));
+        const out = $("worst");
+        out.hidden = false;
+        out.innerHTML = "Worst spot in the box: <b>" + ws.ratio.toFixed(2) + " : 1</b> against your text colour. " +
+          "Typical spot: <b>" + ws.median.toFixed(2) + " : 1</b>. The number that counts is the worst one; " +
+          "its colour is now your background above.";
+      }
+    }
+    dragStart = null;
+    drawMarks();
+  });
+
+  function ring(p, label, color) {
+    const s = Math.max(pixels.width, pixels.height) / 600;
+    octx.lineWidth = 3 * s;
+    octx.strokeStyle = "#000"; octx.beginPath(); octx.arc(p.x, p.y, 11 * s, 0, 7); octx.stroke();
+    octx.lineWidth = 1.6 * s;
+    octx.strokeStyle = color; octx.beginPath(); octx.arc(p.x, p.y, 11 * s, 0, 7); octx.stroke();
+    octx.font = `600 ${14 * s}px ${getComputedStyle(document.body).fontFamily}`;
+    octx.lineWidth = 3 * s; octx.strokeStyle = "#000"; octx.strokeText(label, p.x + 15 * s, p.y - 10 * s);
+    octx.fillStyle = color; octx.fillText(label, p.x + 15 * s, p.y - 10 * s);
+  }
+
+  function drawMarks() {
+    if (!pixels) return;
+    octx.clearRect(0, 0, overlay.width, overlay.height);
+    const s = Math.max(pixels.width, pixels.height) / 600;
+    if (marks.box) {
+      const b = marks.box;
+      octx.setLineDash([6 * s, 4 * s]);
+      octx.lineWidth = 3 * s; octx.strokeStyle = "#000"; octx.strokeRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+      octx.lineWidth = 1.6 * s; octx.strokeStyle = "#fff"; octx.strokeRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+      octx.setLineDash([]);
+    }
+    if (marks.fg) ring(marks.fg, "text", "#fff");
+    if (marks.bg) ring(marks.bg, marks.worst ? "worst" : "background", "#ffd400");
+  }
+
+  function renderImageVision() {
+    const host = $("visionImg");
+    host.innerHTML = "";
+    const s = Math.min(1, SIM_SIDE / Math.max(work.width, work.height));
+    const w = Math.max(1, Math.round(work.width * s)), h = Math.max(1, Math.round(work.height * s));
+    const small = document.createElement("canvas");
+    small.width = w; small.height = h;
+    const sctx = small.getContext("2d", { willReadFrequently: true });
+    sctx.drawImage(work, 0, 0, w, h);
+    const src = sctx.getImageData(0, 0, w, h);
+    [["Your image", null], ["Protanopia", "protanopia"], ["Deuteranopia", "deuteranopia"], ["Tritanopia", "tritanopia"]].forEach(([name, kind]) => {
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const out = new ImageData(new Uint8ClampedArray(src.data), w, h);
+      if (kind) {
+        const m = MATRICES[kind], d = out.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const r = LIN[d[i]], g = LIN[d[i + 1]], b = LIN[d[i + 2]];
+          d[i] = toSrgb(m[0][0] * r + m[0][1] * g + m[0][2] * b);
+          d[i + 1] = toSrgb(m[1][0] * r + m[1][1] * g + m[1][2] * b);
+          d[i + 2] = toSrgb(m[2][0] * r + m[2][1] * g + m[2][2] * b);
+        }
+      }
+      c.getContext("2d").putImageData(out, 0, 0);
+      const card = document.createElement("div");
+      card.className = "sim";
+      const foot = document.createElement("div");
+      foot.className = "sim-foot";
+      const nm = document.createElement("p");
+      nm.className = "sim-name";
+      nm.textContent = name;
+      foot.append(nm);
+      card.append(c, foot);
+      host.appendChild(card);
+    });
+    host.hidden = false;
+  }
 
   render();
 </script>
