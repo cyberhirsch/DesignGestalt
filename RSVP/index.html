@@ -71,14 +71,6 @@
   }
   .round:disabled { color: var(--rule); border-color: var(--rule); cursor: default; }
 
-  .chips { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
-  .chip {
-    background: transparent; color: var(--cream);
-    border: 2px solid var(--sage); border-radius: 999px;
-    padding: 9px 22px; font: inherit; cursor: pointer;
-  }
-  .chip[aria-pressed="true"] { background: var(--cream); color: var(--ground); border-color: var(--cream); font-weight: 700; }
-  .chip[aria-pressed="true"]::before { content: "✓ "; }
 
   /* Buttons: three levels, three states */
   .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 20px; margin-top: 50px; align-items: center; }
@@ -182,16 +174,6 @@
       </div>
     </div>
 
-    <div>
-      <span class="label">Dietary needs</span>
-      <div class="chips">
-        <button type="button" class="chip" aria-pressed="false">Vegetarian</button>
-        <button type="button" class="chip" aria-pressed="false">Vegan</button>
-        <button type="button" class="chip" aria-pressed="false">No gluten</button>
-        <button type="button" class="chip" aria-pressed="false">No nuts</button>
-      </div>
-    </div>
-
     <div class="actions">
       <button type="submit" class="btn primary">RSVP</button>
       <a class="btn secondary" href="campus-christmas-party.ics" download style="text-align:center;text-decoration:none">Add to calendar</a>
@@ -220,9 +202,6 @@
   };
   $('minus').onclick = () => setGuests(guests - 1);
   $('plus').onclick = () => setGuests(guests + 1);
-  document.querySelectorAll('.chip').forEach((c) => {
-    c.onclick = () => c.setAttribute('aria-pressed', c.getAttribute('aria-pressed') !== 'true');
-  });
   const show = (title, text) => {
     $('answer-title').textContent = title;
     $('answer-text').textContent = text;
