@@ -157,7 +157,7 @@
     <div id="start" class="panel">
       <p class="label">Week 8 · Contrast &amp; Affordance</p>
       <h2>Read the goal. Click what does it.</h2>
-      <p>You get four seconds per dialog, then less. A wrong click or no click counts as a miss. At the end you see which tricks caught you.</p>
+      <p>You get seven seconds per dialog, then less, down to three and a half. A wrong click or no click counts as a miss. At the end you see which tricks caught you.</p>
       <button class="go" id="play">Start</button>
       <p class="small" id="best"></p>
     </div>
@@ -281,7 +281,7 @@
 
   let deck = [], i = 0, hits = 0, misses = [], times = [], t0 = 0, raf = 0, timeout = 0, locked = false;
 
-  const duration = (n) => Math.max(1600, 4000 - n * 125);
+  const duration = (n) => Math.max(3500, 7000 - n * 185);
 
   function build(r) {
     const btn = ([label, kind, ok, wrap]) => {
@@ -328,7 +328,7 @@
     const v = $('verdict');
     v.textContent = ok ? 'Right' : late ? 'Too slow' : (r.honest ? 'That one was honest' : r.pattern);
     v.className = 'verdict on';
-    setTimeout(() => { i++; i < ROUNDS ? show() : finish(); }, ok ? 450 : 1100);
+    setTimeout(() => { i++; i < ROUNDS ? show() : finish(); }, ok ? 600 : 1600);
   }
 
   function finish() {
