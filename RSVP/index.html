@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RSVP · Campus Christmas Party</title>
+<meta name="description" content="RSVP page for the Campus Christmas Party, a course example in the John Doe design. Design &amp; Gestalt, TH Rosenheim.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --ground: #16302b;
+    --ground-2: #1c3832;
+    --pressed: #304742;
+    --cream: #f4efe6;
+    --cream-2: #c9cfc6;
+    --yellow: #f4b942;
+    --orange: #d9623b;
+    --sage: #6f8f72;
+    --rule: #3d514b;
+    --font: "Lato", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--ground);
+    color: var(--cream);
+    font: 400 1.125rem/1.4 var(--font);
+    -webkit-font-smoothing: antialiased;
+    padding-inline: max(24px, env(safe-area-inset-left, 0px));
+    padding-block: 40px 48px;
+  }
+  .page {
+    max-width: 480px;
+    margin: 0 auto;
+    display: grid;
+    gap: 0;
+  }
+
+  /* Event header */
+  .event { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; }
+  .mark { width: 104px; height: auto; display: block; }
+  .event h1 { margin: 0 0 4px; font-weight: 900; font-size: 2rem; line-height: 1.1; text-wrap: balance; }
+  .facts { margin: 0; }
+  .by { margin: 24px 0 0; color: var(--yellow); font-style: italic; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 22px 0 0; }
+
+  /* Form */
+  form { display: grid; gap: 22px; margin-top: 56px; }
+  form h2 { margin: 0 0 4px; font-size: 2.6rem; font-weight: 900; line-height: 1.05; }
+  label, .label { font-weight: 700; display: block; }
+  .hint { display: block; font-style: italic; font-weight: 400; color: var(--cream-2); font-size: 1rem; }
+  input[type="text"] {
+    width: 100%; margin-top: 10px;
+    background: transparent; color: var(--cream);
+    border: 2px solid var(--sage); border-radius: 16px;
+    padding: 20px 22px; font: inherit;
+  }
+  input::placeholder { color: var(--cream-2); opacity: .75; font-style: italic; }
+  input[type="text"]:focus { outline: none; border-color: var(--cream); }
+
+  .guests { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .stepper { display: flex; align-items: center; gap: 24px; }
+  .stepper output { font-weight: 700; font-size: 2rem; min-width: 1ch; text-align: center; font-variant-numeric: tabular-nums; }
+  .round {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: transparent; color: var(--cream);
+    border: 2px solid var(--sage); font: 400 2rem/1 var(--font); cursor: pointer;
+  }
+  .round:disabled { color: var(--rule); border-color: var(--rule); cursor: default; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+  .chip {
+    background: transparent; color: var(--cream);
+    border: 2px solid var(--sage); border-radius: 999px;
+    padding: 9px 22px; font: inherit; cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--cream); color: var(--ground); border-color: var(--cream); font-weight: 700; }
+  .chip[aria-pressed="true"]::before { content: "✓ "; }
+  .chips + input { margin-top: 14px; }
+
+  /* Buttons: three levels, three states */
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 20px; margin-top: 50px; align-items: center; }
+  .btn {
+    font: inherit; cursor: pointer; border-radius: 999px;
+    transition: transform .06s, box-shadow .06s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .primary {
+    grid-column: 1 / -1;
+    background: var(--yellow); color: var(--ground);
+    border: 0; padding: 26px; font-weight: 900; font-size: 1.5rem; letter-spacing: .14em;
+    box-shadow: 0 4px 0 var(--orange);
+  }
+  .secondary {
+    background: transparent; color: var(--cream);
+    border: 3px solid var(--cream); padding: 18px 12px; font-weight: 700; font-size: 1.5rem;
+    box-shadow: 0 4px 0 var(--sage);
+  }
+  .tertiary {
+    background: transparent; color: var(--cream);
+    border: 3px solid transparent; padding: 14px 22px; font-size: 1.5rem;
+    justify-self: center;
+  }
+  .tertiary span { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+
+  /* Hover: ring or doubled border, lip grows to 6 px (pointer devices only) */
+  @media (hover: hover) {
+    .primary:hover { box-shadow: inset 0 0 0 3px var(--cream), 0 6px 0 var(--orange); transform: translateY(-2px); }
+    .secondary:hover { box-shadow: inset 0 0 0 3px var(--cream), 0 6px 0 var(--sage); transform: translateY(-2px); }
+    .tertiary:hover { border-color: var(--cream); }
+  }
+  .btn:focus-visible { outline: 3px solid var(--yellow); outline-offset: 5px; }
+
+  /* Pressed: no lip, inner shadow, label 2 px lower */
+  .primary:active { box-shadow: inset 0 4px 8px rgba(0,0,0,.35); transform: translateY(4px); padding-block: 28px 24px; }
+  .secondary:active { background: var(--pressed); box-shadow: inset 0 4px 8px rgba(0,0,0,.35); transform: translateY(4px); padding-block: 20px 10px; }
+  .tertiary:active { background: var(--pressed); box-shadow: inset 0 4px 8px rgba(0,0,0,.35); padding-block: 16px 12px; }
+
+  .error { color: var(--yellow); font-style: italic; margin: 6px 0 0; }
+
+  /* Answer screen */
+  .answer { margin-top: 56px; display: grid; gap: 18px; }
+  .answer h2 { margin: 0; font-size: 2.6rem; font-weight: 900; line-height: 1.05; text-wrap: balance; }
+  .answer p { margin: 0; }
+  .answer .btn { justify-self: start; margin-top: 12px; }
+
+  .note { margin: 64px 0 0; font-size: .875rem; color: var(--cream-2); opacity: .8; }
+
+  /* Desktop: the event on the left, the form on the right */
+  @media (min-width: 960px) {
+    body { padding-block: 0; }
+    .page {
+      max-width: 1120px; min-height: 100vh;
+      grid-template-columns: 1fr 480px; column-gap: 112px; align-items: center;
+    }
+    .event { grid-template-columns: 1fr; gap: 36px; align-self: center; }
+    .mark { width: 200px; }
+    .event h1 { font-size: 4.25rem; margin-bottom: 14px; }
+    .facts { font-size: 1.5rem; }
+    .by { font-size: 1.5rem; margin-top: 8px; }
+    .left hr { display: none; }
+    form, .answer { margin-top: 0; padding-block: 64px; }
+    .note { grid-column: 1 / -1; margin: 0 0 32px; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="left">
+    <header class="event">
+      <svg class="mark" viewBox="0 0 104 140" aria-hidden="true">
+        <circle cx="52" cy="92" r="48" fill="#f4b942"/>
+        <path d="M52 4 C40 30 26 52 26 76 a26 26 0 0 0 52 0 C78 52 64 30 52 4 Z" fill="#d9623b"/>
+        <circle cx="52" cy="78" r="12" fill="#f4efe6"/>
+      </svg>
+      <div>
+        <h1>Campus Christmas Party</h1>
+        <p class="facts">Thursday 17 December, 18:00<br>Main Hall, Campus Chiemgau, Traunstein</p>
+        <p class="by">Please RSVP by Monday 14 December</p>
+      </div>
+    </header>
+    <hr>
+  </div>
+
+  <form id="rsvp" novalidate>
+    <h2>Are you coming?</h2>
+
+    <div>
+      <label for="name">Your name</label>
+      <input id="name" type="text" autocomplete="name" placeholder="First and last name">
+      <p class="error" id="name-error" hidden>Please add your name, so we know who's coming.</p>
+    </div>
+
+    <div class="guests">
+      <span class="label" id="guests-label">Number of guests <span class="hint">Including you</span></span>
+      <div class="stepper" role="group" aria-labelledby="guests-label">
+        <button type="button" class="round" id="minus" aria-label="One guest fewer" disabled>−</button>
+        <output id="count" aria-live="polite">1</output>
+        <button type="button" class="round" id="plus" aria-label="One guest more">+</button>
+      </div>
+    </div>
+
+    <div>
+      <span class="label">Dietary needs</span>
+      <div class="chips">
+        <button type="button" class="chip" aria-pressed="false">Vegetarian</button>
+        <button type="button" class="chip" aria-pressed="false">Vegan</button>
+        <button type="button" class="chip" aria-pressed="false">No gluten</button>
+        <button type="button" class="chip" aria-pressed="false">No nuts</button>
+      </div>
+      <input type="text" aria-label="Other dietary needs" placeholder="Anything else? For example an allergy">
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn primary">RSVP</button>
+      <a class="btn secondary" href="campus-christmas-party.ics" download style="text-align:center;text-decoration:none">Add to calendar</a>
+      <button type="button" class="btn tertiary" id="decline"><span>Not this time</span></button>
+    </div>
+  </form>
+
+  <section class="answer" id="answer" hidden aria-live="polite">
+    <h2 id="answer-title"></h2>
+    <p id="answer-text"></p>
+    <button type="button" class="btn tertiary" id="back"><span>Change my answer</span></button>
+  </section>
+
+  <p class="note">Course example in the John Doe design · Design &amp; Gestalt, TH Rosenheim · This page doesn't send your answer anywhere yet.</p>
+</main>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const form = $('rsvp'), answer = $('answer');
+  let guests = 1;
+  const setGuests = (n) => {
+    guests = Math.min(2, Math.max(1, n));
+    $('count').textContent = guests;
+    $('minus').disabled = guests === 1;
+    $('plus').disabled = guests === 2;
+  };
+  $('minus').onclick = () => setGuests(guests - 1);
+  $('plus').onclick = () => setGuests(guests + 1);
+  document.querySelectorAll('.chip').forEach((c) => {
+    c.onclick = () => c.setAttribute('aria-pressed', c.getAttribute('aria-pressed') !== 'true');
+  });
+  const show = (title, text) => {
+    $('answer-title').textContent = title;
+    $('answer-text').textContent = text;
+    form.hidden = true; answer.hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const name = $('name').value.trim();
+    $('name-error').hidden = !!name;
+    if (!name) { $('name').focus(); return; }
+    const first = name.split(/\s+/)[0];
+    show(`See you there, ${first}.`,
+      guests === 2 ? 'Two of you on Thursday 17 December, 18:00, in the Main Hall.'
+                   : 'Thursday 17 December, 18:00, in the Main Hall.');
+  };
+  $('decline').onclick = () => show('Maybe next year.', 'Thanks for letting us know. If your plans change, you can still say yes until 14 December.');
+  $('back').onclick = () => { answer.hidden = true; form.hidden = false; };
+</script>
+</body>
+</html>
