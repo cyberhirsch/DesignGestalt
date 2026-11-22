@@ -79,7 +79,6 @@
   }
   .chip[aria-pressed="true"] { background: var(--cream); color: var(--ground); border-color: var(--cream); font-weight: 700; }
   .chip[aria-pressed="true"]::before { content: "✓ "; }
-  .chips + input { margin-top: 14px; }
 
   /* Buttons: three levels, three states */
   .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 20px; margin-top: 50px; align-items: center; }
@@ -191,7 +190,6 @@
         <button type="button" class="chip" aria-pressed="false">No gluten</button>
         <button type="button" class="chip" aria-pressed="false">No nuts</button>
       </div>
-      <input type="text" aria-label="Other dietary needs" placeholder="Anything else? For example an allergy">
     </div>
 
     <div class="actions">
